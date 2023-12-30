@@ -9,12 +9,20 @@ import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angul
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SearchComponent } from './components/dashboard/search/search.component';
+import { NumericalDepositComponent } from './components/dashboard/numerical-deposit/numerical-deposit.component';
+import { HomeComponent } from './components/dashboard/home/home.component';
+import { DocumentComponent } from './components/dashboard/document/document.component';
+import { HeaderComponent } from './layouts/header/header.component';
+import { FooterComponent } from './layouts/footer/footer.component';
+import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashbordComponent, 
-    LoginComponent
+    LoginComponent, DashboardComponent, SearchComponent, NumericalDepositComponent, HomeComponent, DocumentComponent, HeaderComponent, FooterComponent, SidebarComponent
   ],
   imports: [
     BrowserModule,

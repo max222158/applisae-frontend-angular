@@ -1,0 +1,87 @@
+<nav [class]="isMiniSidebar ? 'sidebar dark_sidebar mini_sidebar' : 'sidebar dark_sidebar'">
+    <div class="logo d-flex justify-content-between">
+      <a
+      class="large_logo"
+      href=""
+    >
+      <img src="assets/theme/345721.png" alt="" style="width:18px;margin-right:5px"/>
+      <img src="assets/theme/applisae1.png" alt="" style="width:101px;" />
+      </a>
+      <a class="small_logo" href=""><img
+          src="assets/theme/mini_logo.png" alt=""></a>
+      <div class="sidebar_close_icon d-lg-none">
+        <i class="ti-close"></i>
+      </div>
+    </div>
+    <ul id="sidebar_menu" class="metismenu">
+      <li class="">
+        <a routerLink="/dashboard/" routerLinkActive="active" aria-expanded="false" active="false">
+          <div class="nav_icon_small">
+            <img src="assets/theme/dashbord.png" alt="">
+          </div>
+          <div class="nav_title" >
+            <span>Tableau de bord</span>
+          </div>
+        </a>
+      </li>
+
+      <li class="">
+        <a routerLink="/dashboard/fonds-numerique" routerLinkActive="active" aria-expanded="false">
+          <div class="nav_icon_small">
+            <img src="assets/theme/2.svg" alt="">
+          </div>
+          <div class="nav_title">
+            <span>Fonds numérique</span>
+          </div>
+        </a>
+      </li>
+
+
+      <li class="">
+        <a routerLink="/dashboard/recherche" routerLinkActive="active" aria-expanded="false">
+          <div class="nav_icon_small">
+            <img src="assets/theme/chercher.svg" alt="">
+          </div>
+          <div class="nav_title">
+            <span>Recherche</span>
+          </div>
+        </a>
+      </li>
+      <li [class.mm-active]="activeIndex === 0">
+        <a href="#" (click)="handleItemClick(0,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'">
+          <!-- Your menu item content here -->
+          <div class="nav_icon_small">
+            <img src="assets/theme/document.svg" alt="">
+          </div>
+          <div class="nav_title">
+            <span>Gestion documents</span>
+          </div>
+        </a>
+        <ul class="mm-collapse" [class.mm-show]="activeIndex === 0">
+          <li><a href="/dashboard/documents">Document</a></li>
+          <li><a href="/dashboard/dossiers">Dossier</a></li>
+        </ul>
+      </li>
+      
+      <li [class.mm-active]="activeIndex === 1">
+        <a href="#" (click)="handleItemClick(1,$event)" [attr.aria-expanded]="activeIndex === 1 ? 'true' : 'false'">
+         
+          <div class="nav_icon_small">
+            <img src="assets/theme/document.svg" alt="">
+          </div>
+          <div class="nav_title">
+            <span> Utilisateurs Permissions</span>
+          </div>
+        </a>
+        <ul class="mm-collapse" [class.mm-show]="activeIndex === 1">
+          <li><a href="https://demo.dashboardpack.com/cryptocurrency-html/index_2.html">Utilisateurs</a></li>
+          <li><a href="https://demo.dashboardpack.com/cryptocurrency-html/index_3.html">Groupes</a></li>
+          <li><a href="https://demo.dashboardpack.com/cryptocurrency-html/index.html">Permissions</a></li>
+        </ul>
+      </li>
+
+
+      
+
+    </ul>
+  </nav>
