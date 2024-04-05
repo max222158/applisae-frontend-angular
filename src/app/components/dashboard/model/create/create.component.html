@@ -1,0 +1,76 @@
+<div class="container" style="background-color: white;">
+    <div class="card" style="">
+        <h5 class="card-header bg-transparent border-bottom text-uppercase">Créer un modele personnalisé</h5>
+        <div class="card-body row">
+
+    <div class="col-md-6">
+        <div class="">
+            <br /><br />
+            <label for="exampleFormControlInput1" class="form-label">Nom Du Modèle</label>
+            <input class="form-control form-control-lg" type="text" placeholder="Nom Du Modèle"
+                aria-label=".form-control-lg example">
+        </div>
+
+        <br />
+        
+        <div class="card">
+            <h5 class="card-header bg-transparent border-bottom text-uppercase">Type De Courrier Du Modèle</h5>
+            <div class="card-body">
+                <div class="mb-3 row">
+                    <label class="col-md-2 col-form-label">Type De Courrier</label>
+                    <div class="col-md-10">
+                        <select class="form-select" >
+                            <option>-- Selectionner --</option>
+                            <option>Courrier Départ</option>
+                            <option>Courrier Arrivé</option>
+                            <option>Courrier Interne</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="card">
+            <h5 class="card-header bg-transparent border-bottom text-uppercase">Champs Personnalisés</h5>
+            <div class="card-body">
+                <div
+                cdkDropList
+                #todoList="cdkDropList"
+                [cdkDropListData]="todo"
+                [cdkDropListConnectedTo]="[doneList]"
+                class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                @for (item of todo; track item) {
+                  <div class="example-box" cdkDrag>{{item.libelle}}</div>
+                }
+              </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-md-6">
+
+        <div class="example-container">
+            <h2>Champs Personnalisés</h2>
+            <p>Glisser et déposer dans la partie gauche</p>
+          
+            <div
+            cdkDropList
+            #doneList="cdkDropList"
+            [cdkDropListData]="done"
+            [cdkDropListConnectedTo]="[todoList]"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            @for (item of done; track item) {
+              <div class="example-box" cdkDrag>{{item.libelle}}</div>
+            }
+          </div>
+          </div>
+
+    </div>
+    </div>
+    </div>
+</div>

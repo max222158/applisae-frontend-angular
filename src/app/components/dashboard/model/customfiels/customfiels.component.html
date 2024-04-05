@@ -1,0 +1,221 @@
+<div class="row">
+
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Liste des nouveaux champs à ajouter</h5>
+            </div>
+            <div class="card-body">
+
+
+                <div *ngFor="let item of fields; let i = index">
+                    <div>
+
+
+
+
+                        
+                        
+                
+                
+                        <ng-container *ngIf="item.type === 'number'">
+                            <input type="text" [(ngModel)]="item.libelle" readonly placeholder="Libellé du champ" />
+                            <input type="number" [placeholder]="item.type" readonly />
+                        </ng-container>
+                
+                        <ng-container *ngIf="item.type === 'checkbox'">
+                            <input type="text" [(ngModel)]="item.libelle" readonly placeholder="Libellé du champ" />
+                            <label><input type="checkbox" /> Option 1</label>
+                            <label><input type="checkbox" /> Option 2</label>
+                            <label><input type="checkbox" /> Option 3</label>
+                        </ng-container>
+                
+                  </div>
+                </div>
+                
+  
+                <div *ngFor="let divData of divsData; let i = index">
+                    
+                    <ng-container *ngIf="divData.type === 'text'; else numberOrCheckbox">
+
+                    <div class="input-group" style="margin-top: 20px;">
+                        <span class="input-group-text">Nom De Champ</span>
+                        <input class="form-control" type="text" [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                        <span class="input-group-text">Type De Champ</span>
+                        <input type="text" [placeholder]="divData.type" readonly class="form-control">
+                        <button (click)="deleteDiv(i)"
+                        style="background-color: red;color: white; border-radius: 50%; width: 30px; height: 30px;">x</button>
+
+                      </div>
+                    </ng-container>
+                    <ng-template #numberOrCheckbox>
+                        <ng-container *ngIf="divData.type === 'number'">
+                            <div class="input-group" style="margin-top: 20px;">
+                                <span class="input-group-text">Nom De Champ</span>
+                                <input class="form-control" type="text" [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                                <span class="input-group-text">Type De Champ</span>
+                                <input type="text" [placeholder]="divData.type" readonly class="form-control">
+                                <button (click)="deleteDiv(i)"
+                                style="background-color: red;color: white; border-radius: 50%; width: 30px; height: 30px;">x</button>
+        
+                              </div>
+                        </ng-container>
+                        <ng-container *ngIf="divData.type === 'checkbox'">
+                            <label><input type="checkbox" /> Option 1</label>
+                            <label><input type="checkbox" /> Option 2</label>
+                            <label><input type="checkbox" /> Option 3</label>
+                            <button (click)="deleteDiv(i)" style="background-color: red;color: white; border-radius: 50%;">x</button>
+                 
+                        </ng-container>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5>Liste des champs personnalisés éxistants</h5>
+            </div>
+            <div class="card-body">
+
+
+                <div *ngFor="let item of fields; let i = index">
+                    <div>
+
+
+
+
+                        
+                        
+                
+                        <ng-container *ngIf="item.type === 'text'">
+
+                            <div class="input-group" style="margin-top: 20px;">
+                                <span class="input-group-text">Nom De Champ</span>
+                                <input type="text" [(ngModel)]="item.libelle" readonly placeholder="Libellé du champ"  class="form-control">
+                                <span class="input-group-text">Type De Champ</span>
+                                <input type="text" [placeholder]="item.type" readonly class="form-control">
+                                <button (click)="deleteDiv(i)"
+                                style="background-color: red;color: white; border-radius: 50%; width: 30px; height: 30px;">x</button>
+    
+                              </div>
+
+
+                        </ng-container>
+                
+                        <ng-container *ngIf="item.type === 'number'">
+                            <input type="text" [(ngModel)]="item.libelle" readonly placeholder="Libellé du champ" />
+                            <input type="number" [placeholder]="item.type" readonly />
+                        </ng-container>
+                
+                        <ng-container *ngIf="item.type === 'checkbox'">
+                            <input type="text" [(ngModel)]="item.libelle" readonly placeholder="Libellé du champ" />
+                            <label><input type="checkbox" /> Option 1</label>
+                            <label><input type="checkbox" /> Option 2</label>
+                            <label><input type="checkbox" /> Option 3</label>
+                        </ng-container>
+                
+                  </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-4">
+        <div class="container">
+            <div class="row">
+                <div class="">
+                    <h3>Liste des champs</h3>
+                    <p style="color: orange;">Cliquer sur le bouton plus (+) pour l'ajouter</p>
+                </div>
+            </div>
+            <div class="">
+
+                <div class="">
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: space-between;">
+                            <h5>Champ Texte</h5>
+                            <button class="btn-add-field" (click)="addDiv('text')" id="button-text">+</button>
+                        </div>
+                        <div class="card-body">
+                            <input type="texte" class="form-control" placeholder="Champs type texte">
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: space-between;">
+                            <h5>Champ numérique</h5>
+                            <button class="btn-add-field"  (click)="addDiv('number')" id="button-number">+</button>
+                        </div>
+
+                        <div class="card-body">
+                            <input type="number" class="form-control" placeholder="Entrez un nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: space-between;">
+                            <h5>Liste déroulante</h5>
+                            <button class="btn-add-field" id="button-liste déroulante">+</button>
+                        </div>
+                        <div class="card-body">
+                            <select class="form-control">
+                                <option>Choix 1</option>
+                                <option>Choix 2</option>
+                                <option>Choix 3</option>
+                                <option>Choix 4</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between;">
+                        <h5>Champ date</h5>
+                        <button class="btn-add-field" id="button-date">+</button>
+                    </div>
+                    <div class="card-body">
+                        <input type="date" class="form-control">
+                    </div>
+
+                </div>
+                <div class="">
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: space-between;">
+                            <h5>Choix unique</h5>
+                            <button class="btn-add-field" id="button-radio">+</button>
+                        </div>
+                        <div class="card-body">
+                            <input type="radio" name="choix" value="1"> Choix 1
+                            <input type="radio" name="choix" value="2"> Choix 2
+                            <input type="radio" name="choix" value="3"> Choix 3
+                            <input type="radio" name="choix" value="4"> Choix 4
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between;">
+                        <h5>Champ Choix multiple</h5>
+                        <button class="btn-add-field" (click)="addDiv('checkbox')" id="button-multi-choise">+</button>
+                    </div>
+                    <div class="card-body">
+                        <input type="checkbox" name="choix[]" value="1"> Choix 1
+                        <input type="checkbox" name="choix[]" value="2"> Choix 2
+                        <input type="checkbox" name="choix[]" value="3"> Choix 3
+                        <input type="checkbox" name="choix[]" value="4"> Choix 4
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

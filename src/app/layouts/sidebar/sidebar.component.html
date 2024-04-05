@@ -1,87 +1,150 @@
-<nav [class]="isMiniSidebar ? 'sidebar dark_sidebar mini_sidebar' : 'sidebar dark_sidebar'">
-    <div class="logo d-flex justify-content-between">
-      <a
-      class="large_logo"
-      href=""
-    >
-      <img src="assets/theme/345721.png" alt="" style="width:18px;margin-right:5px"/>
-      <img src="assets/theme/applisae1.png" alt="" style="width:101px;" />
-      </a>
-      <a class="small_logo" href=""><img
-          src="assets/theme/mini_logo.png" alt=""></a>
-      <div class="sidebar_close_icon d-lg-none">
-        <i class="ti-close"></i>
-      </div>
+<div class="vertical-menu">
+
+    <div data-simplebar="init" class="h-100 simplebar-scrollable-y">
+        <div class="simplebar-wrapper" style="margin: 0px;">
+            <div class="simplebar-height-auto-observer-wrapper">
+                <div class="simplebar-height-auto-observer"></div>
+            </div>
+            <div class="simplebar-mask">
+                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                    <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content"
+                        style="height: 100%; overflow: hidden scroll;">
+                        <div class="simplebar-content" style="padding: 0px;">
+
+                            <!--- Sidemenu -->
+                            <div id="sidebar-menu" class="mm-active">
+                                <!-- Left Menu Start -->
+                                <ul class="metismenu list-unstyled mm-show" id="side-menu">
+                                    <li class="menu-title" key="t-menu">Menu</li>
+
+                                    <li>
+                                        <a routerLink="/dashboard" routerLinkActive="active"
+                                            class="waves-effect mm-active" aria-expanded="true">
+                                            <i class="fa-solid fa-gauge"></i>
+                                            <span key="t-dashboards">Tableau de bord</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="waves-effect">
+                                            <i class="fa-solid fa-box"></i>
+                                            <span key="t-layouts">Fonds Numériques</span>
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="waves-effect">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <span key="t-layouts">Recherche</span>
+                                        </a>
+
+
+
+                                    </li>
+                                    <li [class.mm-active]="activeIndex === 0">
+                                        <a href="javascript: void(0);" (click)="handleItemClick(0,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
+                                            >
+                                            <i class="fa-solid fa-folder-tree"></i>
+                                            <span key="t-layouts">Gestion Documentaire</span>
+                                        </a>
+                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 0" aria-expanded="false">
+                                            <li><a routerLink="/dashboard/dossiers" routerLinkActive="active"
+                                                    key="t-default">Dossiers</a></li>
+                                            <li class="mm-active"><a routerLink="/dashboard/documents"
+                                                    routerLinkActive="active" key="t-saas" class="active"
+                                                    aria-expanded="true">Documents</a></li>
+                                        </ul>
+                                    </li>
+                                    <li [class.mm-active]="activeIndex === 1">
+                                        <a href="javascript: void(0);" (click)="handleItemClick(1,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
+                                            >
+                                            <i class="fa-regular fa-file-lines"></i>
+                                            <span key="t-layouts">Modèle de document</span>
+                                        </a>
+                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 1" aria-expanded="false">
+                                            <li><a routerLink="/dashboard/creer-modele-document"
+                                                    routerLinkActive="active" key="t-default">Créer un modèle</a></li>
+                                            <li class="mm-active"><a routerLink="/dashboard/modele-documents"
+                                                    routerLinkActive="active" key="t-saas" class="active"
+                                                    aria-expanded="false">Tous les modèles</a></li>
+                                            <li><a routerLink="/dashboard/creer-champs-personnalises"
+                                                    routerLinkActive="active" key="t-default">Champs Personnalisés</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li [class.mm-active]="activeIndex === 2">
+                                        <a href="javascript: void(0);" (click)="handleItemClick(2,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
+                                            >
+                                            <i class="fa-regular fa-envelope"></i>
+                                            <span key="t-layouts">Courrier</span>
+                                        </a>
+                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 2" aria-expanded="false">
+                                            <li><a routerLink="/dashboard/ajouter-un-courrier" routerLinkActive="active"
+                                                    key="t-default">Ajouter un courrier</a></li>
+                                            <li class="mm-active"><a routerLink="/dashboard/mes-courriers"
+                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Mes
+                                                    courriers</a></li>
+                                            <li><a routerLink="/dashboard/creer-champs-personnalises"
+                                                    routerLinkActive="active" key="t-default">Chercher un courrier</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+
+                                    <li [class.mm-active]="activeIndex === 3">
+                                        <a href="javascript: void(0);" (click)="handleItemClick(3,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
+                                            >
+                                            <i class="fa-solid fa-users"></i>
+                                            <span key="t-layouts">Workflow</span>
+                                        </a>
+                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 3" aria-expanded="false">
+                                            <li><a routerLink="/dashboard/ajouter-un-courrier" routerLinkActive="active"
+                                                    key="t-default">Créer un workflow</a></li>
+                                            <li class="mm-active"><a routerLink="/dashboard/mes-courriers"
+                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Tous les workflows</a></li>
+                
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="waves-effect">
+                                            <i class="fa-solid fa-chart-pie"></i>
+                                            <span key="t-layouts">Statistiques</span>
+                                        </a>
+
+                                    </li>
+                                    <li [class.mm-active]="activeIndex === 4">
+                                        <a href="javascript: void(0);" (click)="handleItemClick(4,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
+                                            >
+                                            <i class="fa-solid fa-users-gear"></i>
+                                            <span key="t-layouts">Utilisateurs permissions</span>
+                                        </a>
+                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 4" aria-expanded="false">
+                                            <li><a routerLink="/dashboard/utilisateurs" routerLinkActive="active"
+                                                    key="t-default">Utilisateurs</a></li>
+                                            <li class="mm-active"><a routerLink="/dashboard/permissions"
+                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Permissions</a></li>
+                
+                                        </ul>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                            <!-- Sidebar -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="simplebar-placeholder" style="width: 250px; height: 1398px;"></div>
+        </div>
+        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+            <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+        </div>
+        <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+            <div class="simplebar-scrollbar"
+                style="height: 353px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+        </div>
     </div>
-    <ul id="sidebar_menu" class="metismenu">
-      <li class="">
-        <a routerLink="/dashboard/" routerLinkActive="active" aria-expanded="false" active="false">
-          <div class="nav_icon_small">
-            <img src="assets/theme/dashbord.png" alt="">
-          </div>
-          <div class="nav_title" >
-            <span>Tableau de bord</span>
-          </div>
-        </a>
-      </li>
-
-      <li class="">
-        <a routerLink="/dashboard/fonds-numerique" routerLinkActive="active" aria-expanded="false">
-          <div class="nav_icon_small">
-            <img src="assets/theme/2.svg" alt="">
-          </div>
-          <div class="nav_title">
-            <span>Fonds numérique</span>
-          </div>
-        </a>
-      </li>
-
-
-      <li class="">
-        <a routerLink="/dashboard/recherche" routerLinkActive="active" aria-expanded="false">
-          <div class="nav_icon_small">
-            <img src="assets/theme/chercher.svg" alt="">
-          </div>
-          <div class="nav_title">
-            <span>Recherche</span>
-          </div>
-        </a>
-      </li>
-      <li [class.mm-active]="activeIndex === 0">
-        <a href="#" (click)="handleItemClick(0,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'">
-          <!-- Your menu item content here -->
-          <div class="nav_icon_small">
-            <img src="assets/theme/document.svg" alt="">
-          </div>
-          <div class="nav_title">
-            <span>Gestion documents</span>
-          </div>
-        </a>
-        <ul class="mm-collapse" [class.mm-show]="activeIndex === 0">
-          <li><a href="/dashboard/documents">Document</a></li>
-          <li><a href="/dashboard/dossiers">Dossier</a></li>
-        </ul>
-      </li>
-      
-      <li [class.mm-active]="activeIndex === 1">
-        <a href="#" (click)="handleItemClick(1,$event)" [attr.aria-expanded]="activeIndex === 1 ? 'true' : 'false'">
-         
-          <div class="nav_icon_small">
-            <img src="assets/theme/document.svg" alt="">
-          </div>
-          <div class="nav_title">
-            <span> Utilisateurs Permissions</span>
-          </div>
-        </a>
-        <ul class="mm-collapse" [class.mm-show]="activeIndex === 1">
-          <li><a href="https://demo.dashboardpack.com/cryptocurrency-html/index_2.html">Utilisateurs</a></li>
-          <li><a href="https://demo.dashboardpack.com/cryptocurrency-html/index_3.html">Groupes</a></li>
-          <li><a href="https://demo.dashboardpack.com/cryptocurrency-html/index.html">Permissions</a></li>
-        </ul>
-      </li>
-
-
-      
-
-    </ul>
-  </nav>
+</div>

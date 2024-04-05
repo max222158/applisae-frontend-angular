@@ -11,16 +11,18 @@ export class LoginComponent {
   password: string = '';
   constructor(private authService: AuthService) {}
 
+
   login() {
-    this.authService.login(this.email, this.password).subscribe(
-      response => {
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
         // Gérer la réponse du backend après la connexion réussie
         console.log('Connexion réussie', response);
       },
-      error => {
+      error: (error) => {
         // Gérer les erreurs de connexion
         console.error('Erreur de connexion', error);
-      }
-    );
+      },
+    });
   }
+  
 }

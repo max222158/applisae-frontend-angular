@@ -16,50 +16,43 @@
 }
 </style>
 
-<body class="crm_body_bg">
+<body class="" data-sidebar="dark">
 
 
-
-
-  <section  [class]="isMiniSidebar ? 'main_content dashboard_part large_header_bg full_main_content' : 'main_content dashboard_part large_header_bg'">
-
-    <app-sidebar></app-sidebar>
+  <div id="layout-wrapper">
     <app-header></app-header>
 
-    <div class="main_content_iner overly_inner ">
-      <div class="container-fluid p-0 ">
 
-        <div class="row">
-          <div class="col-12">
-            <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-              <div class="page_title_left d-flex align-items-center">
-                <h3 class="mb-0">Menu</h3>
-              </div>
-              <div class="page_title_right">
-                <ol class="breadcrumb page_bradcam mb-0">
-                  
-                  <li class="breadcrumb-item active">Tableau de bord</li>
-                  <li class="breadcrumb-item"><a href="javascript:void(0);"></a></li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="white_card card_height_100 mb_30">
+    <!-- ========== Left Sidebar Start ========== -->
+
+    <app-sidebar></app-sidebar>
+ 
+    <!-- Left Sidebar End -->
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+
+                <!-- end page title -->
                 <router-outlet></router-outlet>
-                
-            </div>
-          </div>
+                <!-- end row -->
+
+            </div> <!-- container-fluid -->
         </div>
-      </div>
+        <!-- End Page-content -->
+
     </div>
-    <app-footer></app-footer>
+    <!-- end main content-->
 
-
-  </section>
-
+</div>
 
 
 </body>

@@ -1,0 +1,183 @@
+<div class="row">
+
+    <div class="col-md-5" style="
+    overflow-y: scroll;
+    height: 100vh;
+">
+    <form [formGroup]="courrierForm" (ngSubmit)="onSubmit()">
+        <div class="card" style="border: 1px solid #bbbbbbba;">
+            <h5 class="card-header bg-transparent border-bottom">Choisir le modèle du
+                courrier</h5>
+            <div class="card-body">
+                <div class="mb-3 "><label
+                        class="col-md-12 col-form-label">Modèle du courrier</label>
+                    <div class="col-md-12">
+                        <select style="border: 3px solid green"
+                            class="form-select" formControlName="modele">
+                            <option>-- Par défaut --</option>
+                            <option>Correspondance</option>
+                            <option>Demande de document</option>
+                            <option>Recrutement</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="border: 1px solid #bbbbbbba;">
+            <h5 class="card-header bg-transparent border-bottom">Choisir le type de
+                courrier</h5>
+            <div class="card-body">
+                <div class="mb-3 "><label
+                        class="col-md-12 col-form-label">Type De Courrier</label>
+                    <div class="col-md-12">
+                        <select class="form-select"  formControlName="type">
+                            <option value="">-- Selectionner --</option>
+                            <option value="départ">Courrier Départ</option>
+                            <option value="arrivé">Courrier Arrivé</option>
+                            <option value="interne">Courrier Interne</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+            <h5 class="card-header bg-transparent border-bottom ">Objet Du Courrier</h5>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Objet du courrier</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" formControlName="subject"></textarea>
+
+                </div>
+                <p><u>Joindre des fichiers</u></p>
+                <button type="button" class="btn btn-light waves-effect waves-light w-sm">
+                    <i class="fas fa-plus mdi mdi-upload d-block font-size-16"></i>
+                </button>
+
+            </div>
+        </div>
+        <br />
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+            <h5 class="card-header bg-transparent border-bottom">Priorité</h5>
+            <div class="card-body">
+                <div class="mb-3 row">
+
+                    <div class="col-md-12">
+                        <select class="form-select" formControlName="priority">
+                            <option value="Normale">Normale</option>
+                            <option value="Urgente">Urgente</option>
+                            <option value="Très Urgente">Très urgente</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+            <h5 class="card-header bg-transparent border-bottom ">Date</h5>
+            <div class="card-body">
+                <div class="mb-3 row">
+                    <label for="example-date-input" class="col-md-2 col-form-label" >Date Du Courrier</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" id="example-date-input" formControlName="date">
+                    </div>
+                </div>
+
+                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'arrivé'">
+                    <label for="example-date-input" class="col-md-2 col-form-label">Date D'arrivé</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" id="example-date-input" formControlName="closure_date">
+                    </div>
+                </div>
+                
+                
+
+            </div>
+        </div>
+        <br />
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+            <h5 class="card-header bg-transparent border-bottom" *ngIf="courrierForm.get('type')?.value == 'arrivé'">Expéditeur</h5>
+            <h5 class="card-header bg-transparent border-bottom" *ngIf="courrierForm.get('type')?.value == 'départ'">Destinataire</h5>
+            <div class="card-body">
+                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'départ'">
+                    <label for="example-text-input" class="col-md-12 col-form-label">Destinataire</label>
+
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" id="example-text-input" formControlName="recipient">
+                        <p></p>
+                    </div>
+                </div>
+                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'arrivé'">
+                    <label for="example-text-input" class="col-md-12 col-form-label">Expéditeur</label>
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" id="example-text-input" formControlName="sender">
+                        <p></p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+            <h5 class="card-header bg-transparent border-bottom ">Entitée Traitante</h5>
+            <div class="card-body">
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-primary waves-effect btn-label waves-light"><i
+                            class="bx bx-block label-icon fa-solid fa-user"></i> Utilisateur</button>
+                    <button type="button" class="btn btn-primary waves-effect btn-label waves-light"><i
+                            class="bx bx-block label-icon fa-solid fa-users"></i> Workflow</button>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success" >Envoyer</button>
+    </form>
+    </div>
+
+    <div class="col-md-7" style="height: 100vh; background-color: #181f8d;
+    height: 100vh;">
+
+        <div style="position: absolute;z-index: 4;">
+
+            <input type="file" (change)="onFileSelected($event)" id="file" />
+            <button class="btn btn-danger" *ngIf="pdfSrc !== ''" (click)="removeFile()">Supprimer</button>
+
+        </div>
+        <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [render-text]="true" [original-size]="false"
+            style="width: 100%;height: 100vh;position: absolute;z-index: 2;background: #181f8d;"></pdf-viewer>
+
+        <div id="preview"></div>
+
+        <div class="card">
+            <div class="card-body" style="color: white !important; background-color: #181f8d;">
+
+                <h4 class="card-title" style="color: white !important;">Document Du Courrier</h4>
+                <p class="card-title-desc">Ajouter le fichier word ou pdf ou image
+                </p>
+
+                <div style="margin-top: 100px;">
+                    <div class="dropzone dz-clickable" style=" background-color: #181f8d;">
+
+                        <div class="dz-message needsclick">
+                            <div class="mb-3" style="text-align: center;">
+                                <i style="color: #ffffff !important;"
+                                    class="display-4 text-muted bx bxs-cloud-upload fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+
+                            <h4 style="text-align: center;">Déposez le fichier ici ou cliquez pour télécharger.</h4>
+                        </div>
+                    </div>
+
+                    <ul class="list-unstyled mb-0" id="dropzone-preview">
+
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
