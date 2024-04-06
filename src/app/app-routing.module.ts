@@ -71,6 +71,11 @@ const routes: Routes = [{
             path: 'permissions', component: RoleComponent
         }
 
+        ,
+        {
+            path: 'permissions1', component: RoleComponent
+        }
+
 
     ]
 
