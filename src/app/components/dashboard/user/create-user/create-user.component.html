@@ -9,7 +9,7 @@
                 <div class="mb-3 row">
                     <label for="example-text-input" class="col-md-12 col-form-label">Photo</label>
                     <div *ngIf="userForm.get('userImage')?.value">
-                        <img [src]="getPreviewUrl()" style="width: 121px; height:145px">
+                        <img [src]="getPreviewUrl()" style="width: 121px; height:145px"> 
                       </div>
                       <div *ngIf="!userForm.get('userImage')?.value" style="display: flex;width: 121px;justify-content: center;align-items: center;height: 145px;background-color: rgb(59, 59, 59);margin-left: 12px;margin-bottom: 5px;">
                         <i class="fa-regular fa-image" style="color: whitesmoke; font-size: 30px;"></i>
