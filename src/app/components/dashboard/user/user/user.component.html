@@ -59,7 +59,11 @@
                                                     aria-controls="projectList-table" rowspan="1" colspan="1"
                                                     style="width: 58px;"
                                                     aria-label="Status: activate to sort column ascending">Service</th>
-                                                <th scope="col" class="sorting" tabindex="0"
+                                                    <th scope="col" class="sorting" tabindex="0"
+                                                    aria-controls="projectList-table" rowspan="1" colspan="1"
+                                                    style="width: 113px;"
+                                                    aria-label="Team: activate to sort column ascending">Rôle</th>
+                                                    <th scope="col" class="sorting" tabindex="0"
                                                     aria-controls="projectList-table" rowspan="1" colspan="1"
                                                     style="width: 113px;"
                                                     aria-label="Team: activate to sort column ascending">Status</th>
@@ -68,7 +72,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="odd">
+                                            <tr class="odd" *ngFor="let user of  userList" >
                                                 <td class="dtr-control sorting_1" tabindex="0">
                                                     <div class="d-none">7</div>
                                                     <div class="avatar-sm bg-light rounded p-2"> <img
@@ -79,34 +83,14 @@
                                                     <div>
                                                         <h5 class="text-truncate font-size-14"><a
                                                                 href="javascript: void(0);"
-                                                                class="text-dark">Multipurpose Landing</a></h5>
-                                                        <p class="text-muted mb-0">It will be as simple as Occidental
-                                                        </p>
+                                                                class="text-dark">{{user.name}}</a></h5>
+                                                       
                                                     </div>
                                                 </td>
-                                                <td>15 Oct, 2019</td>
-                                                <td><span class="badge bg-danger">Delay</span></td>
-                                                <td class="" style="">
-                                                    <div class="avatar-group"><a href="javascript: void(0);"
-                                                            class="avatar-group-item"
-                                                            data-img="assets/images/users/avatar-4.jpg"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="Chris Lucas"> <img
-                                                                src="assets/images/users/avatar-4.jpg" alt=""
-                                                                class="rounded-circle avatar-xs"> </a><a
-                                                            href="javascript: void(0);" class="avatar-group-item"
-                                                            data-img="assets/images/users/avatar-5.jpg"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="Patricia Pierce"> <img
-                                                                src="assets/images/users/avatar-5.jpg" alt=""
-                                                                class="rounded-circle avatar-xs"> </a><a
-                                                            href="javascript: void(0);" class="avatar-group-item"
-                                                            data-img="assets/images/users/avatar-2.jpg"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="Tommie Metzler"> <img
-                                                                src="assets/images/users/avatar-2.jpg" alt=""
-                                                                class="rounded-circle avatar-xs"> </a></div>
-                                                </td>
+                                                <td>{{user.email}}</td>
+                                                <td><span class="badge bg-danger">{{user.service}}</span></td>
+                                                <td class="" style="">{{user.role}} </td>
+                                                <td class="" style="">{{user.etat}} </td>
                                                 <td class="" style="">
                                                     <div class="dropdown"> <a href="#" class="dropdown-toggle card-drop"
                                                             data-bs-toggle="dropdown" aria-expanded="false"> <i
@@ -125,69 +109,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr class="even">
-                                                <td class="dtr-control sorting_1" tabindex="0">
-                                                    <div class="d-none">6</div>
-                                                    <div class="avatar-sm bg-light rounded p-2"> <img
-                                                            src="assets/images/companies/img-6.png" alt=""
-                                                            class="img-fluid rounded-circle"> </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <h5 class="text-truncate font-size-14"><a
-                                                                href="javascript: void(0);" class="text-dark">Blog
-                                                                Template UI</a></h5>
-                                                        <p class="text-muted mb-0">Separate existence is a myth</p>
-                                                    </div>
-                                                </td>
-                                                <td>24 Oct, 2019</td>
-                                                <td><span class="badge bg-warning">Inprogress</span></td>
-                                                <td class="" style="">
-                                                    <div class="avatar-group"><a href="javascript: void(0);"
-                                                            class="avatar-group-item"
-                                                            data-img="assets/images/users/avatar-3.jpg"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="Paul Barone"> <img
-                                                                src="assets/images/users/avatar-3.jpg" alt=""
-                                                                class="rounded-circle avatar-xs"> </a><a
-                                                            href="javascript: void(0);" class="avatar-group-item"
-                                                            data-img="assets/images/users/avatar-6.jpg"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="William Max"> <img
-                                                                src="assets/images/users/avatar-6.jpg" alt=""
-                                                                class="rounded-circle avatar-xs"> </a><a
-                                                            href="javascript: void(0);" class="avatar-group-item"
-                                                            data-img="assets/images/users/avatar-4.jpg"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="Chris Lucas"> <img
-                                                                src="assets/images/users/avatar-4.jpg" alt=""
-                                                                class="rounded-circle avatar-xs"> </a><a
-                                                            href="javascript: void(0);" class="avatar-group-item"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="2 More">
-                                                            <div class="avatar-xs">
-                                                                <div class="avatar-title rounded-circle">2+</div>
-                                                            </div>
-                                                        </a></div>
-                                                </td>
-                                                <td class="" style="">
-                                                    <div class="dropdown"> <a href="#" class="dropdown-toggle card-drop"
-                                                            data-bs-toggle="dropdown" aria-expanded="false"> <i
-                                                                class="mdi mdi-dots-horizontal font-size-18"></i> </a>
-                                                        <ul class="dropdown-menu dropdown-menu-end" style="">
-                                                            <li><a href="projects-create.html"
-                                                                    class="dropdown-item edit-list" data-edit-id="6"><i
-                                                                        class="mdi mdi-pencil font-size-16 text-success me-1"></i>
-                                                                    Edit</a></li>
-                                                            <li><a href="#removeItemModal" data-bs-toggle="modal"
-                                                                    class="dropdown-item remove-list"
-                                                                    data-remove-id="6"><i
-                                                                        class="mdi mdi-trash-can font-size-16 text-danger me-1"></i>
-                                                                    Remove</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                     
 
                                         </tbody>
                                     </table>

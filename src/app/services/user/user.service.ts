@@ -19,8 +19,14 @@ export class UserService {
     return this.http.get<any[]>(`${this.apiUrl}/list_permissions/?format=json`);
   }
 
-    // Fonction pour envoyer le formulaire
-    savePermission(formData: any): Observable<any> {
-      return this.http.post(`${this.apiUrl}/add-permission/`, formData);
-    }
+  // Fonction pour envoyer le formulaire
+  savePermission(formData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add-permission/`, formData);
+  }
+
+
+  // Fonction pour envoyer le formulaire
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/all-users/?format=json`);
+  }
 }
