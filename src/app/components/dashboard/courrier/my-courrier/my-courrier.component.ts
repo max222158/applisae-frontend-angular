@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { CourrierService } from '../../../../services/courrier/courrier.service';
+import { CourrierService } from '../../../../services/api/courrier/courrier/courrier.service';
+
 
 @Component({
   selector: 'app-my-courrier',

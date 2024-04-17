@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_URL } from '../../constants/constants';
+import { API_URL } from '../../../constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,12 @@ export class CustomfieldService {
   constructor(private http: HttpClient) { }
 
   getFieldCustom(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/customs-field/?format=json`);
+    return this.http.get<any[]>(`${this.apiUrl}/customs-field/?format=json`,  { withCredentials: true });
   }
+
+
+  saveFieldCustom(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add-fiels/`, data);
+  }
+
 }

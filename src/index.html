@@ -653,7 +653,14 @@ body[data-sidebar=dark] .navbar-brand-box {
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body class="mat-typography">
+<style>
+  .sidebar.dark_sidebar #sidebar_menu>li {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 12px;
+}
+</style>
+<body class="" data-sidebar="dark">
   <app-root></app-root>
 </body>
 

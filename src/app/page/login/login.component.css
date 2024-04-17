@@ -1,26 +1,6 @@
-body
-	{
-	background-color:rgb(0, 45, 128);
-	}
-.card-wrapper
-	{
-	width: 400px;
-	text-align: center;
-	border-color: rgb(20,20,255);
-	color: rgb(36, 54, 156);
-	margin-left: 25px;
-	margin-right: 900px;
-	margin-top: 40px;
-	}
-
-
-.card-wrapper{
-	width: 990px;
-	text-align: center;
-	border-color: rgb(20,20,255);
-	color: rgb(83, 61, 208);
-	margin-left: 200px;
-	margin-right: 200px;
-	margin-top: 10px;
+.spinner-border-sm {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: .2em;
+    margin-right: 10px;
 }
-

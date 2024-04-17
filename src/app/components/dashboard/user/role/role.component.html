@@ -15,7 +15,15 @@
 
  
                     <div class="col-sm-auto">
-                        <button type="submit" class="btn btn-primary w-md">Ajouter La Permission</button>
+                       
+                        <app-button-spinner
+                        backgroundColor="green"
+                        textColor="white"
+                        [disabled]="isLoading"
+                        [buttonText]="'Ajouter La Permission'" 
+                        >
+                    </app-button-spinner>
+    
                     </div>
                 </form>
             </div>

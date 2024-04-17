@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+@import './app/styles/dark-theme.scss';
+@import './app/styles/light-theme.scss';
+@import 'ngx-toastr/toastr';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+ .card {
+    border: 1px solid rgba(187, 187, 187, 0.7294117647) !important;
+}
+
+.mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after, .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-indeterminate::after {
+    color: #89ff00 !important;
+}
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+    color: #12eb00 !important;
+}

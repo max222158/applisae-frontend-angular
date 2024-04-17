@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ApiService } from '../../../../services/api.service';
-import { UserService } from '../../../../services/user/user.service';
+import { UserService } from '../../../../services/api/user/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-user',
@@ -9,8 +10,11 @@ import { UserService } from '../../../../services/user/user.service';
   styleUrl: './create-user.component.css'
 })
 export class CreateUserComponent {
+  isLoading: boolean = false;
   permissionList: any[] | undefined;
-  constructor(private wordToPdfService: ApiService,private  permissionService:UserService,private fb: FormBuilder) { }
+  selectedPermissions: number[] = [];
+
+  constructor(private wordToPdfService: ApiService,private toastr: ToastrService,private  userService:UserService,private fb: FormBuilder) { }
   userForm: FormGroup;
   ngOnInit() {
 
@@ -21,13 +25,14 @@ export class CreateUserComponent {
       email: [''],
       gender: [''],
       service: [''],
-      permission: [''],
+      grade: ['']
       
        // Add other form controls as needed
      });
-     this.permissionService.getPermissionList().subscribe(data => {
+     this.userService.getPermissionList().subscribe(data => {
       this.permissionList = data;
     });
+    this.userForm.addControl('permissions', this.fb.control(this.selectedPermissions));
 
   }
   onFileChange(event: Event) {
@@ -43,6 +48,20 @@ export class CreateUserComponent {
       console.error("No files selected");
     }
   }
+  onPermissionChange(event: any, permissionId: number) {
+    if (event.target.checked) {
+        // Ajouter l'ID de la permission à la liste des permissions sélectionnées
+        this.selectedPermissions.push(permissionId);
+    } else {
+        // Retirer l'ID de la permission de la liste des permissions sélectionnées
+        const index = this.selectedPermissions.indexOf(permissionId);
+        if (index !== -1) {
+            this.selectedPermissions.splice(index, 1);
+        }
+    }
+    console.log(this.selectedPermissions)
+}
+
 
   getPreviewUrl() {
     const file = this.userForm.get('userImage')?.value;
@@ -52,8 +71,22 @@ export class CreateUserComponent {
     return null;
   }
   onSubmit() {
+    this.isLoading =true
     if (this.userForm.valid) {
-
+    this.userService.saveUser(this.userForm.value).subscribe({
+      next: (response: any) => {
+        console.log('Réponse de l\'API:', response);
+        this.isLoading = false
+        this.toastr.success('Enregistré avec succès!','Utilisateur');
+        // Ajoutez ici la gestion de la réponse de l'API
+      },
+      error: (error: any) => {
+        console.error('Erreur lors de la requête vers l\'API:', error);
+        this.isLoading = false
+        this.toastr.error( 'Lors de l\'enregistrement! Veuillez réésayer','Erreur');
+        // Ajoutez ici la gestion des erreurs
+      }
+    });
      console.log(this.userForm.value);
    }
   }
