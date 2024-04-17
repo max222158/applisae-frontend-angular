@@ -12,13 +12,13 @@
                 <div class="mb-3 "><label
                         class="col-md-12 col-form-label">Modèle du courrier</label>
                     <div class="col-md-12">
-                        <select style="border: 3px solid green"
-                            class="form-select" formControlName="modele">
-                            <option>-- Par défaut --</option>
-                            <option>Correspondance</option>
-                            <option>Demande de document</option>
-                            <option>Recrutement</option>
-                        </select>
+                        <mat-form-field class="select-modele-component" style="width: 100%;">
+                            <mat-label>Choisir un modèle de courrier</mat-label>
+                            <mat-select [(value)]="selected" (selectionChange)="onSelectionChange($event)">
+                                <mat-option value="Modèle par défaut">Modèle par défaut</mat-option>
+                                <mat-option *ngFor="let modele of modeles" [value]="modele.name">{{modele.name}}</mat-option>
+                              </mat-select>
+                          </mat-form-field>
                     </div>
                 </div>
             </div>
@@ -30,18 +30,19 @@
                 <div class="mb-3 "><label
                         class="col-md-12 col-form-label">Type De Courrier</label>
                     <div class="col-md-12">
-                        <select class="form-select"  formControlName="type">
+                        <select *ngIf="selectedModele ==''" class="form-select"  formControlName="type">
                             <option value="">-- Selectionner --</option>
                             <option value="départ">Courrier Départ</option>
                             <option value="arrivé">Courrier Arrivé</option>
                             <option value="interne">Courrier Interne</option>
                         </select>
+                        <input *ngIf="selectedModele !==''"  class="form-control bg-primary text-white" type="text" readonly [value]="selectedModele">
                     </div>
                 </div>
             </div>
         </div>
         <br />
-        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== '' || selectedModele !==''">
             <h5 class="card-header bg-transparent border-bottom ">Objet Du Courrier</h5>
             <div class="card-body">
                 <div class="mb-3">
@@ -57,34 +58,41 @@
             </div>
         </div>
         <br />
-        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''  || selectedModele !==''">
             <h5 class="card-header bg-transparent border-bottom">Priorité</h5>
             <div class="card-body">
                 <div class="mb-3 row">
 
                     <div class="col-md-12">
-                        <select class="form-select" formControlName="priority">
-                            <option value="Normale">Normale</option>
-                            <option value="Urgente">Urgente</option>
-                            <option value="Très Urgente">Très urgente</option>
-                        </select>
+         
+
+                        <mat-form-field style="width: 100%;">
+                            <mat-label>Priorité de traitement</mat-label>
+                            <mat-select [(ngModel)]="selectedPrio" formControlName="priority" style="width: 100%;">
+                             
+                                <mat-option value="Normale">Normale</mat-option>
+                                <mat-option value="Urgente">Urgente</mat-option>
+                                <mat-option value="Très Urgente">Très Urgente</mat-option>
+                             
+                            </mat-select>
+                          </mat-form-field>
                     </div>
                 </div>
 
             </div>
         </div>
-        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== '' || selectedModele !==''">
             <h5 class="card-header bg-transparent border-bottom ">Date</h5>
             <div class="card-body">
-                <div class="mb-3 row">
-                    <label for="example-date-input" class="col-md-2 col-form-label" >Date Du Courrier</label>
+                <div class="mb-3 ">
+                    <label for="example-date-input" class="col-md-12 col-form-label" >Date Du Courrier</label>
                     <div class="col-md-10">
                         <input class="form-control" type="date" id="example-date-input" formControlName="date">
                     </div>
                 </div>
 
-                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'arrivé'">
-                    <label for="example-date-input" class="col-md-2 col-form-label">Date D'arrivé</label>
+                <div class="mb-3 " *ngIf="courrierForm.get('type')?.value == 'arrivé' || selectedModele =='Courrier Arrivé'">
+                    <label for="example-date-input" class="col-md-12 col-form-label">Date D'arrivé</label>
                     <div class="col-md-10">
                         <input class="form-control" type="date" id="example-date-input" formControlName="closure_date">
                     </div>
@@ -95,11 +103,11 @@
             </div>
         </div>
         <br />
-        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
-            <h5 class="card-header bg-transparent border-bottom" *ngIf="courrierForm.get('type')?.value == 'arrivé'">Expéditeur</h5>
-            <h5 class="card-header bg-transparent border-bottom" *ngIf="courrierForm.get('type')?.value == 'départ'">Destinataire</h5>
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== '' || selectedModele !==''">
+            <h5 class="card-header bg-transparent border-bottom" *ngIf="courrierForm.get('type')?.value == 'arrivé' || selectedModele =='Courrier Arrivé' || selectedModele =='Courrier Arrivé' || selectedModele =='Courrier Interne' || courrierForm.get('type')?.value == 'interne'">Expéditeur</h5>
+            <h5 class="card-header bg-transparent border-bottom" *ngIf="courrierForm.get('type')?.value == 'départ' || selectedModele =='Courrier Départ'">Destinataire</h5>
             <div class="card-body">
-                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'départ'">
+                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'départ' || selectedModele =='Courrier Départ' || selectedModele =='Courrier Interne' || courrierForm.get('type')?.value == 'interne'">
                     <label for="example-text-input" class="col-md-12 col-form-label">Destinataire</label>
 
                     <div class="col-md-12">
@@ -107,7 +115,7 @@
                         <p></p>
                     </div>
                 </div>
-                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'arrivé'">
+                <div class="mb-3 row" *ngIf="courrierForm.get('type')?.value == 'arrivé' || selectedModele =='Courrier Arrivé' || selectedModele =='Courrier Interne' || courrierForm.get('type')?.value == 'interne'">
                     <label for="example-text-input" class="col-md-12 col-form-label">Expéditeur</label>
                     <div class="col-md-12">
                         <input class="form-control" type="text" id="example-text-input" formControlName="sender">
@@ -118,8 +126,45 @@
 
             </div>
         </div>
+        <br />
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== '' || selectedModele !==''">
+            <h5 class="card-header bg-transparent border-bottom ">Annotation</h5>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Ajouter une annotation</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" formControlName="annotation"></textarea>
 
-        <div class="card" *ngIf="courrierForm.get('type')?.value !== ''">
+                </div>
+       
+
+            </div>
+        </div>
+        <div class="card" *ngIf="selectedModele !=='' || selectedModele !==''">
+            <h5 class="card-header bg-transparent border-bottom ">Champs personnalisés du modèle </h5>
+            <div class="card-body">
+                <div>
+                    <div *ngFor="let field of customer_fields; let i = index">
+                        <div class="mb-3">
+                          <label for="exampleFormControlTextarea1" class="form-label">{{ field.label }}</label>
+                          <input *ngIf="field.type === 'text'" type="text" class="form-control" #inputRef>
+                          <input *ngIf="field.type === 'number'" type="number" class="form-control" #inputRef>
+                          <input *ngIf="field.type === 'date'" type="date" class="form-control" #inputRef>
+                          <textarea *ngIf="field.type === 'textarea'" class="form-control" id="exampleFormControlTextarea1" rows="4" #inputRef></textarea>
+                        
+                            
+                        </div>
+                      </div>
+           
+                  
+                      
+                      
+                    
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== '' || selectedModele !==''">
             <h5 class="card-header bg-transparent border-bottom ">Entitée Traitante</h5>
             <div class="card-body">
 
@@ -129,6 +174,12 @@
                     <button type="button" class="btn btn-primary waves-effect btn-label waves-light"><i
                             class="bx bx-block label-icon fa-solid fa-users"></i> Workflow</button>
                 </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="courrierForm.get('type')?.value !== '' || selectedModele !==''">
+            <h5 class="card-header bg-transparent border-bottom ">Mot clé</h5>
+            <div class="card-body">
+
             </div>
         </div>
         <button type="submit" class="btn btn-success" >Envoyer</button>

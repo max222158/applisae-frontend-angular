@@ -6,7 +6,6 @@ import { HomeComponent } from './components/dashboard/home/home.component';
 import { NumericalDepositComponent } from './components/dashboard/numerical-deposit/numerical-deposit.component';
 import { SearchComponent } from './components/dashboard/search/search.component';
 import { DocumentComponent } from './components/dashboard/document/document.component';
-import { hasRoleGuard } from './guards/auth/has-role.guard';
 import { ModelComponent } from './components/dashboard/model/model.component';
 import { CreateComponent } from './components/dashboard/model/create/create.component';
 import { CustomfielsComponent } from './components/dashboard/model/customfiels/customfiels.component';
@@ -15,6 +14,9 @@ import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier
 import { UserComponent } from './components/dashboard/user/user/user.component';
 import { RoleComponent } from './components/dashboard/user/role/role.component';
 import { CreateUserComponent } from './components/dashboard/user/create-user/create-user.component';
+import { AuthGard } from './guards/auth/auth.guard';
+import { CreateworkFlowComponent } from './components/dashboard/workflow/create/create.component';
+import { ListWorkflowComponent } from './components/dashboard/workflow/list/list.component';
 
 
 
@@ -26,7 +28,7 @@ const routes: Routes = [{
     path: 'login', component: LoginComponent
 },
 {
-    path: 'dashboard', component: DashbordComponent /* ,canActivate: [hasRoleGuard]  */, children: [
+    path: 'dashboard', component: DashbordComponent  ,canActivate: [AuthGard] , children: [
         {
             path: '', component: HomeComponent,
         },
@@ -75,7 +77,14 @@ const routes: Routes = [{
         {
             path: 'permissions1', component: RoleComponent
         }
-
+        ,
+        {
+            path: 'creer-un-workflow', component: CreateworkFlowComponent
+        }
+        ,
+        {
+            path: 'liste-des-workflows', component: ListWorkflowComponent
+        }
 
     ]
 

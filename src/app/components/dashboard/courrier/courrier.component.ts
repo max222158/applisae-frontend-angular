@@ -1,10 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import mammoth from 'mammoth';
 import { ApiService } from '../../../services/api.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CourrierService } from '../../../services/courrier/courrier.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { distinctUntilChanged } from 'rxjs';
+import { CourrierService } from '../../../services/api/courrier/courrier/courrier.service';
+import { CourrierModeleService } from '../../../services/api/courrier/modele-courrier/courriermodel.service';
+
+
+interface ModeleValue {
+  label: string;
+  type: string;
+}
 
 @Component({
   selector: 'app-courrier',
@@ -12,34 +19,53 @@ import { distinctUntilChanged } from 'rxjs';
   styleUrl: './courrier.component.css'
 })
 export class CourrierComponent {
+  selected = 'Modèle par défaut';
+  selectedPrio = "Normale";
   [x: string]: any;
   selectedOption: string = '';
-  pdfSrc: SafeResourceUrl | string = ''; 
+  pdfSrc: SafeResourceUrl | string = '';
+  modeles: any[]; // Utilisation d'un tableau générique pour stocker les données
+  selectedType: string;
+  selectedModele: string = "";
+  customer_fields:any [];
+  modeleValue: any [];
+
+  fieldValues: { id: number, value: string }[] = [];
+
+  // Method to check if divsData is not empty
+
+
+
 
 
 
   selectedFile: File | null = null;
   document: Document | null = null;
 
-  constructor(private wordToPdfService: ApiService,private  courrierService:CourrierService, private sanitizer: DomSanitizer,private fb: FormBuilder) { }
- // Utilisation d'un tableau générique pour stocker les données
- courrierForm: FormGroup;
+  constructor(private wordToPdfService: ApiService, private apiCourrierService: CourrierModeleService, private courrierService: CourrierService, private sanitizer: DomSanitizer, private fb: FormBuilder) { }
+  // Utilisation d'un tableau générique pour stocker les données
+  courrierForm: FormGroup;
 
+  @ViewChildren('inputRef') inputRefs!: QueryList<ElementRef>;
 
+  ngOnInit() {
+    this.apiCourrierService.getModeleCourrier().subscribe(data => {
+      this.modeles = data;
+    });
 
- ngOnInit() {
-   this.courrierForm= this.fb.group({
-    type: [''],
-    modele: [''],
-    subject: [''],
-    priority: [''],
-    date: [''],
-    closure_date: [null],
-    recipient: [null],
-    sender: [null],
-    user:[1]
-     // Add other form controls as needed
-   });
+    this.courrierForm = this.fb.group({
+      type: [''],
+      modele: [''],
+      subject: [''],
+      priority: [''],
+      date: [''],
+      annotation: [''],
+      closure_date: [null],
+      recipient: [null],
+      sender: [null],
+      user: [1]
+      // Add other form controls as needed
+    });
     // Souscrire aux changements de la valeur du champ 'type'
     this.courrierForm.get('type')?.valueChanges.subscribe((newTypeValue) => {
       // Réinitialiser les champs lorsque 'type' change
@@ -49,27 +75,54 @@ export class CourrierComponent {
         this.courrierForm.get('sender')?.setValue(null);
       }
     });
-   console.log('Form Controls:', this.courrierForm.controls);
- }
-
- onSubmit() {
-  if (this.courrierForm.valid) {
-    const formData = this.courrierForm.value;
-
-    // Utilisez le service pour envoyer le formulaire
-    this.courrierService.saveCourrier(formData).subscribe({
-      next: (response) => {
-        console.log('Réponse de l\'API:', response);
-        // Ajoutez ici la gestion de la réponse de l'API
-      },
-      error: (error) => {
-        console.error('Erreur lors de la requête vers l\'API:', error);
-        // Ajoutez ici la gestion des erreurs
-      }
-    });
+    console.log('Form Controls:', this.courrierForm.controls);
   }
-   console.log(this.courrierForm.value);
- }
+
+  onSubmit()  {
+    this.fieldValues = [];
+    this.inputRefs.forEach((inputRef, index) => {
+      const field = this.customer_fields[index];
+      const value = inputRef.nativeElement.value;
+      this.fieldValues.push({ id: field.id, value });
+    });
+
+    console.log(this.fieldValues);
+  }
+  onSubmit1() {
+    const submittedData = this.fieldValues.map(item => ({ id: item.id, value: item.value }));
+    console.log(submittedData);
+/*     if (this.courrierForm.valid) {
+      const formData = this.courrierForm.value;
+
+      // Utilisez le service pour envoyer le formulaire
+      this.courrierService.saveCourrier(formData).subscribe({
+        next: (response) => {
+          console.log('Réponse de l\'API:', response);
+          // Ajoutez ici la gestion de la réponse de l'API
+        },
+        error: (error) => {
+          console.error('Erreur lors de la requête vers l\'API:', error);
+          // Ajoutez ici la gestion des erreurs
+        }
+      });
+    }
+    console.log(this.courrierForm.value); */
+  }
+  // On modele select change
+  onSelectionChange(event: any) {
+    const selectedMod = this.modeles.find(modele => modele.name === event.value);
+    if (selectedMod) {
+      this.selectedModele = selectedMod.type;
+      console.log('Type correspondant:', selectedMod.id);
+      this.courrierService.getFieldsByModele(selectedMod.id).subscribe(data => {
+        this.customer_fields = data.fields;
+      });
+      console.log('correspondant:', this.customer_fields);
+      // Vous pouvez faire d'autres actions ici avec le type correspondant
+    }else{
+      this.selectedModele ="";
+    }
+  }
 
 
   onFileSelected(event: Event) {
@@ -79,20 +132,20 @@ export class CourrierComponent {
       let file = fileInput.files[0];
       let reader = new FileReader();
       if (this.isOfficeFile(file)) {
-      
+
         this.wordToPdfService.convertWordToPdf(file).subscribe(
           (pdfBlob: Blob) => {
             this.pdfSrc = URL.createObjectURL(pdfBlob);
             //this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(pdfBlob));
-   
+
             // Gérez ici le téléchargement ou l'affichage du fichier PDF
-            
+
           },
           error => {
             console.error('Erreur lors de la conversion :', error);
           }
         );
-        
+
       }
 
 
@@ -103,11 +156,11 @@ export class CourrierComponent {
 
         if (typeof (FileReader) !== 'undefined') {
           let reader = new FileReader();
-      
+
           reader.onload = (e: any) => {
             this.pdfSrc = e.target.result;
           };
-      
+
           reader.readAsArrayBuffer($pdf.files[0]);
         }
 
@@ -128,6 +181,18 @@ export class CourrierComponent {
   }
 
 
-  
+
+  // Fonction pour ajouter ou mettre à jour les valeurs des champs de saisie
+  updateFieldValue(id: number, value: string) {
+    const index = this.fieldValues.findIndex(item => item.id === id);
+    if (index !== -1) {
+      // Mettre à jour la valeur si l'id existe déjà dans le tableau
+      this.fieldValues[index].value = value;
+    } else {
+      // Ajouter une nouvelle entrée si l'id n'existe pas encore dans le tableau
+      this.fieldValues.push({ id, value });
+    }
+  }
+
 }
 

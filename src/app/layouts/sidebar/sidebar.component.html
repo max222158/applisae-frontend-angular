@@ -97,12 +97,12 @@
                                         <a href="javascript: void(0);" (click)="handleItemClick(3,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
                                             >
                                             <i class="fa-solid fa-users"></i>
-                                            <span key="t-layouts">Workflow</span>
+                                            <span key="t-layouts">Workflows</span>
                                         </a>
                                         <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 3" aria-expanded="false">
-                                            <li><a routerLink="/dashboard/ajouter-un-courrier" routerLinkActive="active"
+                                            <li><a routerLink="/dashboard/creer-un-workflow" routerLinkActive="active"
                                                     key="t-default">Créer un workflow</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/mes-courriers"
+                                            <li class="mm-active"><a routerLink="/dashboard/liste-des-workflows"
                                                     routerLinkActive="active" key="t-saas" aria-expanded="true">Tous les workflows</a></li>
                 
                                         </ul>

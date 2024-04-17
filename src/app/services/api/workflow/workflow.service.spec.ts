@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CourrierService } from './courrier.service';
+import { WorkflowService } from './workflow.service';
 
-describe('CourrierService', () => {
-  let service: CourrierService;
+describe('WorkflowService', () => {
+  let service: WorkflowService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CourrierService);
+    service = TestBed.inject(WorkflowService);
   });
 
   it('should be created', () => {

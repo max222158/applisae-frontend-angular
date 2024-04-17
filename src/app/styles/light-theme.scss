@@ -1,0 +1,31 @@
+/* Styles pour le thème Clair */
+body {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+header {
+  background-color: #f0f0f0;
+}
+
+body.dark-theme .card {
+  border: 1px solid rgba(187, 187, 187, 0.7294117647);
+  background: #333333;
+  color: aliceblue;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #dddddd !important;
+}
+
+.mat-mdc-select {
+
+    color: rgb(6 6 6) !important;
+}
+.mat-mdc-select-arrow {
+    color: rgb(0 0 0) !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label, .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label--float-above {
+    color: rgb(22 21 21) !important;
+}

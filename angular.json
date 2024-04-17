@@ -35,8 +35,9 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/ngx-loading-buttons/src/styles.css",
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -95,8 +96,9 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/ngx-loading-buttons/src/styles.css",
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }

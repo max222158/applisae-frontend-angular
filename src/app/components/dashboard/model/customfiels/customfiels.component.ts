@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomfieldService } from '../../../../services/customfield/customfield.service';
+import { CustomfieldService } from '../../../../services/api/customfield/customfield.service';
 interface DivData {
   label: string;
   placeholder: string;
@@ -18,7 +18,7 @@ export class CustomfielsComponent implements OnInit {
 
   fields: any[] | undefined; // Utilisation d'un tableau générique pour stocker les données
   showButtonValidate: boolean = false;
-
+  champsVides: boolean = false;
   // Method to check if divsData is not empty
 
   constructor(private apiService: CustomfieldService) { }
@@ -65,4 +65,35 @@ export class CustomfielsComponent implements OnInit {
   deleteOption(divIndex: number, optionIndex: number) {
     this.divsData[divIndex].options.splice(optionIndex, 1);
   }
+
+  saveCustomerFiels() {
+    // Réinitialise la variable champsVides à false
+    this.champsVides = false;
+    // Vérifie si tous les champs sont remplis
+    for (let divData of this.divsData) {
+        if (!divData.label.trim()) { // Vérifie si le champ est vide ou contient uniquement des espaces
+            this.champsVides = true;
+            break; // Sort de la boucle dès qu'un champ vide est trouvé
+        }
+    }
+
+    // Si tous les champs sont remplis, continue avec l'ajout des champs personnalisés
+    if (!this.champsVides) {
+  
+      
+    
+        // Utilisez le service pour envoyer le formulaire
+        this.apiService.saveFieldCustom(this.divsData).subscribe({
+          next: (response: any) => {
+            console.log('Réponse de l\'API:', response);
+            // Ajoutez ici la gestion de la réponse de l'API
+          },
+          error: (error: any) => {
+            console.error('Erreur lors de la requête vers l\'API:', error);
+            // Ajoutez ici la gestion des erreurs
+          }
+        });
+      
+    }
+}
 }

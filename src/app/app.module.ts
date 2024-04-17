@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './page/login/login.component';
 import { DashbordComponent } from './page/dashbord/dashbord.component';
 import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -31,7 +31,18 @@ import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier
 import { UserComponent } from './components/dashboard/user/user/user.component';
 import { RoleComponent } from './components/dashboard/user/role/role.component';
 import { CreateUserComponent } from './components/dashboard/user/create-user/create-user.component';
-
+import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { ToastrModule } from 'ngx-toastr';
+import { ButtonSpinnerComponent } from './components/commons/button-with-spinner/button-with-spinner/button-spinner.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { ListWorkflowComponent } from './components/dashboard/workflow/list/list.component';
+import { CreateworkFlowComponent } from './components/dashboard/workflow/create/create.component';
+import { ErrorInterceptor } from './interceptor/error-unauthorize.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,14 +50,21 @@ import { CreateUserComponent } from './components/dashboard/user/create-user/cre
     LoginComponent, DashboardComponent, SearchComponent,
     PdfPreviewComponent, NumericalDepositComponent, HomeComponent, 
     DocumentComponent, HeaderComponent, FooterComponent, SidebarComponent
-    , ModelComponent, CreateComponent, CustomfielsComponent, CourrierComponent, MyCourrierComponent, UserComponent, RoleComponent, CreateUserComponent 
+    , ModelComponent, ButtonSpinnerComponent, CreateComponent,
+     CustomfielsComponent, CourrierComponent, MyCourrierComponent, 
+     UserComponent, RoleComponent, CreateUserComponent, ListWorkflowComponent, CreateworkFlowComponent
   ],
+
   imports: [
-    BrowserModule, PdfViewerModule,ReactiveFormsModule,
+    BrowserModule,MatSelectModule,MatFormFieldModule
+    , PdfViewerModule,ReactiveFormsModule,ToastrModule.forRoot(),NgxMatSelectSearchModule,
     AppRoutingModule,RouterOutlet,FormsModule,CdkDropList,CdkDrag,
-    CommonModule,HttpClientModule,NgxDocViewerModule,NgxExtendedPdfViewerModule, RouterOutlet,RouterLink,RouterLinkActive,RouterModule, BrowserAnimationsModule],
+    CommonModule, HttpClientModule,MatSlideToggleModule,
+    NgxDocViewerModule,MdbAccordionModule, NgxExtendedPdfViewerModule,
+     RouterOutlet,RouterLink,RouterLinkActive,RouterModule,
+      BrowserAnimationsModule],
   
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

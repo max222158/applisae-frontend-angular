@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ThemeService } from '../../services/theme/theme.service';
+import { ThemeService } from '../../services/core/theme/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -12,10 +12,18 @@ export class HeaderComponent {
     const element = document.body as HTMLBodyElement
     element.classList.toggle("mini_sidebar");
   } */
-  constructor(private sidebarToggleService: ThemeService) {}
+  constructor(private themeService: ThemeService) {}
 
   toggleSidebar() {
-    this.sidebarToggleService.toggleSidebar();
+    this.themeService.toggleSidebar();
+  }
+
+  toggleDarkMode() {
+    this.themeService.toggleDarkMode();
+  }
+
+  isDarkMode() {
+    return this.themeService.isDarkMode();
   }
 
 }
