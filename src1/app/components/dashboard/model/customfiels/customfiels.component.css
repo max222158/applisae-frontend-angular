@@ -1,0 +1,68 @@
+.btn-add-field{
+    width: 40px;
+    height: 40px;
+    background-color: green;
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+    margin-top: -27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}                       
+.card-header:first-child {
+    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
+    background: #cde9ff;
+}
+.border-1 {
+    border: 1px solid #dfdfdf;
+    border-radius: 10px;
+}
+.span-field{
+    color: orangered;
+    font-size: 18px;
+}
+.close-btn{
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    margin-top: -5px;
+}
+.input-field-custom{
+    border: 2px solid #3F51B5;
+}
+
+.accordion-item  h2 {
+   
+    letter-spacing: .0125em;
+    margin: 0px 0 0px !important;
+}
+.accordion-item {
+
+    border: 1px solid #bbb;
+}
+.accordion-button  {
+    padding-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.custom-accordion-header {
+    padding-top: 5px; /* Réduire le padding du haut */
+    padding-bottom: 5px; /* Réduire le padding du bas */
+  }
+
+.div-header-arca{
+    
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+.div-header-arca h4 {
+    font-size: 14px;
+    color: white;
+    background: #1027a4;
+    border-radius: 12px;
+    text-align: center;
+    padding: 2px 10px;
+    padding-top: 4px;
+
+}

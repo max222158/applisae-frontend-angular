@@ -1,0 +1,41 @@
+<style>
+.horizontal-scroll-container {
+    overflow-x: auto; /* Activation du défilement horizontal lorsque le contenu dépasse la largeur du conteneur */
+    white-space: nowrap; /* Empêcher le retour à la ligne pour que les éléments se défilent horizontalement */
+    /* Autres styles selon vos besoins */
+}
+
+.horizontal-scroll-container > * {
+    /* Styles pour les éléments à l'intérieur du conteneur */
+    display: inline-block; /* Aligner les éléments horizontalement */
+    /* Autres styles selon vos besoins */
+}
+</style>
+<h2 mat-dialog-title>Sélectionner un Workflow pour ce courrier</h2>
+<mat-dialog-content class="mat-typography">
+    <div *ngFor="let workflow of workflowList; let i = index">
+        <div class="mb-4 p-3 pt-1"
+        style="border: 1px solid #bbb; border-radius: 10px;"
+        [ngStyle]="{'background-color': i === selectedIndex ? '#dfffba' : ''}"
+        (click)="selectWorkflow(i,workflow.id)">
+        <p class="mb-0 mb-3" style="background: rgb(145, 18, 1); padding-left:10px;padding-right: 10px;color: white; border-radius: 20px; width: fit-content;">{{workflow.name}}</p>
+        <div class="horizontal-scroll-container "
+            >
+          <div *ngFor="let user of workflow.workflow; let i = index" class="ml-2" style="width: 100px;
+           margin-left: 10px; text-align: center;">
+            
+                <i class="fa-solid fa-circle-user" title="{{ user.name }} - {{ user.grade }}" style="font-size: 40px;"></i>
+         
+            <div>
+                <p style="font-size: 12px; max-width: 150px; " class="multiline-text"><span class="badge badge-danger">{{ i }}</span> {{ user.name }}</p>
+            </div>
+            </div>
+        </div>
+    </div>
+      </div>
+      
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn btn-danger">Annuler</button>
+  <button class="btn btn-primary" >Choisir ce workflow</button>
+</mat-dialog-actions>

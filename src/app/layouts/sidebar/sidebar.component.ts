@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
 
-  isMiniSidebar: boolean = false;
+  isMiniSidebar: boolean = false; 
 
   constructor(private sidebarToggleService: ThemeService,private router:Router) {}
   selectedMenuItem: string = '';
