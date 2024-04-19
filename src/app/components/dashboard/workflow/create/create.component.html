@@ -6,23 +6,20 @@
     <div class="row">
         <div class="col-md-5">
             <div class="">
-                <form [formGroup]="workflowForm" (ngSubmit)="onSubmit()" >
-                <label for="exampleFormControlInput1" class="form-label">Nom Du Workflow</label>
-                <input class="form-control form-control-lg mb-1" formControlName="name" type="text" placeholder="Nom Du Workflow"
-                    aria-label=".form-control-lg example">
+                <form [formGroup]="workflowForm" (ngSubmit)="onSubmit()">
+                    <label for="exampleFormControlInput1" class="form-label">Nom Du Workflow</label>
+                    <input class="form-control form-control-lg mb-1" formControlName="name" type="text"
+                        placeholder="Nom Du Workflow" aria-label=".form-control-lg example">
 
-                    <div class="mb-3" style="width: 100%;"><label
-                        for="exampleFormControlTextarea1"   class="form-label">Description de ce workflow</label>
-                    <textarea  formControlName="description" id="exampleFormControlTextarea1" rows="2" class="form-control"></textarea>
-                </div>
-                    <app-button-spinner
-                    backgroundColor="green"
-                    textColor="white"
-                    [disabled]="isLoading"
-                    [buttonText]="'Enregistrer le workflow'" 
-                    >
-                </app-button-spinner>
-            </form>
+                    <div class="mb-3" style="width: 100%;"><label for="exampleFormControlTextarea1"
+                            class="form-label">Description de ce workflow</label>
+                        <textarea formControlName="description" id="exampleFormControlTextarea1" rows="2"
+                            class="form-control"></textarea>
+                    </div>
+                    <app-button-spinner backgroundColor="green" textColor="white" [disabled]="isLoading"
+                        [buttonText]="'Enregistrer le workflow'">
+                    </app-button-spinner>
+                </form>
             </div>
             <div *ngFor="let user of userList">
                 <div class="div-work-user">
@@ -39,29 +36,37 @@
             <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="workflow" class="example-list p-4"
                 (cdkDropListDropped)="drop($event)">
                 <p class="text-warning text-center">L'ordre du workflow est du haut vers le bas</p>
-                <div *ngIf="workflow.length === 0" style="width: 100%; align-items: center; justify-content: center; display: flex;">
+                <div *ngIf="workflow.length === 0"
+                    style="width: 100%; align-items: center; justify-content: center; display: flex;">
                     <div style="width: 300px;">
-                        <img src="../../../../../assets/images/workflow.png" width="300px" height="300px" alt="Image par défaut">
+                        <img src="../../../../../assets/images/workflow.png" width="300px" height="300px"
+                            alt="Image par défaut">
                         <h4 class="text-center">Ajouter des utilisateurs au workflow et assigner leurs une tâche</h4>
-                    </div>   
-                </div>
-                @for (item of workflow; track item) {
-                <div class="example-box" cdkDrag>
-                    <div class="div-work-user">
-                        <button class="absolute btn " style="position: absolute; right: 30px; color: rgb(164, 0, 0);"
-                        (click)="removeToWorkflow(item)" >Supprimer du workflow</button>
-                        <p>{{item.name}} <span class="badge badge-primary rounded-pill d-inline" style="background: green;">{{item.grade}}</span></p>
-                        <div style="display: flex;">
-                            <img src="../../../../../assets/images/9131529-min.png" style="width: 40px; height: 40px;margin-right: 10px;" alt="">
-
-                            <div _ngcontent-ng-c1801250392="" class="mb-3" style="width: 100%;"><label _ngcontent-ng-c1801250392=""
-                                    for="exampleFormControlTextarea1"   class="form-label">Tâches à effectuer</label>
-                                <textarea id="exampleFormControlTextarea1" rows="3" class="form-control"></textarea>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                }
+                <div *ngIf="workflow.length > 0" class="border-vertical" style="">
+                    <div *ngFor="let item of workflow; let i = index; trackBy: trackById">
+                        <div style="display: flex;">
+                          <div style="width: 30px; height: 30px; border-radius: 50%;
+                           color: aliceblue; display: flex; justify-content: center;
+                            align-items: center; background: #E91E63;">{{i+1}}</div>
+                          <div class="example-box" style="width: 100%;" cdkDrag>
+                            <div class="div-work-user">
+                              <p>{{ item.name }} <span class="badge badge-primary rounded-pill d-inline" style="background: green;">{{ item.grade }}</span></p>
+                              <div style="display: flex;">
+                                <img src="../../../../../assets/images/9131529-min.png" style="width: 40px; height: 40px; margin-right: 10px;" alt="">
+                                <div _ngcontent-ng-c1801250392="" class="mb-3" style="width: 100%;">
+                                  <p  class="mb-0">Tâches à effectuer</p>
+                                  <textarea id="exampleFormControlTextarea1" rows="2" class="form-control"></textarea>
+                                </div>
+                              </div>
+                              <button class="p-0 m-0" style="color: rgb(212, 0, 0); background-color: rgba(240, 248, 255, 0); border: 0px; " (click)="removeToWorkflow(item)">Supprimer du workflow</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                </div>
             </div>
         </div>
     </div>

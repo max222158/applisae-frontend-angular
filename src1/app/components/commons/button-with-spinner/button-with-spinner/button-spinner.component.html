@@ -1,0 +1,7 @@
+<button
+class="btn btn-success"
+  [style.background-color]="backgroundColor"
+  [disabled]="disabled">
+  <span *ngIf="disabled" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span *ngIf="!disabled">{{ buttonText }}</span>
+</button>

@@ -24,7 +24,21 @@
                                             <span key="t-dashboards">Tableau de bord</span>
                                         </a>
                                     </li>
+                                    <li [class.mm-active]="activeIndex === 2">
+                                        <a href="javascript: void(0);" (click)="handleItemClick(2,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
+                                            >
+                                            <i class="fa-regular fa-envelope"></i>
+                                            <span key="t-layouts">Courrier</span>
+                                        </a>
+                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 2" aria-expanded="false">
+                                            <li><a routerLink="/dashboard/ajouter-un-courrier" routerLinkActive="active"
+                                                    key="t-default">Ajouter un courrier</a></li>
+                                            <li class="mm-active"><a routerLink="/dashboard/mes-courriers"
+                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Mes
+                                                    courriers</a></li>
 
+                                        </ul>
+                                    </li>
                                     <li>
                                         <a href="#" class="waves-effect">
                                             <i class="fa-solid fa-box"></i>
@@ -73,23 +87,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li [class.mm-active]="activeIndex === 2">
-                                        <a href="javascript: void(0);" (click)="handleItemClick(2,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
-                                            >
-                                            <i class="fa-regular fa-envelope"></i>
-                                            <span key="t-layouts">Courrier</span>
-                                        </a>
-                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 2" aria-expanded="false">
-                                            <li><a routerLink="/dashboard/ajouter-un-courrier" routerLinkActive="active"
-                                                    key="t-default">Ajouter un courrier</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/mes-courriers"
-                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Mes
-                                                    courriers</a></li>
-                                            <li><a routerLink="/dashboard/creer-champs-personnalises"
-                                                    routerLinkActive="active" key="t-default">Chercher un courrier</a>
-                                            </li>
-                                        </ul>
-                                    </li>
+
 
 
 

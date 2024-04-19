@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <h4 class="card-title">Nouvel utilisateur</h4>
+                <p class="card-title-desc">Ajouter les informations de l'utilisateur </p>
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3 row">
+                    <label for="example-text-input" class="col-md-12 col-form-label">Photo</label>
+                    <div *ngIf="userForm.get('userImage')?.value">
+                        <img [src]="getPreviewUrl()" style="width: 121px; height:145px"> 
+                      </div>
+                      <div *ngIf="!userForm.get('userImage')?.value" style="display: flex;width: 121px;justify-content: center;align-items: center;height: 145px;background-color: rgb(59, 59, 59);margin-left: 12px;margin-bottom: 5px;">
+                        <i class="fa-regular fa-image" style="color: whitesmoke; font-size: 30px;"></i>
+                      </div>
+                    <input type="file" formControlName="userImage" (change)="onFileChange($event)" accept="image/*">
+                </div>
+                <div class="mb-3 row">
+                    <label for="example-text-input" class="col-md-12 col-form-label">Identifiant</label>
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" formControlName="identifiant" placeholder="Identifiant" id="example-text-input">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="example-text-input" class="col-md-12 col-form-label">Nom Et Prénom</label>
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" formControlName="name" placeholder="Nom et Prénom" id="example-text-input">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="example-search-input" class="col-md-12 col-form-label">Email</label>
+                    <div class="col-md-12">
+                        <input class="form-control" type="email" formControlName="email" placeholder="Email ici" id="example-search-input">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-md-12 col-form-label">Genre</label>
+                    <div class="col-md-12">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" formControlName="gender"  id="inlineRadio1" value="Masculin">
+                        <label class="form-check-label" for="inlineRadio1">Masculin</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" formControlName="gender" type="radio"  id="inlineRadio2" value="Féminin">
+                        <label class="form-check-label" for="inlineRadio2">Féminin</label>
+                    </div>  
+                </div>                                                        
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="col-md-12 col-form-label">Service</label>
+                    <div class="col-md-12">
+                        <select class="form-select" formControlName="service">
+                            <option>-- Selection --</option>
+                            <option value="Informatique">Informatique</option>
+                            <option value="Comptabilité">Comptabilité</option>
+                            <option value="Direction">Direction</option>
+                            <option value="Secrétariat">Secrétariat</option>
+                            <option value="Archivage">Archivage</option>
+                            <option value="Bibliothèque">Bibliothèque</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="col-md-12 col-form-label">Grade dans le service</label>
+                    <div class="col-md-12">
+                        <select class="form-select" formControlName="grade">
+                            <option>-- Selection --</option>
+                            <option value="Directeur générale">Directeur générale</option>
+                            <option value="Directeur Adjoint">Directeur Adjoint</option>
+                            <option value="Directeur RH">Directeur RH</option>
+                            <option value="Directeur Adjoint RH">Directeur Adjoint RH</option>
+                            <option value="Archiviste">Archiviste</option>
+                            <option value="Secrétaire">Secrétaire</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="col-md-12 col-form-label" style="font-size: 20px; color: rgb(14, 74, 0);">Permissions à associer à cet utilisateur</label>
+                    <hr/>
+                    <div class="col-md-12">
+                        <div class="form-check form-check-inline" *ngFor="let permission of permissionList;" style="margin-bottom: 50px;">
+                            <input class="form-check-input"  style="height: 20px;width: 20px;" type="checkbox"  [value]="permission.id" (change)="onPermissionChange($event, permission.id)">
+                            <label class="form-check-label" for="inlineCheckbox">{{permission.name}}</label>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <app-button-spinner
+                    backgroundColor="green"
+                    textColor="white"
+                    [disabled]="isLoading"
+                    [buttonText]="'Création de l\'utilisateur'" 
+                    >
+                </app-button-spinner>
+
+                </form>
+
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div>
