@@ -1,6 +1,0 @@
-.card-header:first-child {
-    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
-    /* background: black; */
-    background-color: #181f8d !important;
-    color: aliceblue;
-}
