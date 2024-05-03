@@ -1,0 +1,67 @@
+.action-btn .btn{
+
+    margin-right: 5px;
+    margin-top: 10px;
+}
+.action-btn .btn i{
+
+    font-size: 20px;
+}
+.card-header:first-child {
+    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
+    /* background: black; */
+    background-color: #181f8d !important;
+    color: aliceblue;
+}
+.example-chip-list {
+    width: 100%;
+  }
+
+  text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #ffffff !important;
+    border-bottom: 2px solid #002393;
+    color: black;
+}
+
+input.mat-mdc-chip-input {
+    flex: 1 0 150px;
+    margin-left: 8px;
+    color: rgb(0, 0, 116) !important;
+}
+
+.process-flow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 20px;
+  }
+  
+  .icon {
+    width: 60px;
+    height: 60px;
+    background-color: #6c63ff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+  }
+  
+  .label {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .vertical-line {
+    width: 2px; /* Définit la largeur de la ligne */
+    height: 100px; /* Définit la hauteur de la ligne (peut être ajustée selon vos besoins) */
+    border-left: 1px solid black; /* Optionnel : style de la bordure à gauche de la ligne */
+    margin-left:16px
+}

@@ -23,4 +23,16 @@ export class WorkflowService {
 
     return this.http.get<any[]>(`${this.apiUrl}/workflow/get-workflow/?format=json`,  { withCredentials: true });
   }
+
+  getUserInWorkflow(id: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    return this.http.post(`${this.apiUrl}/workflow/get-users/`, formData,  { withCredentials: true });
+  }
+
+  getUsersCourrier(users: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('users', JSON.stringify(users));
+    return this.http.post(`${this.apiUrl}/workflow/get-users-courriers/`, formData,  { withCredentials: true });
+  }
 }
