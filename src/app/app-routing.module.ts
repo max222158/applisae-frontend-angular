@@ -17,6 +17,8 @@ import { CreateUserComponent } from './components/dashboard/user/create-user/cre
 import { AuthGard } from './guards/auth/auth.guard';
 import { CreateworkFlowComponent } from './components/dashboard/workflow/create/create.component';
 import { ListWorkflowComponent } from './components/dashboard/workflow/list/list.component';
+import { CourrierDetailsComponent } from './components/dashboard/courrier/courrier-details/courrier-details.component';
+import { CreateCourrierComponent } from './components/dashboard/courrier/create-courrier/create-courrier.component';
 
 
 
@@ -58,10 +60,20 @@ const routes: Routes = [{
             path: 'creer-champs-personnalises', component: CustomfielsComponent
         },
         {
-            path: 'ajouter-un-courrier', component: CourrierComponent
+            path: 'ajouter-un-courrier', component: CreateCourrierComponent
         },
         {
-            path: 'mes-courriers', component: MyCourrierComponent
+            path: 'courriers', component: CourrierComponent , children: [
+        
+                {
+                    path: 'mes-courriers', component: MyCourrierComponent,
+                
+                },
+                {
+        
+                    path: 'details-courrier/:id', component: CourrierDetailsComponent
+                },
+            ]
         },
         {
             path: 'utilisateurs', component: UserComponent

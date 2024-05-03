@@ -25,7 +25,6 @@ import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/d
 import { CourrierComponent } from './components/dashboard/courrier/courrier.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
-import { PdfPreviewComponent } from './components/dashboard/courrier/pdf-loader.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier/my-courrier.component';
 import { UserComponent } from './components/dashboard/user/user/user.component';
@@ -43,6 +42,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { ListWorkflowComponent } from './components/dashboard/workflow/list/list.component';
 import { CreateworkFlowComponent } from './components/dashboard/workflow/create/create.component';
 import { ErrorInterceptor } from './interceptor/error-unauthorize.interceptor';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CustomDateFormatPipe } from './services/core/utils/customize-date.service';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CourrierDetailsComponent } from './components/dashboard/courrier/courrier-details/courrier-details.component';
+import { CreateCourrierComponent } from './components/dashboard/courrier/create-courrier/create-courrier.component';
+import { PdfPreviewComponent } from './components/dashboard/courrier/create-courrier/pdf-loader.component';
+import { MatIconModule } from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,16 +61,16 @@ import { ErrorInterceptor } from './interceptor/error-unauthorize.interceptor';
     DocumentComponent, HeaderComponent, FooterComponent, SidebarComponent
     , ModelComponent, ButtonSpinnerComponent, CreateComponent,
      CustomfielsComponent, CourrierComponent, MyCourrierComponent, 
-     UserComponent, RoleComponent, CreateUserComponent, ListWorkflowComponent, CreateworkFlowComponent
+     UserComponent, RoleComponent, CreateUserComponent, ListWorkflowComponent, CreateworkFlowComponent,CustomDateFormatPipe, CourrierDetailsComponent, CreateCourrierComponent
   ],
 
   imports: [
-    BrowserModule,MatSelectModule,MatFormFieldModule
+    BrowserModule,NgxPaginationModule,MatSelectModule,MatFormFieldModule,MatCheckboxModule
     , PdfViewerModule,ReactiveFormsModule,ToastrModule.forRoot(),NgxMatSelectSearchModule,
     AppRoutingModule,RouterOutlet,FormsModule,CdkDropList,CdkDrag,
     CommonModule, HttpClientModule,MatSlideToggleModule,
     NgxDocViewerModule,MdbAccordionModule, NgxExtendedPdfViewerModule,
-     RouterOutlet,RouterLink,RouterLinkActive,RouterModule,
+     RouterOutlet,RouterLink,RouterLinkActive,RouterModule,MatIconModule,MatTooltipModule,MatChipsModule,
       BrowserAnimationsModule],
   
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],

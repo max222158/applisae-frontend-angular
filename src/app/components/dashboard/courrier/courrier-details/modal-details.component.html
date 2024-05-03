@@ -1,0 +1,180 @@
+<div style="">
+<style>
+.horizontal-scroll-container {
+    overflow-x: auto; /* Activation du défilement horizontal lorsque le contenu dépasse la largeur du conteneur */
+    white-space: nowrap; /* Empêcher le retour à la ligne pour que les éléments se défilent horizontalement */
+    /* Autres styles selon vos besoins */
+}
+
+.horizontal-scroll-container > * {
+    /* Styles pour les éléments à l'intérieur du conteneur */
+    display: inline-block; /* Aligner les éléments horizontalement */
+    /* Autres styles selon vos besoins */
+}
+</style>
+<h2 mat-dialog-title>Tous les détails du courrier </h2>
+<mat-dialog-content class="mat-typography" style="">
+        <div class="card" style="border: 1px solid #bbbbbbba;">
+            <h5 class="card-header bg-transparent border-bottom">Choisir le modèle du
+                courrier</h5>
+            <div class="card-body">
+                <div class="mb-3 "><label class="col-md-12 col-form-label">Modèle du courrier</label>
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="border: 1px solid #bbbbbbba;">
+            <h5 class="card-header bg-transparent border-bottom">Choisir le type de
+            courrier</h5>
+            <div class="card-body">
+                <div class="mb-3 "><label class="col-md-12 col-form-label">Type De Courrier</label>
+
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="card" >
+            <!-- Content of your card here -->            
+            <h5 class="card-header bg-transparent border-bottom ">Objet Du Courrier</h5>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Objet du courrier</label>
+                    <textarea class="form-control" placeholder="Objet du courrier" id="exampleFormControlTextarea1" rows="2"
+                        formControlName="subject"></textarea>
+
+                </div>
+                <p><u>Joindre des fichiers</u></p>
+                <button type="button" class="btn btn-light waves-effect waves-light w-sm">
+                    <i class="fas fa-plus mdi mdi-upload d-block font-size-16"></i>
+                </button>
+
+            </div>
+        </div>
+        <br />
+        <div class="card" >
+            <h5 class="card-header bg-transparent border-bottom">Priorité</h5>
+            <div class="card-body">
+                <div class="mb-3 row">
+
+                    <div class="col-md-12">
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card" >
+            <h5 class="card-header bg-transparent border-bottom ">Date</h5>
+            <div class="card-body">
+                <div class="mb-3 ">
+                    <label for="example-date-input" class="col-md-12 col-form-label">Date Du Courrier</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" id="example-date-input" formControlName="date">
+                    </div>
+                </div>
+
+                <div class="mb-3 "
+                    >
+                    <label for="example-date-input" class="col-md-12 col-form-label">Date D'arrivée</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" id="example-date-input"
+                            formControlName="closure_date">
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <br />
+        <div class="card">
+            <h5 class="card-header bg-transparent border-bottom"
+                >
+                Expéditeur</h5>
+            <h5 class="card-header bg-transparent border-bottom"
+                >
+                Destinataire</h5>
+            <div class="card-body">
+                <div class="mb-3 row"
+                   >
+                    <label for="example-text-input" class="col-md-12 col-form-label">Destinataire</label>
+
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" id="example-text-input" placeholder="Destinataire du courrier" formControlName="recipient">
+                        <p></p>
+                    </div>
+                </div>
+                <div class="mb-3 row"
+                    >
+                    <label for="example-text-input" class="col-md-12 col-form-label">Expéditeur</label>
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" id="example-text-input" placeholder="Expéditeur du courrier" formControlName="sender">
+                        <p></p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <br />
+        <div class="card" >
+            <h5 class="card-header bg-transparent border-bottom ">Annotation</h5>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Ajouter une annotation</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" placeholder="Ecrire une annotation"
+                        formControlName="annotation"></textarea>
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="card" >
+            <h5 class="card-header bg-transparent border-bottom ">Champs personnalisés du modèle </h5>
+            <div class="card-body">
+                <div>
+        
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card" >
+            <h5 class="card-header bg-transparent border-bottom ">Entitée Traitante</h5>
+            <div class="card-body">
+
+                <div class="d-flex flex-wrap gap-2">
+    
+                    <div style="width: 100%;">
+                        <p 
+                            style="width: fit-content;letter-spacing: 3px; font-size: 13px; background: #7b0042; color: #fff; padding-left: 20px; padding-right: 20px; border-radius: 15px;">
+                            <b>  </b></p>
+
+                    </div>
+
+             
+                </div>
+            </div>
+        </div>
+        <div class="card" >
+            <h5 class="card-header bg-transparent border-bottom ">Mot clé</h5>
+            <div class="card-body">
+
+            </div>
+        </div>
+
+      
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn btn-primary" (click)="closeDialog()" >Fermer</button>
+</mat-dialog-actions>
+</div>

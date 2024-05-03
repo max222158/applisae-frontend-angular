@@ -1,0 +1,4 @@
+.mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+    border-color: rgb(200 200 200) !important;
+    background-color: transparent;
+}

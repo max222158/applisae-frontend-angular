@@ -33,7 +33,7 @@
                                         <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 2" aria-expanded="false">
                                             <li><a routerLink="/dashboard/ajouter-un-courrier" routerLinkActive="active"
                                                     key="t-default">Ajouter un courrier</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/mes-courriers"
+                                            <li class="mm-active"><a routerLink="/dashboard/courriers/mes-courriers"
                                                     routerLinkActive="active" key="t-saas" aria-expanded="true">Mes
                                                     courriers</a></li>
 
@@ -55,20 +55,6 @@
 
 
 
-                                    </li>
-                                    <li [class.mm-active]="activeIndex === 0">
-                                        <a href="javascript: void(0);" (click)="handleItemClick(0,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
-                                            >
-                                            <i class="fa-solid fa-folder-tree"></i>
-                                            <span key="t-layouts">Gestion Documentaire</span>
-                                        </a>
-                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 0" aria-expanded="false">
-                                            <li><a routerLink="/dashboard/dossiers" routerLinkActive="active"
-                                                    key="t-default">Dossiers</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/documents"
-                                                    routerLinkActive="active" key="t-saas" class="active"
-                                                    aria-expanded="true">Documents</a></li>
-                                        </ul>
                                     </li>
                                     <li [class.mm-active]="activeIndex === 1">
                                         <a href="javascript: void(0);" (click)="handleItemClick(1,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"

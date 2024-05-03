@@ -17,7 +17,7 @@
         <div class="mb-4 p-3 pt-1"
         style="border: 1px solid #bbb; border-radius: 10px;"
         [ngStyle]="{'background-color': i === selectedIndex ? '#dfffba' : ''}"
-        (click)="selectWorkflow(i,workflow.id)">
+        (click)="selectWorkflow(i,workflow.id,workflow.name)">
         <p class="mb-0 mb-3" style="background: rgb(145, 18, 1); padding-left:10px;padding-right: 10px;color: white; border-radius: 20px; width: fit-content;">{{workflow.name}}</p>
         <div class="horizontal-scroll-container "
             >
@@ -36,6 +36,6 @@
       
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button class="btn btn-danger">Annuler</button>
-  <button class="btn btn-primary" >Choisir ce workflow</button>
+  <button class="btn btn-danger mr-2">Annuler</button>
+  <button class="btn btn-primary" (click)="closeDialog()" >Choisir ce workflow</button>
 </mat-dialog-actions>

@@ -1,0 +1,24 @@
+.card-header:first-child {
+    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
+    /* background: black; */
+    background-color: #181f8d !important;
+    color: aliceblue;
+}
+.example-chip-list {
+    width: 100%;
+  }
+
+  text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #ffffff !important;
+    border-bottom: 2px solid #002393 !important;
+    color: black;
+}
+input::placeholder {
+    color: rgb(70, 70, 70) !important; /* Changez la couleur ici */
+}
+
+input.mat-mdc-chip-input {
+    flex: 1 0 150px;
+    margin-left: 8px;
+    color: rgb(0, 0, 116) !important;
+}

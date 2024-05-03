@@ -51,6 +51,7 @@ export class CreateworkFlowComponent {
 
   onSubmit() {
     this.updateWorkflow()
+
     const formData = {name: this.workflowForm.value.name, description: this.workflowForm.value.description, workflow: this.workflow}
     console.log(formData)
      this.workflowService.saveWorkFlow(formData).subscribe({
@@ -103,12 +104,14 @@ export class CreateworkFlowComponent {
     const updatedWorkflow: User[] = [];
   
     this.workflow.forEach((item, index) => {
-      const textarea = textareaElements[index];
+      const textarea = textareaElements[index+1];
       const updatedItem = { ...item, task: textarea?.value || '' };
       updatedWorkflow.push(updatedItem);
     });
   
     this.workflow = updatedWorkflow;
+
+    console.log(this.workflow)
   }
 
 }

@@ -89,3 +89,19 @@ body.dark-theme .mat-mdc-select-arrow {
 body.dark-theme .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label, .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label--float-above {
   color: rgb(255, 255, 255) !important;
 }
+
+body.dark-theme .annot-div {
+  background: #909090 !important;
+}
+
+body.dark-theme i{
+
+  color: #ffff !important;
+}
+
+body.dark-theme .modal-user-workflow {
+  background: #909090 !important;
+}
+body.dark-theme .modal-user-workflow .div-user {
+  background: #373737 !important;
+}

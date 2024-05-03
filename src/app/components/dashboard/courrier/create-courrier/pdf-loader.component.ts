@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 })
 export class PdfPreviewComponent {
   pdfSrc: string | ArrayBuffer = '';
-
+ 
   handleFileInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     const files = target.files;

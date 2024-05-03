@@ -1,0 +1,36 @@
+<style>
+    .horizontal-scroll-container {
+        overflow-x: auto;
+        /* Activation du défilement horizontal lorsque le contenu dépasse la largeur du conteneur */
+        white-space: nowrap;
+        /* Empêcher le retour à la ligne pour que les éléments se défilent horizontalement */
+        /* Autres styles selon vos besoins */
+    }
+</style> 
+<h2 mat-dialog-title>Sélectionner le destnataire pour ce courrier </h2>
+<mat-dialog-content class="mat-typography">
+    <div *ngFor="let user of users">
+        <div class="mb-4 p-3 pt-1"
+            style="border: 1px solid #bbb; border-radius: 10px; cursor: pointer;"
+            [ngStyle]="{'background-color': isSelected(user.id) ? '#dfffba' : ''}"
+            (click)="toggleSelection(user.id,user.name)">
+            <div style="display: flex;">
+             
+                <i class="fa-solid fa-circle-user" title="{{ user.name }} - {{ user.grade }}"
+                    style="font-size: 40px; color: rgb(57, 163, 255);"></i>
+                <div class="ml-1">
+                    <p class="mb-0 mb-3"
+                        style="background: rgb(13, 98, 0);margin-bottom: 0px !important; padding-left:10px;padding-right: 10px;color: white; border-radius: 20px; width: fit-content;">
+                        {{user.name}}</p>
+                    <p class="mt-0" style="color: blueviolet;">{{user.grade}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+    <button class="btn btn-primary mr-2" (click)="addUser()">Ajouter cet utilisateur</button>
+    <button class="btn btn-danger" (click)="closeDialog()">Fermer</button>
+</mat-dialog-actions>

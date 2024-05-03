@@ -15,13 +15,28 @@ export class CourrierService {
 
   constructor(private http: HttpClient) { }
 
-  getCourrierList(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/list_courriers/?format=json`);
+  getCourrierList(page:number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/list_courriers/?page=${page}&format=json`,{withCredentials:true});
   }
-
+  getUser(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/courriers/user/?format=json`,{withCredentials:true});
+  }
     // Fonction pour envoyer le formulaire
     saveCourrier(formData: any): Observable<any> {
-      return this.http.post(`${this.apiUrl}/save_courrier/`, formData);
+      return this.http.post(`${this.apiUrl}/courriers/save_courrier/`, formData,{withCredentials:true});
+    }
+    getDetailsCourrierById(id: number, page:number): Observable<any> {
+      const formData = new FormData();
+      formData.append('id', id.toString());  // Envoyer l'ID du modèle de courrier
+  
+      return this.http.post(`${this.apiUrl}/courriers/get_details_courrier/?page=${page}`, formData, { withCredentials: true });
+    }
+
+    getFileCourrierById(id: number): Observable<any> {
+      const formData = new FormData();
+      formData.append('id', id.toString());  // Envoyer l'ID du modèle de courrier
+  
+      return this.http.post(`${this.apiUrl}/courriers/get-file-courrier-by-id/`, formData, { withCredentials: true });
     }
 
     // Get the field of a modele courrier

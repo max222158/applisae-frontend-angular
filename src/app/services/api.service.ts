@@ -9,14 +9,14 @@ export class ApiService {
 
 
 
-  private baseUrl = 'http://127.0.0.1:5000'; 
+  private baseUrl = 'http://localhost:8000/api'; 
 
   constructor(private http: HttpClient) { }
 
-  convertWordToPdf(wordFile: File): Observable<Blob> {
+  convertWordToPdf(wordFile: File): Observable<any> {
     const formData: FormData = new FormData();
-    formData.append('wordFile', wordFile, wordFile.name);
+    formData.append('file', wordFile, wordFile.name);
 
-    return this.http.post(`${this.baseUrl}/convert`, formData, { responseType: 'blob' });
+    return this.http.post(`${this.baseUrl}/convert/`, formData);
   }
 }
