@@ -52,6 +52,6 @@ export class MyCourrierComponent {
       }
     };
 
-    this.router.navigate(['/dashboard/courriers/details-courrier', courrierId], navigationExtras);
+    this.router.navigate(['/tableau-de-bord/courriers/details-courrier', courrierId], navigationExtras);
   }
 }

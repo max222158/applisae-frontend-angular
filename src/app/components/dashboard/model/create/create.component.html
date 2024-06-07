@@ -25,7 +25,6 @@
                             <label class="col-md-12 col-form-label">Type De Courrier</label>
                             <div class="col-md-10">
                                 <select class="form-select" formControlName="type">
-                                    <option>-- Selectionner --</option>
                                     <option>Courrier Départ</option>
                                     <option>Courrier Arrivé</option>
                                     <option>Courrier Interne</option>
@@ -64,7 +63,8 @@
                 <app-button-spinner
                     backgroundColor="green"
                     textColor="white"
-                    [disabled]="isLoading"
+                    [disabled]="disabled"
+                    [isSpinnerLoading]="isSpinnerLoading"
                     [buttonText]="'Enregistrer le modele'" 
                     >
                 </app-button-spinner>

@@ -44,3 +44,61 @@ body.light-theme .mat-mdc-dialog-container .mdc-dialog__title {
   color: rgb(84 73 73 / 87%);
 
 }
+
+body.light-theme .action-button{
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #797979
+}
+
+body.light-theme .simplebar-mask {
+
+    background: white !important;
+}
+
+body.light-theme .simplebar-content-wrapper {
+
+  background: rgb(244, 244, 244);
+} 
+
+body.light-theme #sidebar-menu ul li a {
+  display: block;
+  padding: 0.625rem 1.5rem;
+  color: #1b1b1b ;
+  position: relative;
+  font-size: 15px;
+  -webkit-transition: all .6s;
+  transition: all .6s;
+}
+
+body.light-theme #sidebar-menu ul li a:hover {
+  color: #aeaeae;
+}
+body.light-theme .mm-active .active {
+  color: #000 !important;
+}
+
+body.light-theme #sidebar-menu ul li ul.sub-menu li a:hover {
+  color: #7780fd;
+}
+
+body.light-theme .mm-active .active i {
+  color: #6a7187 !important;
+}
+body.light-theme  .mm-active>a {
+  color: #fff !important;
+  background: #00BCD4;
+
+}
+
+body.light-theme #page-topbar {
+
+  background-color: #30a3ff !important;
+
+}
+
+body.light-theme body[data-sidebar=dark] .navbar-brand-box {
+  background: #30a3ff !important;
+  border-bottom: 0px solid #393938 !important;
+}

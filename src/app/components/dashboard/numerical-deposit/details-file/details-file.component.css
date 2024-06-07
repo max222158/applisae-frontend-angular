@@ -1,0 +1,22 @@
+
+
+.page-content {
+    padding: calc(70px + 24px) 0px 60px 0px !important;
+}
+
+.action-button:hover{
+
+    color: blue;
+
+}
+
+.action-button{
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.action-button i{
+    margin-right: 7px;
+    font-size: 16px;
+}

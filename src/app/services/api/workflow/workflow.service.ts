@@ -13,9 +13,12 @@ export class WorkflowService {
 
 
   constructor(private http: HttpClient) { }
-
-
   saveWorkFlow(formData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/workflow/document/save-workflow/`, formData,  { withCredentials: true });
+  }
+
+
+  saveModelWorkFlow(formData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/workflow/save-workflow/`, formData,  { withCredentials: true });
   }
 
@@ -34,5 +37,47 @@ export class WorkflowService {
     const formData = new FormData();
     formData.append('users', JSON.stringify(users));
     return this.http.post(`${this.apiUrl}/workflow/get-users-courriers/`, formData,  { withCredentials: true });
+  }
+
+
+  getTaskWorkflowByUser(page: number,filter:string): Observable<any> {
+    const formData = new FormData();
+    formData.append('page', page.toString());
+    formData.append('filterBy', filter);
+    return this.http.post(`${this.apiUrl}/workflow/get-task/`, formData,  { withCredentials: true });
+  }
+
+  getDetailsTaskById(id: number, task: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('task', task.toString());
+    return this.http.post(`${this.apiUrl}/workflow/get-task-id/`, formData,  { withCredentials: true });
+  }
+
+
+  getDocumentFileByTask(id: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    return this.http.post(`${this.apiUrl}/workflow/get-document-file-id/`, formData,  { withCredentials: true });
+  }
+
+  
+  setIsTaskRead(id: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    return this.http.post(`${this.apiUrl}/workflow/set-task-is-read/`, formData,  { withCredentials: true });
+  }
+
+  approvedWorkflowTask(id: number, approvation:boolean): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('approvation', approvation.toString());
+    return this.http.post(`${this.apiUrl}/workflow/approve-task/`, formData,  { withCredentials: true });
+  }
+
+  closeWorkflow(id: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    return this.http.post(`${this.apiUrl}/workflow/close-worflow/`, formData,  { withCredentials: true });
   }
 }

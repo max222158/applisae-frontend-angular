@@ -1,0 +1,37 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModalCopy ? 'block' : 'none'}">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <h3 class="m-2">Déplacer {{number_of_elements}} éléments vers...</h3>
+                <p class="ml-2">Emplacement actuel:</p>
+                <div class="flex1 item-center">
+                    <button class="btn button-back" style="width: 50px; height:50px; border-radius: 50%;background: #ebebeb;">
+                        <i class="fa-solid fa-home font-size-20"></i>
+                    </button>
+                    <p *ngFor="let path of paths" (click)="getPathFolder(path.id, path.name)"
+                       style="color: rgb(0, 71, 157); font-size: 16px; cursor: pointer; margin-right: 15px; margin-bottom: 0px; padding-left: 10px;">
+                        {{path.name}} <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-left: 10px;"></i>
+                    </p>
+                    <p style="color: rgb(117, 117, 117); font-size: 16px; font-weight: 500;" class="mb-0">
+                        {{current_folder_name}}
+                    </p>
+                </div>
+                <hr>
+                <div *ngFor="let folder of folders; let i = index" class="cursor-pointer item-center"
+                     (click)="setIsSelectionFolder(i,folder.id)"
+                     style="margin-top: 10px; display: flex; padding: 10px;"
+                     [ngStyle]="{background: isSelectionFolder === i ? 'rgb(42 140 194 / 21%)' : ''}">
+                    <i (click)="getFolderById(folder.id, folder.name)" class="fa-solid fa-chevron-right"
+                       style="font-size: 12px; margin-right: 10px; margin-top: 4px;"></i>
+                    <i class="fa-solid fa-folder" style="font-size: 20px; color: rgb(42, 140, 194) !important;"></i>
+                    <p style="margin-left: 5px; margin-bottom: 0px;">{{folder.name}}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="copyFile()">Copier Ici...</button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>

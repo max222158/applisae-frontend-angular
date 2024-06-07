@@ -17,6 +17,6 @@ export class ApiService {
     const formData: FormData = new FormData();
     formData.append('file', wordFile, wordFile.name);
 
-    return this.http.post(`${this.baseUrl}/convert/`, formData);
+    return this.http.post(`${this.baseUrl}/convert/`, formData,{withCredentials:true});
   }
 }

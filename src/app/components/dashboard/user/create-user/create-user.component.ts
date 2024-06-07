@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ApiService } from '../../../../services/api.service';
 import { UserService } from '../../../../services/api/user/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { Media_url_public } from '../../../../constants/constants';
 
 @Component({
   selector: 'app-create-user',
@@ -13,6 +14,8 @@ export class CreateUserComponent {
   isLoading: boolean = false;
   permissionList: any[] | undefined;
   selectedPermissions: number[] = [];
+
+  selectedFile: File | null = null;
 
   constructor(private wordToPdfService: ApiService,private toastr: ToastrService,private  userService:UserService,private fb: FormBuilder) { }
   userForm: FormGroup;
@@ -40,6 +43,7 @@ export class CreateUserComponent {
 
     if (inputElement && inputElement.files && inputElement.files.length > 0) {
       const file = inputElement.files[0];
+      this.selectedFile = inputElement.files[0];
       this.userForm.patchValue({
         userImage: file
       });
@@ -73,7 +77,15 @@ export class CreateUserComponent {
   onSubmit() {
     this.isLoading =true
     if (this.userForm.valid) {
-    this.userService.saveUser(this.userForm.value).subscribe({
+      
+    const formData = new FormData();
+    formData.append('user',JSON.stringify(this.userForm.value));
+    if (this.selectedFile) {
+
+
+      formData.append('file', this.selectedFile, this.selectedFile.name);
+    }
+    this.userService.saveUser(formData).subscribe({
       next: (response: any) => {
         console.log('Réponse de l\'API:', response);
         this.isLoading = false

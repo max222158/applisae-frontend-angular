@@ -14,8 +14,13 @@ export class LoginComponent {
   credentials = { email: '', password: '' };
   loading = false;
 
-  constructor(private authService: AuthService, private toastr: ToastrService,private router: Router) {}
+  constructor(private authService: AuthService, private toastr: ToastrService,private router: Router) {
+  
+  }
 
+  ngOnInit() {
+    localStorage.removeItem('menu')
+  }
   onSubmit(): void {
     this.loading = true;
     this.authService.login(this.credentials).subscribe({
@@ -26,7 +31,11 @@ export class LoginComponent {
         this.toastr.success('Bienvenue', 'Connexion a réussi!');
         this.authService.setIsAuthentificate(true);
         localStorage.setItem('islogged', 'true');
-        this.router.navigate(['/dashboard']); 
+        localStorage.setItem('menu', JSON.stringify(response.menu));
+        localStorage.setItem('userDetails', JSON.stringify(response.userDetails));
+        console.log("6666666", AuthService.menuShared); 
+        this.authService.setMenu(response.menu)
+        this.router.navigate(['/tableau-de-bord']); 
       },
       error: (error) => {
         this.loading = false;

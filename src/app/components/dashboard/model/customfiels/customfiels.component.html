@@ -1,370 +1,678 @@
-<div class="row">
+<div class="container">
+    <div class="row">
 
 
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="mb-0" style="color: black; font-weight: 500;">Liste des nouveaux champs à ajouter</h3>
-                <p class="mt-0"><i class="fa-solid fa-circle-info"></i> Les champs créés pourront être ajouté au modèle
-                    de document</p>
-            </div>
-            <div class="card-body">
-
-
-
-                <div *ngFor="let divData of divsData; let i = index">
-                    <p *ngIf="champsVides && !divData.label.trim()" class="text-danger"><i
-                            class="fa-solid fa-circle-xmark"></i> Ce champ ne peut pas être vide.</p>
-
-                    <ng-container *ngIf="divData.type === 'text'">
-                        <div class="">
-                            <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
-                                <div class="card-header"
-                                    style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
-
-                                    <input class="form-control input-field-custom" type="text"
-                                        [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
-                                    <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
-                                        id="button-text">x</button>
-                                </div>
-                                <div class="card-body">
-                                    <p class="field-p">
-                                        Type: <span class="span-field">Texte</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="divData.type === 'number'">
-
-
-                        <div class="">
-                            <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
-                                <div class="card-header"
-                                    style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
-                                    <input class="form-control input-field-custom" type="text"
-                                        [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
-                                    <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
-                                        id="button-text">x</button>
-                                </div>
-                                <div class="card-body">
-                                    <p class="field-p">
-                                        Type de champs: <span class="span-field">Nombre</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-
-                    <ng-container *ngIf="divData.type === 'checkbox'">
-
-                        <div class="">
-                            <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
-                                <div class="card-header"
-                                    style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
-                                    <input class="form-control input-field-custom" type="text"
-                                        [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
-                                    <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
-                                        id="button-text">x</button>
-                                </div>
-                                <div class="card-body">
-                                    <p>Options</p>
-                                    <ng-container *ngIf="divData.type === 'checkbox'">
-                                        <div style="display: flex; margin-top: 10px;"
-                                            *ngFor="let option of divData.options; let j = index">
-                                            <input class="form-control" style="width: 300px;" type="text"
-                                                [(ngModel)]="option.value" />
-                                            <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
-                                            <button *ngIf="j === divData.options.length - 1"
-                                                class="btn btn-success ml-1" (click)="addOption(i)">Ajouter</button>
-                                            <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
-                                            <span *ngIf="j !== divData.options.length - 1">
-                                                <button class="btn btn-danger ml-1" (click)="deleteOption(i, j)"><i
-                                                        class="fa-solid fa-trash-can"></i></button>
-                                            </span>
-                                        </div>
-
-                                    </ng-container>
-                                    <p class="field-p mt-4">
-                                        Type de champs: <span class="span-field">Choix multiples</span>
-                                    </p>
-                                    <p class="mt-0"><i class="fa-solid fa-circle-info"></i> Remplacer les options par
-                                        vos valeurs</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="divData.type === 'radio'">
-
-                        <div class="">
-                            <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
-                                <div class="card-header"
-                                    style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
-                                    <input class="form-control input-field-custom" type="text"
-                                        [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
-                                    <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
-                                        id="button-text">x</button>
-                                </div>
-                                <div class="card-body">
-                                    <p>Options</p>
-                                    <ng-container *ngIf="divData.type === 'radio'">
-                                        <div style="display: flex; margin-top: 10px;"
-                                            *ngFor="let option of divData.options; let j = index">
-                                            <input class="form-control" style="width: 300px;" type="text"
-                                                [(ngModel)]="option.value" />
-                                            <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
-                                            <button *ngIf="j === divData.options.length - 1"
-                                                class="btn btn-success ml-1" (click)="addOption(i)">Ajouter</button>
-                                            <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
-                                            <span *ngIf="j !== divData.options.length - 1">
-                                                <button class="btn btn-danger ml-1" (click)="deleteOption(i, j)"><i
-                                                        class="fa-solid fa-trash-can"></i></button>
-                                            </span>
-                                        </div>
-
-                                    </ng-container>
-                                    <p class="field-p mt-4">
-                                        Type de champs: <span class="span-field">Choix unique</span>
-                                    </p>
-                                    <p class="mt-0"><i class="fa-solid fa-circle-info"></i> Remplacer les options par
-                                        vos valeurs</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="divData.type == 'date'">
-
-
-                        <div class="">
-                            <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
-                                <div class="card-header"
-                                    style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
-                                    <input class="form-control input-field-custom" type="text"
-                                        [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
-                                    <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
-                                        id="button-text">x</button>
-                                </div>
-                                <div class="card-body">
-                                    <p class="field-p">
-                                        Type de champs: <span class="span-field">Date</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-template #numberOrCheckbox>
-
-
-                    </ng-template>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0" style="color: black; font-weight: 500;">Liste des nouveaux champs à ajouter</h3>
+                    <p class="mt-0"><i class="fa-solid fa-circle-info"></i> Les champs créés pourront être ajouté au
+                        modèle
+                        de document</p>
                 </div>
-            </div>
-            <div *ngIf="divsData.length > 0">
-                <button class="btn btn-success" (click)="saveCustomerFiels()">Ajouter les champs personnalisés</button>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h3 class="" style="color: black; font-weight: 500;">Liste des champs personnalisés éxistants</h3>
-            </div>
-            <div class="card-body">
-
-
-                <div *ngFor="let item of fields; let i = index">
-
-                    <div class="mt-2">
+                <div class="card-body">
 
 
 
+                    <div *ngFor="let divData of divsData; let i = index">
+                        <p *ngIf="champsVides && !divData.label.trim()" class="text-danger"><i
+                                class="fa-solid fa-circle-xmark"></i> Ce champ ne peut pas être vide.</p>
 
+                        <ng-container *ngIf="divData.type === 'text'">
+                            <div class="">
+                                <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
+                                    <div class="card-header"
+                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
 
-
-                    <ng-container *ngIf="item.type === 'number'">
-
-                        <mdb-accordion>
-                            <mdb-accordion-item>
-                                <ng-template mdbAccordionItemHeader class="pt-0 pb-0 custom-accordion-header" style="display: block;">
-                                    <div class="div-header-arca">
-                                        <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
-                                        <p class="field-p mt-0 mb-0">
-                                            Type du champs: <span class="span-field">Nombre</span>
-
+                                        <input class="form-control input-field-custom" type="text"
+                                            [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                                        <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
+                                            id="button-text">x</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="field-p">
+                                            Type: <span class="span-field">Texte</span>
                                         </p>
                                     </div>
-                                </ng-template>
-                                <ng-template mdbAccordionItemBody>
-                                    <div class="">
-                                        <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
-                                            <div class="card-header"
-                                                style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="divData.type === 'number'">
 
-                                                <input class="form-control input-field-custom" type="text"
-                                                    [(ngModel)]="item.label" placeholder="Mettre le nom du champ ici" />
 
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="field-p">
-                                                    Type: <span class="span-field">Nombre</span>
-                                                </p>
-                                            </div>
-                                           
-                                        </div>
+                            <div class="">
+                                <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
+                                    <div class="card-header"
+                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                        <input class="form-control input-field-custom" type="text"
+                                            [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                                        <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
+                                            id="button-text">x</button>
                                     </div>
-                                    <p style="color: red; cursor: pointer;">Supprimer ce champs</p>
-                                </ng-template>
-                            </mdb-accordion-item>
-                        </mdb-accordion>
-
-                    </ng-container>
-                    <ng-container *ngIf="item.type === 'text'">
-                        <mdb-accordion>
-                            <mdb-accordion-item>
-                                <ng-template mdbAccordionItemHeader class="pt-0 pb-0"
-                                    style="display: block; border: 1px solid #bbb;">
-                                    <div class="div-header-arca">
-                                        <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
-                                        <p class="field-p mt-0 mb-0">
-                                            Type du champs: <span class="span-field">Texte</span>
-
+                                    <div class="card-body">
+                                        <p class="field-p">
+                                            Type de champs: <span class="span-field">Nombre</span>
                                         </p>
                                     </div>
-                                </ng-template>
-                                <ng-template mdbAccordionItemBody>
-                                    <div class="">
-                                        <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
-                                            <div class="card-header"
-                                                style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                </div>
+                            </div>
+                        </ng-container>
 
-                                                <input class="form-control input-field-custom" type="text"
-                                                    [(ngModel)]="item.label" placeholder="Mettre le nom du champ ici" />
+                        <ng-container *ngIf="divData.type === 'checkbox'">
 
+                            <div class="">
+                                <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
+                                    <div class="card-header"
+                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                        <input class="form-control input-field-custom" type="text"
+                                            [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                                        <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
+                                            id="button-text">x</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Options</p>
+                                        <ng-container *ngIf="divData.type === 'checkbox'">
+                                            <div style="display: flex; margin-top: 10px;"
+                                                *ngFor="let option of divData.optionsCheckbox; let j = index">
+                                                <input class="form-control" style="width: 300px;" type="text"
+                                                    [(ngModel)]="option.value" />
+                                                <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
+                                                <button *ngIf="j === divData.optionsCheckbox.length - 1"
+                                                    class="btn btn-success ml-1"
+                                                    (click)="addOptionCheckbox(i)">Ajouter</button>
+                                                <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
+                                                <span *ngIf="j !== divData.optionsCheckbox.length - 1">
+                                                    <button class="btn btn-danger ml-1"
+                                                        (click)="deleteOptionCheckbox(i, j)"><i
+                                                            class="fa-solid fa-trash-can"></i></button>
+                                                </span>
                                             </div>
-                                            <div class="card-body">
-                                                <p class="field-p">
-                                                    Type: <span class="span-field">Texte</span>
+
+                                        </ng-container>
+                                        <p class="field-p mt-4">
+                                            Type de champs: <span class="span-field">Choix multiples</span>
+                                        </p>
+                                        <p class="mt-0"><i class="fa-solid fa-circle-info"></i> Remplacer les options
+                                            par
+                                            vos valeurs</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="divData.type === 'radio'">
+
+                            <div class="">
+                                <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
+                                    <div class="card-header"
+                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                        <input class="form-control input-field-custom" type="text"
+                                            [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                                        <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
+                                            id="button-text">x</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Options</p>
+                                        <ng-container *ngIf="divData.type === 'radio'">
+                                            <div style="display: flex; margin-top: 10px;"
+                                                *ngFor="let option of divData.options; let j = index">
+                                                <input class="form-control" style="width: 300px;" type="text"
+                                                    [(ngModel)]="option.value" />
+                                                <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
+                                                <button *ngIf="j === divData.options.length - 1"
+                                                    class="btn btn-success ml-1" (click)="addOption(i)">Ajouter</button>
+                                                <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
+                                                <span *ngIf="j !== divData.options.length - 1">
+                                                    <button class="btn btn-danger ml-1" (click)="deleteOption(i, j)"><i
+                                                            class="fa-solid fa-trash-can"></i></button>
+                                                </span>
+                                            </div>
+
+                                        </ng-container>
+                                        <p class="field-p mt-4">
+                                            Type de champs: <span class="span-field">Choix unique</span>
+                                        </p>
+                                        <p class="mt-0"><i class="fa-solid fa-circle-info"></i> Remplacer les options
+                                            par
+                                            vos valeurs</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="divData.type === 'select'">
+
+                            <div class="">
+                                <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
+                                    <div class="card-header"
+                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                        <input class="form-control input-field-custom" type="text"
+                                            [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                                        <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
+                                            id="button-text">x</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Options</p>
+                                        <ng-container *ngIf="divData.type === 'select'">
+                                            <div style="display: flex; margin-top: 10px;"
+                                                *ngFor="let option of divData.optionsForSelect; let j = index">
+                                                <input class="form-control" style="width: 300px;" type="text"
+                                                    [(ngModel)]="option.value" />
+                                                <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
+                                                <button *ngIf="j === divData.optionsForSelect.length - 1"
+                                                    class="btn btn-success ml-1"
+                                                    (click)="addOptionSelect(i)">Ajouter</button>
+                                                <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
+                                                <span *ngIf="j !== divData.optionsForSelect.length - 1">
+                                                    <button class="btn btn-danger ml-1"
+                                                        (click)="deleteOptionSelect(i, j)"><i
+                                                            class="fa-solid fa-trash-can"></i></button>
+                                                </span>
+                                            </div>
+
+                                        </ng-container>
+                                        <p class="field-p mt-4">
+                                            Type de champs: <span class="span-field">Liste déroulante</span>
+                                        </p>
+                                        <p class="mt-0"><i class="fa-solid fa-circle-info"></i> Remplacer les options
+                                            par
+                                            vos valeurs</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="divData.type == 'date'">
+
+
+                            <div class="">
+                                <div class="card border-1 col-md-12 col-lg-9" style="background: #39dc420a;">
+                                    <div class="card-header"
+                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                        <input class="form-control input-field-custom" type="text"
+                                            [(ngModel)]="divData.label" placeholder="Mettre le nom du champ ici" />
+                                        <button class="btn btn-danger ml-3 close-btn" (click)="deleteDiv(i)"
+                                            id="button-text">x</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="field-p">
+                                            Type de champs: <span class="span-field">Date</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #numberOrCheckbox>
+
+
+                        </ng-template>
+                    </div>
+                </div>
+                <div *ngIf="divsData.length > 0" style="margin: 18px;">
+
+
+
+                    <button type="submit" class="btn mt-3"  (click)="saveCustomerFiels()"
+                        style="background: #0f3500;color: white;font-size: 17px;padding-left: 30px;padding-right: 30px;border-radius: 10px;display: flex;justify-content: center;align-items: center;">
+
+                        <span *ngIf="isSpinnerLoading" class="spinner-border text-success" style="
+                width: 20px;
+                height: 20px;
+            "></span>
+                        <p class="mb-0 pl-2"> Ajouter les champs
+                            personnalisés</p>
+                    </button>
+                </div>
+            </div>
+
+
+            <!--        Liste des champs personnalisés éxistants -->
+
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="" style="color: black; font-weight: 500;">Liste des champs personnalisés éxistants</h3>
+                </div>
+                <div class="card-body">
+
+
+                    <div *ngFor="let item of fieldsExist; let i = index">
+
+                        <div class="mt-2">
+
+
+
+                            <ng-container *ngIf="item.type === 'date'">
+
+                                <mdb-accordion>
+                                    <mdb-accordion-item>
+                                        <ng-template mdbAccordionItemHeader class="pt-0 pb-0 custom-accordion-header"
+                                            style="display: block;">
+                                            <div class="div-header-arca">
+                                                <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
+                                                <p class="field-p mt-0 mb-0">
+                                                    Type du champs: <span class="span-field">Date</span>
+
                                                 </p>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <p style="color: red;">Supprimer ce champs</p>
-                                </ng-template>
-                            </mdb-accordion-item>
-                        </mdb-accordion>
-                    </ng-container>
+                                        </ng-template>
+                                        <ng-template mdbAccordionItemBody>
+                                            <div class="">
+                                                <div class="card border-1 col-md-12 col-lg-9"
+                                                    style="background: #39dc420a;">
+                                                    <div class="card-header"
+                                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+
+                                                        <input class="form-control input-field-custom" type="text"
+                                                            [(ngModel)]="item.label"
+                                                            placeholder="Mettre le nom du champ ici" />
+
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="field-p">
+                                                            Type: <span class="span-field">Date</span>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <p style="color: red; cursor: pointer;">Supprimer ce champs</p>
+                                        </ng-template>
+                                    </mdb-accordion-item>
+                                </mdb-accordion>
+
+                            </ng-container>
+
+
+                            <ng-container *ngIf="item.type === 'number'">
+
+                                <mdb-accordion>
+                                    <mdb-accordion-item>
+                                        <ng-template mdbAccordionItemHeader class="pt-0 pb-0 custom-accordion-header"
+                                            style="display: block;">
+                                            <div class="div-header-arca">
+                                                <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
+                                                <p class="field-p mt-0 mb-0">
+                                                    Type du champs: <span class="span-field">Nombre</span>
+
+                                                </p>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template mdbAccordionItemBody>
+                                            <div class="">
+                                                <div class="card border-1 col-md-12 col-lg-9"
+                                                    style="background: #39dc420a;">
+                                                    <div class="card-header"
+                                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+
+                                                        <input class="form-control input-field-custom" type="text"
+                                                            [(ngModel)]="item.label"
+                                                            placeholder="Mettre le nom du champ ici" />
+
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="field-p">
+                                                            Type: <span class="span-field">Nombre</span>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <p style="color: red; cursor: pointer;">Supprimer ce champs</p>
+                                        </ng-template>
+                                    </mdb-accordion-item>
+                                </mdb-accordion>
+
+                            </ng-container>
+                            <ng-container *ngIf="item.type === 'text'">
+                                <mdb-accordion>
+                                    <mdb-accordion-item>
+                                        <ng-template mdbAccordionItemHeader class="pt-0 pb-0"
+                                            style="display: block; border: 1px solid #bbb;">
+                                            <div class="div-header-arca">
+                                                <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
+                                                <p class="field-p mt-0 mb-0">
+                                                    Type du champs: <span class="span-field">Texte</span>
+
+                                                </p>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template mdbAccordionItemBody>
+                                            <div class="">
+                                                <div class="card border-1 col-md-12 col-lg-9"
+                                                    style="background: #39dc420a;">
+                                                    <div class="card-header"
+                                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+
+                                                        <input class="form-control input-field-custom" type="text"
+                                                            [(ngModel)]="item.label"
+                                                            placeholder="Mettre le nom du champ ici" />
+
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="field-p">
+                                                            Type: <span class="span-field">Texte</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p style="color: red;">Supprimer ce champs</p>
+                                        </ng-template>
+                                    </mdb-accordion-item>
+                                </mdb-accordion>
+                            </ng-container>
+
+                            <ng-container *ngIf="item.type === 'select'">
+                                <mdb-accordion>
+                                    <mdb-accordion-item>
+                                        <ng-template mdbAccordionItemHeader class="pt-0 pb-0"
+                                            style="display: block; border: 1px solid #bbb;">
+                                            <div class="div-header-arca">
+                                                <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
+                                                <p class="field-p mt-0 mb-0">
+                                                    Type du champs: <span class="span-field">Sélection</span>
+
+                                                </p>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template mdbAccordionItemBody>
+                                            <div class="">
+                                                <div class="card border-1 col-md-12 col-lg-9"
+                                                    style="background: #39dc420a;">
+                                                    <div class="card-header"
+                                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                                        <input class="form-control input-field-custom" type="text"
+                                                            [(ngModel)]="item.label"
+                                                            placeholder="Mettre le nom du champ ici" />
+                                                        <button class="btn btn-danger ml-3 close-btn"
+                                                            (click)="deleteDiv(i)" id="button-text">x</button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>Options</p>
+                                                        <ng-container *ngIf="item.type === 'select'">
+                                                            <div style="display: flex; margin-top: 10px;"
+                                                                *ngFor="let option of item.field_values; let j = index">
+                                                                <input class="form-control" style="width: 300px;"
+                                                                    type="text" [(ngModel)]="option.value" />
+                                                                <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
+                                                                <button *ngIf="j === item.field_values.length - 1"
+                                                                    class="btn btn-success ml-1"
+                                                                    (click)="addOptionSelect(i)">Ajouter</button>
+                                                                <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
+                                                                <span *ngIf="j !== item.field_values.length - 1">
+                                                                    <button class="btn btn-danger ml-1"
+                                                                        (click)="deleteOptionSelect(i, j)"><i
+                                                                            class="fa-solid fa-trash-can"></i></button>
+                                                                </span>
+                                                            </div>
+
+                                                        </ng-container>
+                                                        <p class="field-p mt-4">
+                                                            Type de champs: <span class="span-field">Liste
+                                                                déroulante</span>
+                                                        </p>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p style="color: red;">Supprimer ce champs</p>
+                                        </ng-template>
+                                    </mdb-accordion-item>
+                                </mdb-accordion>
+                            </ng-container>
+
+                            <ng-container *ngIf="item.type === 'checkbox'">
+                                <mdb-accordion>
+                                    <mdb-accordion-item>
+                                        <ng-template mdbAccordionItemHeader class="pt-0 pb-0"
+                                            style="display: block; border: 1px solid #bbb;">
+                                            <div class="div-header-arca">
+                                                <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
+                                                <p class="field-p mt-0 mb-0">
+                                                    Type du champs: <span class="span-field">Choix multiples</span>
+
+                                                </p>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template mdbAccordionItemBody>
+                                            <div class="">
+                                                <div class="card border-1 col-md-12 col-lg-9"
+                                                    style="background: #39dc420a;">
+                                                    <div class="card-header"
+                                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                                        <input class="form-control input-field-custom" type="text"
+                                                            [(ngModel)]="item.label"
+                                                            placeholder="Mettre le nom du champ ici" />
+                                                        <button class="btn btn-danger ml-3 close-btn"
+                                                            (click)="deleteDiv(i)" id="button-text">x</button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>Options</p>
+                                                        <ng-container *ngIf="item.type === 'checkbox'">
+                                                            <div style="display: flex; margin-top: 10px;"
+                                                                *ngFor="let option of item.field_values; let j = index">
+                                                                <input class="form-control" style="width: 300px;"
+                                                                    type="text" [(ngModel)]="option.value" />
+                                                                <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
+                                                                <button *ngIf="j === item.field_values.length - 1"
+                                                                    class="btn btn-success ml-1"
+                                                                    (click)="addOptionSelect(i)">Ajouter</button>
+                                                                <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
+                                                                <span *ngIf="j !== item.field_values.length - 1">
+                                                                    <button class="btn btn-danger ml-1"
+                                                                        (click)="deleteOptionSelect(i, j)"><i
+                                                                            class="fa-solid fa-trash-can"></i></button>
+                                                                </span>
+                                                            </div>
+
+                                                        </ng-container>
+                                                        <p class="field-p mt-4">
+                                                            Type de champs: <span class="span-field">Choix
+                                                                multiples</span>
+                                                        </p>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p style="color: red;">Supprimer ce champs</p>
+                                        </ng-template>
+
+
+                                    </mdb-accordion-item>
+                                </mdb-accordion>
+                            </ng-container>
+
+
+                            <ng-container *ngIf="item.type === 'radio'">
+                                <mdb-accordion>
+                                    <mdb-accordion-item>
+                                        <ng-template mdbAccordionItemHeader class="pt-0 pb-0"
+                                            style="display: block; border: 1px solid #bbb;">
+                                            <div class="div-header-arca">
+                                                <h4 class="mt-0 mb-0" style="width: 100%;">Champs: {{item.label}}</h4>
+                                                <p class="field-p mt-0 mb-0">
+                                                    Type du champs: <span class="span-field">Choix unique</span>
+
+                                                </p>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template mdbAccordionItemBody>
+                                            <div class="">
+                                                <div class="card border-1 col-md-12 col-lg-9"
+                                                    style="background: #39dc420a;">
+                                                    <div class="card-header"
+                                                        style="display: flex;margin-top: -20px; background-color: #ffffff00; justify-content: space-between;">
+                                                        <input class="form-control input-field-custom" type="text"
+                                                            [(ngModel)]="item.label"
+                                                            placeholder="Mettre le nom du champ ici" />
+                                                        <button class="btn btn-danger ml-3 close-btn"
+                                                            (click)="deleteDiv(i)" id="button-text">x</button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>Options</p>
+                                                        <ng-container *ngIf="item.type === 'radio'">
+                                                            <div style="display: flex; margin-top: 10px;"
+                                                                *ngFor="let option of item.field_values; let j = index">
+                                                                <input class="form-control" style="width: 300px;"
+                                                                    type="text" [(ngModel)]="option.value" />
+                                                                <!-- Vérifier si l'option est la dernière dans la liste pour afficher le bouton "Ajouter" -->
+                                                                <button *ngIf="j === item.field_values.length - 1"
+                                                                    class="btn btn-success ml-1"
+                                                                    (click)="addOptionSelect(i)">Ajouter</button>
+                                                                <!-- Ne pas afficher le bouton de suppression pour l'option où le bouton "Ajouter" est affiché -->
+                                                                <span *ngIf="j !== item.field_values.length - 1">
+                                                                    <button class="btn btn-danger ml-1"
+                                                                        (click)="deleteOptionSelect(i, j)"><i
+                                                                            class="fa-solid fa-trash-can"></i></button>
+                                                                </span>
+                                                            </div>
+
+                                                        </ng-container>
+                                                        <p class="field-p mt-4">
+                                                            Type de champs: <span class="span-field">Choix Unique</span>
+                                                        </p>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p style="color: red;">Supprimer ce champs</p>
+                                        </ng-template>
+
+
+                                    </mdb-accordion-item>
+                                </mdb-accordion>
+                            </ng-container>
+
+                        </div>
+
+                    </div>
 
                 </div>
-
-                </div>
-
             </div>
+
         </div>
 
-    </div>
-    <div class="col-md-4">
-        <div class="container">
-            <div class="row">
-                <div class="">
-                    <h3>Liste des champs</h3>
-                    <p style="color: orange;">Cliquer sur le bouton plus (+) pour l'ajouter</p>
+
+
+
+
+
+        <!-- 
+    // Liste des champs que le user peut utiliser -->
+
+
+        <div class="col-md-4">
+            <div class="container">
+                <div class="row">
+                    <div class="">
+                        <h3>Liste des champs</h3>
+                        <p style="color: orange;">Cliquer sur le bouton plus (+) pour l'ajouter</p>
+                    </div>
                 </div>
+                <div class="">
+
+                    <div class="">
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between;">
+                                <h5>Champ Texte</h5>
+                                <button class="btn-add-field btn btn-success" (click)="addDiv('text')"
+                                    id="button-text">+</button>
+                            </div>
+                            <div class="card-body">
+                                <input type="texte" class="form-control" placeholder="Champs type texte">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between;">
+                                <h5>Champ numérique</h5>
+                                <button class="btn-add-field btn btn-success" (click)="addDiv('number')"
+                                    id="button-number">+</button>
+                            </div>
+
+                            <div class="card-body">
+                                <input type="number" class="form-control" placeholder="Entrez un nombre">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between;">
+                                <h5>Liste déroulante</h5>
+                                <button class="btn-add-field btn btn-success" (click)="addDiv('select')"
+                                    id="button-liste déroulante">+</button>
+                            </div>
+                            <div class="card-body">
+                                <select class="form-control">
+                                    <option>Choix 1</option>
+                                    <option>Choix 2</option>
+                                    <option>Choix 3</option>
+                                    <option>Choix 4</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between;">
+                                <h5>Champ Choix multiple</h5>
+                                <button class="btn-add-field btn btn-success" (click)="addDiv('checkbox')"
+                                    id="button-multi-choise">+</button>
+                            </div>
+                            <div class="card-body">
+                                <input type="checkbox" name="choix[]" value="1"> Choix 1
+                                <input type="checkbox" name="choix[]" value="2"> Choix 2
+                                <input type="checkbox" name="choix[]" value="3"> Choix 3
+                                <input type="checkbox" name="choix[]" value="4"> Choix 4
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between;">
+                                <h5>Choix unique</h5>
+                                <button class="btn-add-field btn btn-success" (click)="addDiv('radio')"
+                                    id="button-radio">+</button>
+                            </div>
+                            <div class="card-body">
+                                <input type="radio" name="choix" value="1"> Choix 1
+                                <input type="radio" name="choix" value="2"> Choix 2
+                                <input type="radio" name="choix" value="3"> Choix 3
+                                <input type="radio" name="choix" value="4"> Choix 4
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between;">
+                                <h5>Champ date</h5>
+                                <button class="btn-add-field btn btn-success" (click)="addDiv('date')"
+                                    id="button-date">+</button>
+                            </div>
+                            <div class="card-body">
+                                <input type="date" class="form-control">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
             </div>
-            <div class="">
-
-                <div class="">
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h5>Champ Texte</h5>
-                            <button class="btn-add-field btn btn-success" (click)="addDiv('text')"
-                                id="button-text">+</button>
-                        </div>
-                        <div class="card-body">
-                            <input type="texte" class="form-control" placeholder="Champs type texte">
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h5>Champ numérique</h5>
-                            <button class="btn-add-field btn btn-success" (click)="addDiv('number')"
-                                id="button-number">+</button>
-                        </div>
-
-                        <div class="card-body">
-                            <input type="number" class="form-control" placeholder="Entrez un nombre">
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h5>Liste déroulante</h5>
-                            <button class="btn-add-field btn btn-success" (click)="addDiv('select')"
-                                id="button-liste déroulante">+</button>
-                        </div>
-                        <div class="card-body">
-                            <select class="form-control">
-                                <option>Choix 1</option>
-                                <option>Choix 2</option>
-                                <option>Choix 3</option>
-                                <option>Choix 4</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h5>Champ Choix multiple</h5>
-                            <button class="btn-add-field btn btn-success" (click)="addDiv('checkbox')"
-                                id="button-multi-choise">+</button>
-                        </div>
-                        <div class="card-body">
-                            <input type="checkbox" name="choix[]" value="1"> Choix 1
-                            <input type="checkbox" name="choix[]" value="2"> Choix 2
-                            <input type="checkbox" name="choix[]" value="3"> Choix 3
-                            <input type="checkbox" name="choix[]" value="4"> Choix 4
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h5>Choix unique</h5>
-                            <button class="btn-add-field btn btn-success" (click)="addDiv('radio')"
-                                id="button-radio">+</button>
-                        </div>
-                        <div class="card-body">
-                            <input type="radio" name="choix" value="1"> Choix 1
-                            <input type="radio" name="choix" value="2"> Choix 2
-                            <input type="radio" name="choix" value="3"> Choix 3
-                            <input type="radio" name="choix" value="4"> Choix 4
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h5>Champ date</h5>
-                            <button class="btn-add-field btn btn-success" (click)="addDiv('date')"
-                                id="button-date">+</button>
-                        </div>
-                        <div class="card-body">
-                            <input type="date" class="form-control">
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-
-
 
         </div>
-
     </div>
 </div>

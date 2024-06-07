@@ -4,18 +4,34 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { API_URL } from '../../../constants/constants';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api'; // Remplacez par l'URL de votre backend
+  private apiUrl = API_URL; // Remplacez par l'URL de votre backend
   private isAuthenticated = false;
-  constructor(private http: HttpClient,private cookieService: CookieService, private router: Router) { 
+
+  static menuShared: any[] = [];
+  static userDetails = {}
+  
+  constructor(private http: HttpClient,private cookieService: CookieService, private router: Router) {
+    const storedMenu = localStorage.getItem('menu'); 
+    const userDetails = localStorage.getItem('userDetails'); 
     if(localStorage.getItem('islogged') == "true"){
-      this.isAuthenticated = true
+      this.isAuthenticated = true;
     }; 
+    if (storedMenu !== null) {
+      AuthService.menuShared = JSON.parse(storedMenu);
+
+    } else {
+      // Gérer le cas où storedMenu est null (valeur par défaut, par exemple)
+      AuthService.menuShared = []; // ou toute autre valeur appropriée
+    }
+
+
   }
 
 
@@ -33,27 +49,7 @@ export class AuthService {
     this.isAuthenticated = value;
   }
 
- /*  login(email: string, password: string): Observable<any> {
-    const url = `${this.apiUrl}/login/`;
-    const credentials = { email, password };
-    const options = { withCredentials: true };
 
-    //console.log(this.cookieService.get('dial'));
-
-    return this.http.post(url, credentials).pipe(
-      map(response => {
-   
-        this.isAuthenticated = true;
-        return response; 
-      }),
-      catchError(error => {
-     
-        this.isAuthenticated = false;
-        return of(error); 
-      
-      })
-    );
-  } */
 
   login1(email: string, password: string){
     const url = `${this.apiUrl}/login`;
@@ -71,11 +67,33 @@ export class AuthService {
   logout() {
     this.isAuthenticated = false;
     localStorage.removeItem('islogged')
+    localStorage.removeItem('menu')
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
     console.log("-------------"+this.isAuthenticated);
     return this.isAuthenticated;
+  }
+
+  
+  getMenu(): any[] {
+    return AuthService.menuShared;
+  }
+  setMenu(menu:any[]){
+    AuthService.menuShared = menu;
+  }
+
+  getUser(): any {
+    const userDetails = localStorage.getItem('userDetails'); 
+    if(userDetails !== null){
+      return JSON.parse(userDetails)
+    }
+  }
+
+  setUserDetails(data:any){
+
+
+
   }
 }

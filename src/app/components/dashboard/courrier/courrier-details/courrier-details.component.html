@@ -1,342 +1,286 @@
-<div class="row">
-    <div class="col-md-5" style="background-color: hsl(110, 100%, 90%);padding: 20px;height: 100vh;">
+<div class="container">
+    <div class="row">
+        <div class="col-md-5" style="background-color: hsl(110, 100%, 90%);padding: 20px;height: 100vh;">
 
-        <div *ngIf="isFileLoading" class=""
-            style="font-size: 30px; display: flex; align-items:center;justify-content: center; width: 100%; height: 100%;">
-            <span *ngIf="disabled" class="spinner-border spinner-border-xxl" role="status" aria-hidden="true"></span>
-        </div>
-
-        <div style="">
-            <div style="display: flex;position: absolute; right: 10px; z-index: 4;">
-                <button class="btn btn-success mt-1 ml-1"><i class="fa-solid fa-upload"></i> Changer de version</button>
-                <button class="btn btn-success  mt-1 ml-1" style="background: #730066;"><i
-                        class="fa-solid fa-expand"></i></button>
-            </div>
-            <div style="position: absolute;z-index: 4;">
-
-                <input type="file" id="file" />
-            </div>
-            <pdf-viewer *ngIf="pdfsource !== ''" [src]="pdfsource" [original-size]="false"
-                style="width: 95%;height: calc(100vh - 50px);position: absolute;z-index: 2;background: #beffc2;"></pdf-viewer>
-
-            <div id="preview"></div>
-
-
-
-        </div>
-    </div>
-    <div class="col-md-7">
-        <div style="">
-            <h2>{{courrier.subject || ""}}</h2>
-            <div style="display: flex; padding-bottom: 1rem;">
-                <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 58, 109);"></i>
-                <div class="ml-1">
-                    <p class="mb-0 font-weight-bold">{{courrier.user_sender_info.name || ""}}</p>
-                    <p>{{courrier.user_sender_info.email || ""}} <span
-                            style="background: green; border-radius: 10px; color:#f9f9f9; padding: 2px 12px;">Initiateur</span>
-                    </p>
-                </div>
-                {{courrier.user_sender_info.created_at || "" | customDateFormat}}
-
-            </div>
-        </div>
-        <div>
-
-            <div class="action-btn" style="">
-                <button class="btn btn-success" (click)="openDialog()" mat-raised-button matTooltip="Tous les détails">
-                    <i class="fa-solid fa-circle-info"></i>
-
-                </button>
-                <button (click)="openAnnotationModal()" class="btn btn-success" style="background: #001b89;"
-                    mat-raised-button matTooltip="Annotations">
-                    <i class="fa-regular fa-pen-to-square"></i>
-
-                </button>
-
-
-                <button class="btn btn-secondary" (click)="openHistoriqueVersionModal()" mat-raised-button matTooltip="Historique des versions">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-
-                </button>
-                <button class="btn btn-warning " (click)="onpenAttachment()" mat-raised-button
-                    matTooltip="Pièces jointes">
-                    <i class="fa-solid fa-paperclip"></i>
-
-                </button>
-
-                <button class="btn btn-warning " (click)="closeWorkflow_or_user_view(true)" style="background: #730066;"
-                    mat-raised-button matTooltip="Liste de diffusions">
-                    <i class="fa-solid fa-users"></i>
-
-                </button>
-                <button *ngIf="position_in_workflow ==0" class="btn btn-warning " mat-raised-button
-                    matTooltip="Ajouter un Utilisateur à la fil" style="background: #cf0000;">
-                    <i class="fa-solid fa-share-nodes"></i>
-
-                </button>
-
+            <div *ngIf="isFileLoading" class=""
+                style="font-size: 30px; display: flex; align-items:center;justify-content: center; width: 100%; height: 100%;">
+                <span *ngIf="disabled" class="spinner-border spinner-border-xxl" role="status"
+                    aria-hidden="true"></span>
             </div>
 
+            <div style="">
+                <div style="position: absolute; right: 10px; z-index: 4;">
+                    <div style="display: flex;">
 
-        </div>
+                        <button type="button" class="btn btn-light waves-effect waves-light w-sm"
+                            (click)="fileInput.click()" [disabled]="isFileLoading" style="background: #6c0000;
+                            color: white; font-size: 13px; padding-left: 30px; padding-right: 30px; border-radius: 20px;">
 
-        <div class="pl-1" style="padding-left: 1rem;">
-            <div style="display: flex; padding: 1rem;">
-                <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 77, 144);"></i>
-                <div class="ml-1">
-                    <p class="mb-0 font-weight-bold">{{name}}</p>
-                    <p>{{email}} </p>
-                </div>
-                {{date | customDateFormat}}
+                            <i class="fas fa-upload font-size-16"></i> Changer de version
 
-            </div>
-            <div class="p-3  col-md-11 annot-div" style="background: #f9f9f9; border-radius: 10px;">
-                <p style="font-size: 16px;">{{annotation}}</p>
-            </div>
-            <hr style="color:#bbb">
-        </div>
+                        </button>
+                        <input type="file" (change)="onFileSelected($event)" #fileInput id="file" hidden>
 
 
-        <div *ngFor="let details of annotations |
-paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }" class="pl-1"
-            style="padding-left: 1rem;">
-            <div style="display: flex; padding-left: 1rem;">
-                <h3 class="" style="">{{details.subject}}</h3>
-            </div>
-            <div style="display: flex; padding: 1rem;">
-                <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 77, 144);"></i>
-                <div class="ml-1">
-                    <p class="mb-0 font-weight-bold">{{details.user.name}}</p>
-                    <p>{{details.user.email}}</p>
-                </div>
-                {{details.created_at | customDateFormat}}
+                        <button class="btn btn-success  mt-1 ml-1" (click)="setIsModalFullcreenDocumentOpen()" style="background: #730066;"><i
+                                class="fa-solid fa-expand"></i></button>
 
-            </div>
-            <div class="p-3  col-md-11 annot-div" style="background: #f9f9f9; border-radius: 10px;">
-                <p style="font-size: 16px;">{{details.annotation}}</p>
-            </div>
-            <hr style="color:#bbb">
-        </div>
-
-        <div class="col-5">
-            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
-                nextLabel="Suivant"></pagination-controls>
-            <button (click)="setMessageBlock()" class="btn btn-success border-radius round " style="position: fixed; bottom: 20px;
-    font-size: 20px; right: 20px;padding-left: 60px;padding-right: 60px;" mat-fab color="primary"
-                aria-label="Example icon button with a delete icon">
-                {{textResponseButton}}
-            </button>
-        </div>
-    </div>
-    <div *ngIf="messageBlock == true" style="position: fixed; width: 400px; height: 400px; right: 20px;bottom: 70px;
-    border-radius: 15px; border: 2px solid #d7d7d7; background:#f9f9f9;">
-        <br>
-        <p style="font-size: 18px; margin-bottom: 0px;font-weight: 500;">Ajouter un message ici</p>
-        <textarea name="" class="form-control" id="" cols="30" rows="15"></textarea>
-
-        <app-button-spinner backgroundColor="green" textColor="white" [disabled]="isLoading"
-            [buttonText]="'Enregistrer le modele'">
-        </app-button-spinner>
-    </div>
-</div>
-
-<!-- Modal pieces jointes -->
-
-<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
-    style="padding-right: 17px; background: #00000063;"
-    [ngStyle]="{'display': isOpenModalAttachmentFile? 'block' : 'none' }">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLiveLabel">Pièces jointes</h5>
-                <button type="button" (click)="onpenAttachment()" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div *ngFor="let attach of attachment_file" >
-                <a href=""><u><i class="fa-solid fa-paperclip"></i> {{attach.name}}</u></a>
-            </div>
-            <p *ngIf="attachment_file.length == 0">Pas de pièces jointes</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="onpenAttachment()"
-                    data-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--  #######################  Modal Annotation ################################### -->
-<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
-    style="padding-right: 17px; background: #00000063;"
-    [ngStyle]="{'display': isOpenModalAnnotation? 'block' : 'none' }">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLiveLabel">Annotations</h5>
-                <button type="button" (click)="openAnnotationModal()" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p *ngIf="annotations.length == 0">Pas d'annotations pour ce courrier</p>
-                <div *ngFor="let details of annotations |
-paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }" class="pl-1"
-                    style="padding-left: 1rem;">
-                    <div style="display: flex; padding-left: 1rem;">
-                        <h3 class="" style="">{{details.subject}}</h3>
-                    </div>
-                    <div style="display: flex; padding: 1rem;">
-                        <i class="fa-solid fa-circle-user" title=""
-                            style="font-size: 40px; color: rgb(0, 77, 144);"></i>
-                        <div class="ml-1">
-                            <p class="mb-0 font-weight-bold">{{details.user.name}}</p>
-                            <p>{{details.user.email}}</p>
-                        </div>
-                        {{details.created_at | customDateFormat}}
 
                     </div>
-                    <div class="p-3  col-md-11 annot-div" style="background: #f9f9f9; border-radius: 10px;">
-                        <p style="font-size: 16px;">{{details.annotation}}</p>
+                    <div style="position: absolute;z-index: 4;">
+
                     </div>
-                    <hr style="color:#bbb">
                 </div>
 
-                <div class="col-5">
-                    <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
-                        nextLabel="Suivant"></pagination-controls>
-                    <button (click)="setMessageBlock()" class="btn btn-success border-radius round " style="position: fixed; bottom: 20px;
-                        font-size: 20px; right: 20px;padding-left: 60px;padding-right: 60px;" mat-fab color="primary"
-                        aria-label="Example icon button with a delete icon">
-                        {{textResponseButton}}
-                    </button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="openAnnotationModal()"
-                    data-dismiss="modal">Fermer</button>
+                <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [original-size]="false"
+                    style="margin-top:20px; width: 95%;height: calc(100vh - 50px);position: absolute;z-index: 2;background: #beffc2;"></pdf-viewer>
+
+                <div id="preview"></div>
+
+
+
             </div>
         </div>
-    </div>
-</div>
-
-
-<!--  #######################  Modal Historique des version de documents ################################### -->
-<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
-    style="padding-right: 17px; background: #00000063;"
-    [ngStyle]="{'display': isOpenModalHistoriqueVersion? 'block' : 'none' }">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLiveLabel">Historique des versions de documents</h5>
-                <button type="button" (click)="openHistoriqueVersionModal()" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div *ngFor="let details of annotations |
-paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }" class="pl-1"
-                    style="padding-left: 1rem;">
-                    <div style="display: flex; padding-left: 1rem;">
-                        <h3 class="" style="">{{details.subject}}</h3>
-                    </div>
-                    <div style="display: flex; padding: 1rem;">
-                        <i class="fa-solid fa-circle-user" title=""
-                            style="font-size: 40px; color: rgb(0, 77, 144);"></i>
-                        <div class="ml-1">
-                            <p class="mb-0 font-weight-bold">{{details.user.name}}</p>
-                            <p>{{details.user.email}}</p>
-                        </div>
-                        {{details.created_at | customDateFormat}}
-
-                    </div>
-                    <div class="p-3  col-md-11 annot-div" style="background: #f9f9f9; border-radius: 10px;">
-                        <p style="font-size: 16px;">{{details.annotation}}</p>
-                    </div>
-                    <hr style="color:#bbb">
-                </div>
-
-                <div class="col-5">
-                    <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
-                        nextLabel="Suivant"></pagination-controls>
-                    <button (click)="setMessageBlock()" class="btn btn-success border-radius round " style="position: fixed; bottom: 20px;
-                        font-size: 20px; right: 20px;padding-left: 60px;padding-right: 60px;" mat-fab color="primary"
-                        aria-label="Example icon button with a delete icon">
-                        {{textResponseButton}}
-                    </button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="openHistoriqueVersionModal()"
-                    data-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div *ngIf="user_or_workflow" class="modal-user-workflow"
-    style="position: fixed;padding-top: 70px; width: 300px; height: 100vh; top: 0px; background: white; right: 0px; box-shadow: -10px 0px 10px rgba(0, 0, 0, 0.1);">
-    <div class="col-12">
-        <button (click)="closeWorkflow_or_user_view(false)" class="btn btn-danger" style="margin: 5px;">Fermer</button>
-
-        <div class="p-2">
-            <h5>Liste de diffusions</h5>
-
-
-            <div class="" *ngIf="workflow !== ''">
-                <div class="" *ngFor="let workflow of workflow; let index = index">
-                    <div class="" style="display: flex;">
-                        <div class="" *ngIf="index === position_in_workflow-1" mat-raised-button
-                            matTooltip="Le courrier se trouve ici" style="width: 50px;
-                        height: 50px; border-radius: 50%;
-                         background: hwb(37 0% 0%); display: flex; justify-content: center; align-items: center;">
-                            <span role="status" aria-hidden="true" class="spinner-border spinner-border-sm"></span>
-
-                        </div>
-                        <i class="fa-solid fa-circle-check" *ngIf="index !== position_in_workflow-1" title=""
-                            style="font-size: 40px; color: rgb(105, 105, 105);" [ngStyle]="{'color': position_in_workflow > index ? 'green' 
-                             : 'rgb(105, 105, 105)'}">
-                        </i>
-
-                        <div class="label ml-1" mat-raised-button matTooltip="{{workflow.task}}">
-                            <p class="mb-0">{{workflow.name || ""}}</p>
-                            <span
-                                style="background: green; border-radius: 10px; color:#f9f9f9; padding: 2px 12px;">{{workflow.grade}}</span>
-                            <div class="border">
-
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <hr class="vertical-line" />
-                </div>
-
-            </div>
-
-            <div *ngIf="users !== ''">
-
-                <div class="div-user"
-                    style="display: flex; padding-bottom: 1rem; padding: 1rem; background: #e7f9ff; border-radius: 12px; margin-bottom: 10px;"
-                    *ngFor="let user of users">
+        <div class="col-md-7">
+            <div style="" *ngIf="courrier !== null">
+                <h2>{{courrier.subject || ""}}</h2>
+                <div style="display: flex; padding-bottom: 1rem;">
                     <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 58, 109);"></i>
                     <div class="ml-1">
-                        <p class="mb-0 font-weight-bold">{{user.name || ""}}</p>
-                        <p class="mb-0">{{user.email || ""}}
+                        <p class="mb-0 font-weight-bold">{{courrier.user_sender_info.name || ""}}</p>
+                        <p>{{courrier.user_sender_info.email || ""}} <span
+                                style="background: green; border-radius: 10px; color:#f9f9f9; padding: 2px 12px;">Initiateur</span>
                         </p>
-                        <span
-                            style="background: green; border-radius: 10px; color:#f9f9f9; padding: 2px 12px;">{{user.grade}}</span>
                     </div>
+                    {{courrier.user_sender_info.created_at || "" | customDateFormat}}
 
-                    <hr style="height: 2px; color: blue;" />
+                </div>
+            </div>
+            <div>
+
+                <div class="action-btn" style="">
+                    <button class="btn btn-success" (click)="openDialog()" mat-raised-button
+                        matTooltip="Tous les détails">
+                        <i class="fa-solid fa-circle-info"></i>
+
+                    </button>
+                    <button (click)="openAnnotationModal()" class="btn btn-success" style="background: #001b89;"
+                        mat-raised-button matTooltip="Annotations">
+                        <i class="fa-regular fa-pen-to-square"></i>
+
+                    </button>
+
+
+                    <button class="btn btn-secondary" (click)="openHistoriqueVersionModal()" mat-raised-button
+                        matTooltip="Historique des versions">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    </button>
+                    <button class="btn btn-warning " (click)="onpenAttachment()" mat-raised-button
+                        matTooltip="Pièces jointes">
+                        <i class="fa-solid fa-paperclip"></i>
+
+                    </button>
+
+                    <button class="btn btn-warning " (click)="closeWorkflow_or_user_view(true)"
+                        style="background: #730066;" mat-raised-button matTooltip="Liste de diffusions">
+                        <i class="fa-solid fa-users"></i>
+
+                    </button>
+                    <button *ngIf="position_in_workflow ==0" class="btn btn-warning " mat-raised-button
+                        matTooltip="Ajouter un Utilisateur à la fil" style="background: #cf0000;">
+                        <i class="fa-solid fa-share-nodes"></i>
+
+                    </button>
 
                 </div>
 
+
+            </div>
+
+            <div class="pl-1" style="padding-left: 1rem;">
+                <div style="display: flex; padding: 1rem;">
+                    <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 77, 144);"></i>
+                    <div class="ml-1">
+                        <p class="mb-0 font-weight-bold">{{last_annotation.user.name}}</p>
+                        <p>{{last_annotation.user.email}} </p>
+                    </div>
+                    {{last_annotation.created_at | customDateFormat}}
+
+                </div>
+                <div class="p-3  col-md-11 annot-div" style="background: #f9f9f9; border-radius: 10px;"  *ngIf="last_annotation !== null">
+                    <p style="color: #6d18c2;">Dernière annotation</p>
+                    <p style="font-size: 16px;">{{last_annotation.annotation || ''}}</p>
+                </div>
+                <hr style="color:#bbb">
+            </div>
+
+
+
+
+                <button (click)="setMessageBlock()" class="btn btn-success border-radius round " style="position: fixed; bottom: 20px;
+    font-size: 20px; right: 20px;padding-left: 60px;padding-right: 60px;" mat-fab color="primary"
+                    aria-label="Example icon button with a delete icon">
+                    {{textResponseButton}}
+                </button>
+        
+        </div>
+        <div *ngIf="messageBlock == true" style="position: fixed; width: 400px; height: 400px; right: 20px;bottom: 70px;
+    border-radius: 15px; border: 2px solid #d7d7d7; background:#f9f9f9;">
+            <br>
+            <p style="font-size: 18px; margin-bottom: 0px;font-weight: 500;">Ajouter un message ici</p>
+            <textarea name="" class="form-control" id="" cols="30" rows="15"></textarea>
+
+            <app-button-spinner backgroundColor="green" textColor="white" [disabled]="isLoading"
+                [buttonText]="'Enregistrer le modele'">
+            </app-button-spinner>
+        </div>
+    </div>
+
+    <!-- Modal pieces jointes -->
+
+    <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+        style="padding-right: 17px; background: #00000063;"
+        [ngStyle]="{'display': isOpenModalAttachmentFile? 'block' : 'none' }">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLiveLabel">Pièces jointes</h5>
+                    <button type="button" (click)="onpenAttachment()" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div *ngFor="let attach of attachment_file">
+                        <a href=""><u><i class="fa-solid fa-paperclip"></i> {{attach.name}}</u></a>
+                    </div>
+                    <p *ngIf="attachment_file.length == 0">Pas de pièces jointes</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="onpenAttachment()"
+                        data-dismiss="modal">Fermer</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!--  #######################  Modal Annotation ################################### -->
+    <app-modal-annotations
+        [isOpenModalAnnotation]="isOpenModalAnnotation" 
+        [annotations]="annotations" 
+        [perPage]="perPage" 
+        [page]="page" 
+        (pageChangedEvent) = "pageChanged($event)"
+        [totalItems]="totalItems">
+    </app-modal-annotations>
+
+
+
+    <!--  #######################  Modal Historique des version de documents ################################### -->
+    <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+        style="padding-right: 17px; background: #00000063;"
+        [ngStyle]="{'display': isOpenModalHistoriqueVersion? 'block' : 'none' }">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLiveLabel">Historique des versions de documents</h5>
+                    <button type="button" (click)="openHistoriqueVersionModal()" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+       
+
+                    <div class="col-5">
+                        <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                            nextLabel="Suivant"></pagination-controls>
+                        <button (click)="setMessageBlock()" class="btn btn-success border-radius round " style="position: fixed; bottom: 20px;
+                        font-size: 20px; right: 20px;padding-left: 60px;padding-right: 60px;" mat-fab color="primary"
+                            aria-label="Example icon button with a delete icon">
+                            {{textResponseButton}}
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="openHistoriqueVersionModal()"
+                        data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="user_or_workflow" class="modal-user-workflow"
+        style="position: fixed;padding-top: 70px; width: 300px; height: 100vh; top: 0px; background: white; right: 0px; box-shadow: -10px 0px 10px rgba(0, 0, 0, 0.1);">
+        <div class="col-12">
+            <button (click)="closeWorkflow_or_user_view(false)" class="btn btn-danger"
+                style="margin: 5px;">Fermer</button>
+
+            <div class="p-2">
+                <h5>Liste de diffusions</h5>
+
+
+                <div class="" *ngIf="workflow !== ''">
+                    <div class="" *ngFor="let workflow of workflow; let index = index">
+                        <div class="" style="display: flex;">
+                            <div class="" *ngIf="index === position_in_workflow-1" mat-raised-button
+                                matTooltip="Le courrier se trouve ici" style="width: 50px;
+                        height: 50px; border-radius: 50%;
+                         background: hwb(37 0% 0%); display: flex; justify-content: center; align-items: center;">
+                                <span role="status" aria-hidden="true" class="spinner-border spinner-border-sm"></span>
+
+                            </div>
+                            <i class="fa-solid fa-circle-check" *ngIf="index !== position_in_workflow-1" title=""
+                                style="font-size: 40px; color: rgb(105, 105, 105);" [ngStyle]="{'color': position_in_workflow > index ? 'green' 
+                             : 'rgb(105, 105, 105)'}">
+                            </i>
+
+                            <div class="label ml-1" mat-raised-button matTooltip="{{workflow.task}}">
+                                <p class="mb-0">{{workflow.name || ""}}</p>
+                                <span
+                                    style="background: green; border-radius: 10px; color:#f9f9f9; padding: 2px 12px;">{{workflow.grade}}</span>
+                                <div class="border">
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <hr class="vertical-line" />
+                    </div>
+
+                </div>
+
+                <div *ngIf="users !== ''">
+
+                    <div class="div-user"
+                        style="display: flex; padding-bottom: 1rem; padding: 1rem; background: #e7f9ff; border-radius: 12px; margin-bottom: 10px;"
+                        *ngFor="let user of users">
+                        <i class="fa-solid fa-circle-user" title=""
+                            style="font-size: 40px; color: rgb(0, 58, 109);"></i>
+                        <div class="ml-1">
+                            <p class="mb-0 font-weight-bold">{{user.name || ""}}</p>
+                            <p class="mb-0">{{user.email || ""}}
+                            </p>
+                            <span
+                                style="background: green; border-radius: 10px; color:#f9f9f9; padding: 2px 12px;">{{user.grade}}</span>
+                        </div>
+
+                        <hr style="height: 2px; color: blue;" />
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-modal-view-document 
+    [isOpenModal] = "isModalFullcreenDocumentOpen"
+    (closeModalEvent)="setIsModalFullcreenDocumentOpen()"
+    [pdfSrc]="pdfSrc"
+      >
+    
+     </app-modal-view-document>

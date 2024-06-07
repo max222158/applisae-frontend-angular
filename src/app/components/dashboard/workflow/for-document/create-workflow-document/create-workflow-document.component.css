@@ -1,0 +1,18 @@
+.card {
+    border: 1px solid rgba(187, 187, 187, 0.7294117647) !important;
+    height: 100px;
+}
+.card {
+    margin-top: 24px;
+    /* -webkit-box-shadow: 0 .75rem 1.5rem rgba(18, 38, 63, .03); */
+    box-shadow: 0rem 0rem rgba(18, 38, 63, .03);
+}
+.col-md-6, .col-xl-4{
+    border: 0px solid rgba(187, 187, 187, 0.7294117647) !important;
+    
+}
+
+.card:hover{
+
+    background: #a8ffae;
+}

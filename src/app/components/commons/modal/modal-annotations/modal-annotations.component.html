@@ -1,0 +1,49 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+style="padding-right: 17px; background: #00000063;"
+[ngStyle]="{'display': isOpenModalAnnotation? 'block' : 'none' }">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLiveLabel">Annotations</h5>
+            <button type="button" (click)="closeModal()" class="close" data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p *ngIf="annotations.length == 0">Pas d'annotations pour ce courrier</p>
+            <div *ngFor="let details of annotations |
+paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }" class="pl-1"
+                style="padding-left: 1rem;">
+                <div style="display: flex; padding-left: 1rem;">
+                    <h3 class="" style="">{{details.subject}}</h3>
+                </div>
+                <div style="display: flex; padding: 1rem;">
+                    <i class="fa-solid fa-circle-user" title=""
+                        style="font-size: 40px; color: rgb(0, 77, 144);"></i>
+                    <div class="ml-1">
+                        <p class="mb-0 font-weight-bold">{{details.user.name}}</p>
+                        <p>{{details.user.email}}</p>
+                    </div>
+                    {{details.created_at | customDateFormat}}
+
+                </div>
+                <div class="p-3  col-md-11 annot-div" style="background: #f9f9f9; border-radius: 10px;">
+                    <p style="font-size: 16px;">{{details.annotation}}</p>
+                </div>
+                <hr style="color:#bbb">
+            </div>
+
+            <div class="col-5">
+                <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                    nextLabel="Suivant"></pagination-controls>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()"
+                data-dismiss="modal">Fermer</button>
+        </div>
+    </div>
+</div>
+</div>

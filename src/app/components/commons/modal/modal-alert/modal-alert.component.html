@@ -1,0 +1,17 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;"  [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog modal-dialog-centered "  role="document">
+        <div class="modal-content" style="">
+            <div class="modal-body p-4" style="text-align: center;">
+                <i *ngIf="icon !== ''" class="{{icon}}" style="font-size: 55px; color: green;" [ngStyle]="{'color':color}"></i>
+                <h2 class="m-2 ">{{title}} </h2>
+                <p class="text-white">{{description}}</p>
+             
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger text-white" (click)="closeModal()">Annuler</button>
+                <button type="button" class="btn btn-secondary" (click)="validation()" data-dismiss="modal">{{textButtonValidation}}</button>
+            </div>
+        </div>
+    </div>
+</div>

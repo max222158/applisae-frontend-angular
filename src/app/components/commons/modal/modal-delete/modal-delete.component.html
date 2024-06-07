@@ -1,0 +1,16 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;"  [ngStyle]="{'display': isOpenModalDelete ? 'block' : 'none'}">
+    <div class="modal-dialog "  role="document">
+        <div class="modal-content" style="background: rgb(150, 0, 0);">
+            <div class="modal-body p-4">
+                <h4 class="m-2 text-white">Voulez-vous supprimer les {{number_of_elements}}  éléments </h4>
+                <p class="text-white">Cette action est irreversible</p>
+             
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger text-white" (click)="deleteFile()">Supprimer</button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>

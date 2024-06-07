@@ -1,0 +1,99 @@
+<div class="p-2 "
+    style="background: #ffa996;border-radius: 10px;padding-left: 30px !important;padding-top: 10px !important;">
+    <div class="flex1">
+        <i class="fa-solid fa-circle-info font-size-20 m-2" style="color: black !important;"></i>
+        <div class="">
+            <h3>Créer un groupe</h3>
+            <p class="font-size-14 mb-O" style="color: black !important;">Associer des utilisateurs à groupe pour le partage de dossiers
+                et de documents pour le travail <b>en collabaration</b></p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        
+        <div class="card mt-2">
+            <div class="card-body">
+    
+
+                <form  class="row gy-2 gx-3 align-items-center" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+                    <div class="mb-3 row">
+                        <label for="example-text-input" class="col-md-12 col-form-label">Nom du groupe</label>
+                        <div class="col-md-8">
+                            <input  class="form-control" required type="text" 
+                            formControlName="name" placeholder="Nom du groupe" style="border: 2px solid #011c9f;" id="example-text-input">
+                        </div>
+                    </div>
+             
+                       
+                    <app-button-spinner
+                        backgroundColor="green"
+                        textColor="white"
+                        [disabled]="disabled"
+                        [isSpinnerLoading]="isSpinnerLoading"
+                        [buttonText]="'Créer le groupe '" 
+                        >
+                    </app-button-spinner>
+ 
+                    <div class="col-sm-auto">
+                       
+
+    
+                    </div>
+                </form>
+
+                <h6>Utilisateurs associés au groupe</h6>
+
+                <div *ngFor="let user of usersInGroup" class="flex1 border-1 mt-2"
+                 style="border: 1px solid #bbb; border-radius: 10px;" >
+
+                    <button class="btn" (click)="removeUserFromGroup(user.id)"
+                    mat-raised-button matTooltip="Retirer du groupe"
+                    ><i class="fa-solid fa-circle-minus font-size-20 m-2" style="color: #6f0000;"></i></button>
+                    <div class="p-3">
+                        <p class="mb-O font-size-14">{{user.name}}</p>
+                        <p class="mb-O">{{user.email}}</p>
+                        <p class="mb-O"><span class="bg-primary badge me-2">{{user.grade}}</span></p>
+                        <select name="role" id="" class="mt-1" >
+                            <option value="editor">Editeur</option>
+                            <option value="reader">Lecteur</option>
+                            <option value="contributor">Contributeur</option>
+                        </select>
+                    </div>
+                    
+
+                </div>
+
+            </div>
+            <!-- end card body -->
+        </div>
+
+
+    </div>
+    <div class="col-md-6">
+        <div class="card mt-2">
+            <div class="card-body">
+                <h4>Les utilisateurs du système</h4>
+                <input class="form-control" type="text" (input)="onInputChange($event)" placeholder="Recherche un utilisateurs" >
+
+                <button class="btn btn-success mt-1" (click)="onSearch()">Recherche</button>
+
+                <div *ngFor="let user of users" class="flex1 border-1 mt-2"
+                 style="border: 1px solid #bbb; border-radius: 10px;" >
+
+                    <button class="btn" (click)="addUserToGroup(user.id)" mat-raised-button matTooltip="Ajouter au groupe"><i class="fa-solid fa-plus font-size-20 m-2"></i></button>
+                    <div class="p-3">
+                        <p class="mb-O font-size-14">{{user.name}}</p>
+                        <p class="mb-O">{{user.email}}</p>
+                        <p class="mb-O"><span class="bg-primary badge me-2">{{user.grade}}</span></p>
+                    </div>
+                    
+
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+    </div>
+
+</div>

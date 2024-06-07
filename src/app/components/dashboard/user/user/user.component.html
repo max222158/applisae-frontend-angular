@@ -14,7 +14,7 @@
           <!-- end col -->
           <div class="col-sm-auto">
             <div class="text-sm-end">
-              <a routerLink="/dashboard/utilisateurs/creer" routerLinkActive="active"
+              <a routerLink="/tableau-de-bord/utilisateurs/creer" routerLinkActive="active"
                 class="btn btn-success btn-rounded" id="addProject-btn"><i class="mdi mdi-plus me-1"></i> Nouvel
                 utilisateur</a>
             </div>
@@ -38,7 +38,7 @@
             <tr *ngFor="let user of userList">
               <td>
                 <div class="d-flex align-items-center">
-                  <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px"
+                  <img [src]="media_url_public + user.image"  alt="" style="width: 45px; height: 45px"
                     class="rounded-circle" />
 
                 </div>

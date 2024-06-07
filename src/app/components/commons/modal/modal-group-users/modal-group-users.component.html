@@ -1,0 +1,46 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModalGroupUser ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable" role="document">
+        <div class="modal-content ">
+            <div class="modal-header" style="background: #014306;">
+                <h5 class="modal-title text-white" id="exampleModalLiveLabel">Choisir les groupes à ajouter</h5>
+
+            </div>
+            <div class="modal-body p-4">
+                <div class="flex1">
+
+                    <input class="form-control" type="text" (input)="onInputChange($event)" placeholder="Recherche un utilisateurs" >
+
+                    <button class="btn btn-success " (click)="onSearch()">Recherche</button>
+                </div>
+                <hr>
+                <div *ngFor="let user of groupUser">
+                    <div class="mb-4 p-3 pt-1"
+                        style="border: 1px solid #bbb; border-radius: 10px; cursor: pointer;"
+                        [ngStyle]="{'background-color': isSelected(user.id) ? '#dfffba96' : ''}"
+                        (click)="toggleSelection(user.id,user.name)">
+                        <div style="display: flex;">
+                         
+    
+                            <i class="fa-solid fa-users-rectangle" style="font-size: 40px; color: rgb(0, 43, 22);"></i>
+                            <div class="ml-1">
+                                <p class="mb-0 mb-3 font-size-16"
+                                    style="background: rgb(13, 98, 0);margin-bottom: 0px !important; padding-left:10px;
+                                    padding-right: 10px;color: white; border-radius: 20px; width: fit-content;">
+                                    {{user.name}}</p>
+
+                                    <p>{{user.description}}</p>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="closeModal()">Valider</button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>

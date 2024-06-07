@@ -105,3 +105,50 @@ body.dark-theme .modal-user-workflow {
 body.dark-theme .modal-user-workflow .div-user {
   background: #373737 !important;
 }
+
+body.dark-theme .modal-content{
+  background: #404040;
+}
+
+body[data-sidebar=dark] .navbar-brand-box {
+  background: #000000;
+  border-bottom: 1px solid #393938;
+}
+body.dark-theme td, th {
+  color:white 
+}
+
+body.dark-theme  .table>tbody {
+    background: #333333;
+}
+
+body.dark-theme .table-hover>tbody>tr:hover>* {
+
+  background: #000407;
+}
+
+body.dark-theme .table-hover>tbody>tr:hover>* {
+  --bs-table-color-state: var(--bs-table-hover-color);
+  --bs-table-bg-state: rgb(0 0 0 / 31%);
+}
+
+body.dark-theme .btn-search{
+  color:#ffff;
+}
+
+body.dark-theme .p-description{
+  color: #ffffff;
+
+
+}
+
+body.dark-theme #page-topbar {
+
+  background-color: #30a3ff !important;
+
+}
+
+body.dark-theme body[data-sidebar=dark] .navbar-brand-box {
+  background: #30a3ff !important;
+  border-bottom: 0px solid #393938 !important;
+}

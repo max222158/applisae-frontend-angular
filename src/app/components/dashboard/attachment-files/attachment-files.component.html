@@ -1,0 +1,11 @@
+<ul>
+  <li *ngFor="let file of selectedAttachmentFiles">
+    <button class="btn btn-danger p-1 mr-1" (click)="removeFileAttachment(file)">x</button>
+    <span>{{ file.name }}</span>
+  </li>
+</ul>
+
+<button type="button" class="btn btn-success waves-effect waves-light w-sm" (click)="fileInputAttachment.click()">
+  <i class="fas fa-plus mdi mdi-upload  font-size-16"></i>Ajouter des fichiers
+</button>
+<input type="file" multiple (change)="onFileAttachmentSelected($event)" #fileInputAttachment hidden>

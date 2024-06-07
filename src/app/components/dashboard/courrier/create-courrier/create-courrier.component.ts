@@ -18,6 +18,8 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipEditedEvent, MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { UploadFileService } from '../../../../services/api/uploadfile/uploadFiles.service';
+import {  demande_document,demande_de_financement } from '../../../../all-model-html/all-courrier-model-html-format';
+import { courrier_administratif } from '../../../../all-model-html/courrier-administratif';
 @Component({
   selector: 'app-create-courrier',
   templateUrl: './create-courrier.component.html',
@@ -50,13 +52,17 @@ export class CreateCourrierComponent {
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   keywords: any[] = [
-    {name: 'Courrier'},
-    {name: 'entrant'},
-    {name: 'IGE'},
+
   ];
   announcer = inject(LiveAnnouncer);
   isFileLoading:boolean = false
+  isSpinnerLoading:boolean = false
+  disabled:boolean = true
+  
 
+  htmlContent: string = ''
+
+  newHtmlContent: string = ''
   // Method to check if divsData is not empty
 
 
@@ -94,12 +100,15 @@ export class CreateCourrierComponent {
       closure_date: [null],
       recipient: [null],
       sender: [null],
-      user: [1]
+      user: [1],
+      modelCourrierHtml1: [0],
+      modelCourrierHtml2: [0]
       // Add other form controls as needed
     }); 
     // Souscrire aux changements de la valeur du champ 'type'
     this.courrierForm.get('type')?.valueChanges.subscribe((newTypeValue) => {
       // Réinitialiser les champs lorsque 'type' change
+      console.log(newTypeValue)
       if (newTypeValue) {
         this.courrierForm.get('closure_date')?.setValue(null);
         this.courrierForm.get('recipient')?.setValue(null);
@@ -108,12 +117,75 @@ export class CreateCourrierComponent {
     });
 
 
+
+    this.courrierForm.get('modelCourrierHtml1')?.valueChanges.subscribe((newTypeValue) => {
+      if (newTypeValue && newTypeValue !== this.htmlContent) {
+        console.log(newTypeValue);
+        if(newTypeValue == 0){
+          this.updateContent()
+        }else{
+
+          if(this.courrierForm.get('priority')?.value.trim() !== '' 
+          &&  this.courrierForm.get('subject')?.value.trim() !== ''
+          && (this.usersSelect.length > 0 || this.workFlowName !== '' )
+          ){
+            this.disabled = false
+          }
+    
+        }
+        if(newTypeValue == 1){
+          this.htmlContent = demande_de_financement;
+        }
+        if(newTypeValue == 2){
+          this.htmlContent = demande_document;
+        }
+        if(newTypeValue == 3){
+          this.htmlContent = demande_document;
+        }  
+        
+        if(newTypeValue == 4){
+          this.htmlContent = courrier_administratif;
+        }  
+   
+      }
+    });
+    
+    this.courrierForm.get('modelCourrierHtml2')?.valueChanges.subscribe((newTypeValue) => {
+      if (newTypeValue && newTypeValue !== this.htmlContent) {
+        // Assurez-vous que htmlContent ne prend pas newTypeValue comme valeur
+        this.htmlContent = ""; // Par exemple, remplacez "Autre contenu" par la valeur que vous souhaitez
+        this.courrierForm.get('modelCourrierHtml1')?.setValue(newTypeValue);
+        console.log(newTypeValue);
+      }
+    });
+    
+
+    this.subscribeToFormChanges()
+
     console.log('Form Controls:', this.courrierForm.controls);
+  }
+
+
+
+  subscribeToFormChanges(): void {
+    this.courrierForm.valueChanges.subscribe(() => {
+      const subjectValue = this.courrierForm.get('subject')?.value.trim();
+      const priority = this.courrierForm.get('priority')?.value.trim();
+
+
+        if(this.selectedFile !== null || this.courrierForm.value.modelCourrierHtml1 != 0) {
+          if(this.usersSelect.length > 0 || this.workFlowName !== '' ){
+          this.disabled = subjectValue === '' || priority === ''; // Disable if any of them is empty
+        }
+      }
+
+    });
   }
 
   onSubmit() {
 
-
+    this.isSpinnerLoading = true
+    this.disabled = true
     //this.uploadFileCourrier()
 
     //return 0
@@ -139,9 +211,13 @@ export class CreateCourrierComponent {
     formData.append('sender', this.courrierForm.value.sender);
     formData.append('annotation', this.courrierForm.value.annotation);
     formData.append('last_annotation', this.courrierForm.value.annotation);
-    if(this.extension == ".docx"){
+/*     if(this.extension == ".docx"){
       formData.append('file_base64', JSON.stringify(this.pdfSrc));
-    }
+    } */
+
+
+    formData.append('keyword', JSON.stringify(this.keywords));
+
     if(this.selectedWorkflowId){
       formData.append('workflow', this.selectedWorkflowId.toString());
    
@@ -154,31 +230,25 @@ export class CreateCourrierComponent {
 
 
         formData.append('file', this.selectedFile, this.selectedFile.name);
-    }
-/*     const data = {
-      'modele': this.selectedModeleCourrierId,
-      'type': type,
-      'subject': this.courrierForm.value.subject,
-      'priority': this.courrierForm.value.priority,
-      'date': this.courrierForm.value.date,
-      'closure_date': this.courrierForm.value.closure_date,
-      'recipient': this.courrierForm.value.recipient,
-      'sender': this.courrierForm.value.sender,
-      'annotation': this.courrierForm.value.annotation,
-      'last_annotation': this.courrierForm.value.annotation,
-      'workflow':  idUsers.length <= 0 ||  this.selectedWorkflowId !== 0? this.selectedWorkflowId : null ,
-      'customuser': idUsers.length > 0 ? idUsers : null,  // les user qui recoivent le courriern
-      
+    }else{
 
-    }; */
+        formData.append('othermodeleCourrier', courrier_administratif);
+
+    }
 
 
     this.courrierService.saveCourrier(formData).subscribe({
       next: (response) => {
         console.log('Réponse de l\'API:', response);
+        this.isSpinnerLoading = false
+        this.disabled = true
+
+        this.removeFile()
         // Ajoutez ici la gestion de la réponse de l'API
       },
       error: (error) => {
+        this.isSpinnerLoading = false
+        this.disabled = false
         console.error('Erreur lors de la requête vers l\'API:', error);
         // Ajoutez ici la gestion des erreurs
       }
@@ -193,26 +263,7 @@ export class CreateCourrierComponent {
 
     console.log(this.fieldValues);
   }
-  onSubmit1() {
-    const submittedData = this.fieldValues.map(item => ({ id: item.id, value: item.value }));
-    console.log(submittedData);
-    /*     if (this.courrierForm.valid) {
-          const formData = this.courrierForm.value;
-    
-          // Utilisez le service pour envoyer le formulaire
-          this.courrierService.saveCourrier(formData).subscribe({
-            next: (response) => {
-              console.log('Réponse de l\'API:', response);
-              // Ajoutez ici la gestion de la réponse de l'API
-            },
-            error: (error) => {
-              console.error('Erreur lors de la requête vers l\'API:', error);
-              // Ajoutez ici la gestion des erreurs
-            }
-          });
-        }
-        console.log(this.courrierForm.value); */
-  }
+
   // On modele select change
   onSelectionChange(event: any) {
     const selectedMod = this.modeles.find(modele => modele.name === event.value);
@@ -236,12 +287,24 @@ export class CreateCourrierComponent {
 
   onFileSelected(event: Event) {
     this.isFileLoading=true
+    this.disabled = true
     let fileInput = event.target as HTMLInputElement;
 
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
+
+      if(this.courrierForm.get('priority')?.value.trim() !== '' 
+      &&  this.courrierForm.get('subject')?.value.trim() !== ''
+      && (this.usersSelect.length > 0 || this.workFlowName !== '' )
+      ){
+        this.disabled = false
+      }
+
       let file = fileInput.files[0];
       this.selectedFile = fileInput.files[0]
       let reader = new FileReader();
+
+
+
       if (!this.isPdfFile(file)) {
 
         this.wordToPdfService.convertWordToPdf(file).subscribe(
@@ -274,7 +337,6 @@ export class CreateCourrierComponent {
 
 
       if (this.isPdfFile(file)) {
-
         let $pdf: any = document.querySelector('#file');
 
         if (typeof (FileReader) !== 'undefined') {
@@ -288,7 +350,16 @@ export class CreateCourrierComponent {
           reader.readAsArrayBuffer($pdf.files[0]);
         }
 
+
       }
+      
+      
+    }else{
+
+      this.isFileLoading=false
+      this.disabled = true
+      this.selectedFile = null
+
     }
 
 
@@ -308,6 +379,8 @@ export class CreateCourrierComponent {
 
   removeFile() {
     this.pdfSrc = "";
+    this.selectedFile = null
+    this.disabled = true
   }
   isPdfFile(file: File): boolean {
     return file.name.toLowerCase().endsWith('.pdf');
@@ -378,12 +451,23 @@ export class CreateCourrierComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result.name)
 
+
       // Vérifiez si un résultat a été renvoyé (l'ID)
       if (result) {
         // Utilisez l'ID dans CourrierComponent
         this.selectedWorkflowId = result.id;
         this.workFlowName = result.name;
         this.usersSelect = [];
+
+        if(this.courrierForm.get('priority')?.value.trim() !== '' 
+        &&  this.courrierForm.get('subject')?.value.trim() !== ''
+        && (this.usersSelect.length > 0 || this.workFlowName !== '') && 
+        (this.selectedFile !== null|| this.courrierForm.value.modelCourrierHtml1 != 0)
+        ){
+          this.disabled = false
+        }else{
+          this.disabled = true
+        }
         // Autres actions avec l'ID
       }
     });
@@ -391,6 +475,7 @@ export class CreateCourrierComponent {
 
   addUserToSelect(user: any) {
     this.usersSelect.push(user); // Ajoute l'utilisateur à usersSelect
+    
   }
 
   openDialogUser(): void {
@@ -404,10 +489,18 @@ export class CreateCourrierComponent {
         this.usersSelect = [...this.usersSelect, ...result];
         this.workFlowName = ''
         this.selectedWorkflowId = 0
-        // Utilisez l'ID dans CourrierComponent
-        /*       this.selectedWorkflowId= result.id;
-              this.workFlowName = result.name */
-        // Autres actions avec l'ID
+
+
+        if(this.courrierForm.get('priority')?.value.trim() !== '' 
+        &&  this.courrierForm.get('subject')?.value.trim() !== ''
+        && (this.usersSelect.length > 0 || this.workFlowName !== '')  && 
+        
+        (this.selectedFile !== null|| this.courrierForm.value.modelCourrierHtml1 != 0)
+        ){
+          this.disabled = false
+        }else{
+          this.disabled = true
+        }
       }
     });
   }
@@ -415,8 +508,24 @@ export class CreateCourrierComponent {
   removeUser(id: number) {
 
         this.usersSelect = this.usersSelect.filter(item => item.id !== id);
+        this.verifyFieldsBeforeValidation()
+
+
 
 }
+
+verifyFieldsBeforeValidation(){
+  if(this.courrierForm.get('priority')?.value.trim() !== '' 
+  &&  this.courrierForm.get('subject')?.value.trim() !== ''
+  && (this.usersSelect.length > 0 || this.workFlowName !== '' ) &&
+   (this.selectedFile !== null|| this.courrierForm.value.modelCourrierHtml1 != 0)
+  ){
+    this.disabled = false
+  }else{
+    this.disabled = true
+  }
+}
+
 
 uploadFileCourrier() {
   this.pdfSrc =""
@@ -440,8 +549,33 @@ uploadFileCourrier() {
     })
 
   }
+  
 }
+
+updateContent(): void {
+
+  this.courrierForm.get('modelCourrierHtml1')?.setValue(0);
+  this.courrierForm.get('modelCourrierHtml2')?.setValue(0);
+  this.disabled =true
 }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @Component({
   selector: 'dialog-content-example-dialog',
