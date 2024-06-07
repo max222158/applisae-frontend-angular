@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { WorkflowService } from '../../../../services/api/workflow/workflow.service';
+import { File_server_url } from '../../../../constants/constants';
 
 @Component({
   selector: 'app-courrier-details',
@@ -24,7 +25,7 @@ export class CourrierDetailsComponent {
   page: number = 1
   perPage: number = 10
   totalItems: any = 0
-  courrier: any
+  courrier: any = null
   messageBlock: boolean = false
   textResponseButton = "Répondre"
   isLoading = true
@@ -40,7 +41,18 @@ export class CourrierDetailsComponent {
   isOpenModalAnnotation:boolean = false
   attachment_file: any = [] 
   isOpenModalHistoriqueVersion: boolean = false
-
+  pdfSrc: any = ''
+  zoom: number = 0.7
+  
+  link_video_server: string = File_server_url;
+  link_nginx_server: string = File_server_url
+  isModalFullcreenDocumentOpen: boolean = false
+  // Remplacez par vos données
+  annotationPerPage: number = 10;
+  pageAnnotation: number = 1;
+  totalItemsAnnotation: number = 0;
+  annotationsInModal:any = []
+  last_annotation:any = null
   constructor(private courrierService: CourrierService, private workflowService: WorkflowService, public dialog: MatDialog, private route: ActivatedRoute, private router: Router, private cdr: ChangeDetectorRef) {
 
 
@@ -58,6 +70,7 @@ export class CourrierDetailsComponent {
   }
 
   ngOnInit(): void {
+    this.isFileLoading = true
     this.route.queryParams.subscribe(params => {
       this.courrierId = this.route.snapshot.paramMap.get('id');
 
@@ -73,6 +86,7 @@ export class CourrierDetailsComponent {
           this.annotations = data.results.annotations
           this.attachment_file = data.results.attachment_file
           this.totalItems = data.count;
+          this.last_annotation = data.results.annotations[0]
           if (data.results.workflow !== null) {
             this.workflowService.getUserInWorkflow(data.results.workflow).subscribe({
               next: (data) => {
@@ -101,6 +115,7 @@ export class CourrierDetailsComponent {
               },
               error: (error) => {
                 console.error('Erreur lors de la requête vers l\'API:', error);
+                
                 // Ajoutez ici la gestion des erreurs
               }
             })
@@ -110,18 +125,24 @@ export class CourrierDetailsComponent {
           //this.message = data;
         });
 
+
+        // Fetcher le fichier principal du courrier pdf ou autres
+
+
+
         this.courrierService.getFileCourrierById(parseInt(this.courrierId)).subscribe((data: any) => {
-          if (data.base64_content) {
+          this.isFileLoading = false
+          if (data.base64) {
 
 
-            let binary_string = window.atob(data.base64_content);
+            let binary_string = window.atob(data.base64);
             let len = binary_string.length;
             let bytes = new Uint8Array(len);
             for (let i = 0; i < len; i++) {
               bytes[i] = binary_string.charCodeAt(i);
             }
 
-            this.pdfsource = bytes.buffer;
+            this.pdfSrc = bytes.buffer;
             this.isFileLoading = false
           }
         });
@@ -140,10 +161,12 @@ export class CourrierDetailsComponent {
         console.log(data.results);
         this.annotations = data.results.annotations
         this.totalItems = data.count
+
         //this.message = data;
       });
     }
   }
+
 
   dial() {
 
@@ -153,6 +176,9 @@ export class CourrierDetailsComponent {
     console.log(event)
     this.fetchAnnotation();
   }
+
+
+
 
 
   openDialog(): void {
@@ -186,11 +212,9 @@ export class CourrierDetailsComponent {
     }
   }
   openAnnotationModal(){
-    if(this.isOpenModalAnnotation == false){
+
       this.isOpenModalAnnotation = true;
-    }else{
-      this.isOpenModalAnnotation = false;
-    }
+
   }
 
   openHistoriqueVersionModal(){
@@ -200,8 +224,38 @@ export class CourrierDetailsComponent {
       this.isOpenModalHistoriqueVersion = false;
     }
   }
+
+
+  
+  onFileSelected(event: Event) {
+    this.pdfSrc = ''
+    this.isFileLoading = true
+    let fileInput = event.target as HTMLInputElement;
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+
+      let file = fileInput.files[0];
+
+      let reader = new FileReader();
+
+
+
+  }
 }
 
+setIsModalFullcreenDocumentOpen(){
+  if(this.isModalFullcreenDocumentOpen){
+    this.isModalFullcreenDocumentOpen = false
+  }else{
+    this.isModalFullcreenDocumentOpen = true
+  }
+}
+
+
+
+closeModal() {
+  this.isOpenModalAnnotation = false;
+}
+}
 
 
 @Component({
@@ -237,5 +291,8 @@ export class DialogContentDetailsDialog {
   }
   openDialog(): void {
   }
+
+
+
 
 }

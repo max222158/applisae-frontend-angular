@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '../../../constants/constants';
@@ -31,4 +31,33 @@ export class UserService {
   getAllUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/all-users/?format=json`,  { withCredentials: true });
   }
+
+    // Fonction pour envoyer le formulaire
+    getUsersSearch(page: number, query: string): Observable<any> {
+      let params = new HttpParams()
+        .set('page', page.toString())
+        .set('q', query);
+      
+      return this.http.get<any>(`${this.apiUrl}/users/search/?format=json`, { params,withCredentials: true  });
+    }
+
+    getGroupsSearch(page: number, query: string): Observable<any> {
+      let params = new HttpParams()
+        .set('page', page.toString())
+        .set('q', query);
+      
+      return this.http.get<any>(`${this.apiUrl}/groupe/list-group/?format=json`, { params,withCredentials: true  });
+    }
+
+    createGroup(formData: any): Observable<any> {
+      return this.http.post(`${this.apiUrl}/groupe/create-group/`, formData,  { withCredentials: true });
+    }
+
+    editGroup(formData: any): Observable<any> {
+      return this.http.post(`${this.apiUrl}/groupe/edit-group/`, formData,  { withCredentials: true });
+    }
+
+    getGroupId(id: number): Observable<any> {
+      return this.http.post(`${this.apiUrl}/groupe/get-group-by-id/`, id,  { withCredentials: true });
+    }
 }

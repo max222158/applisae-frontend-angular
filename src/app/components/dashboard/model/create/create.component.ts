@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CourrierModeleService } from '../../../../services/api/courrier/modele-courrier/courriermodel.service';
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { clearInput } from '../../../../helpers/helper';
 
 @Component({
   selector: 'app-create',
@@ -16,7 +17,8 @@ export class CreateComponent {
   fields: any[] = []; // Utilisation d'un tableau générique pour stocker les données
   custom: any[] = [];
   field_drop: any[] = [];
-
+  isSpinnerLoading:boolean = false
+  disabled:boolean = true
   field_no_drop : any[] = [];
   modeleCourrierForm: FormGroup;
 
@@ -35,12 +37,17 @@ export class CreateComponent {
  
        // Add other form controls as needed
      });
-
+     this.modeleCourrierForm.valueChanges.subscribe(() => {
+      const nameValue = this.modeleCourrierForm.get('name')?.value.trim();
+      const descriptionValue = this.modeleCourrierForm.get('type')?.value.trim();
+      this.disabled = nameValue === '' || descriptionValue === ''; // Disable if any of them is empty
+    });
      console.log('Form Controls:', this.modeleCourrierForm.controls);
   }
 
   onSubmit() {
-    this.isLoading = true;
+    this.disabled = true;
+    this.isSpinnerLoading = true
     console.log('Form Controls:', this.modeleCourrierForm.value);
     const idsArray = this.field_drop.map(item => item.id);
     if (this.modeleCourrierForm.valid) {
@@ -59,6 +66,9 @@ export class CreateComponent {
 
           this.toastr.success('Enregistré avec succès!','Modèle');
           console.log('Réponse de l\'API:', response);
+          this.disabled = true
+          this.isSpinnerLoading = false
+          clearInput(this.modeleCourrierForm, ['name', 'type']);
           // Ajoutez ici la gestion de la réponse de l'API
         },
         error: (error: any) => {

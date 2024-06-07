@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ThemeService } from '../../services/core/theme/theme.service';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/api/user/user.service';
+import { AuthService } from '../../services/api/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,17 +12,28 @@ import { Router } from '@angular/router';
 export class SidebarComponent {
 
   isMiniSidebar: boolean = false; 
+  mini_sidebar = "h-100 mm-show simplebar-scrollable-y"
+  menu:any[] = this.authService.getMenu()
 
-  constructor(private sidebarToggleService: ThemeService,private router:Router) {}
+  constructor(private themeService: ThemeService,private router:Router,private authService: AuthService) {}
   selectedMenuItem: string = '';
   activeIndex: number = -1; 
   ngOnInit() {
-    this.sidebarToggleService.isMiniSidebar$.subscribe((isMiniSidebar) => {
-      this.isMiniSidebar = isMiniSidebar;
-    });
+
+    this.mini_sidebar = this.themeService.getSidebarStatus()
+    this.menu = this.authService.getMenu()
+
   }
 
 
+
+  setActive(index: number) {
+    this.activeIndex = index;
+  }
+
+  toggleSubmenu(index: number) {
+    this.activeIndex = this.activeIndex === index ? 0 : index;
+  }
 
   // Function to handle menu item click
   handleItemClick(index: number, event:Event): void {

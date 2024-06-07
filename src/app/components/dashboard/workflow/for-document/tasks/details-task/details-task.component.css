@@ -1,0 +1,16 @@
+@media screen and (max-width:768px){
+
+    .flex1{
+        display: block;
+    }
+    .action-div{
+        width: 100% !important;
+        padding-left: 0px !important;
+    }
+}
+
+.p-description{
+        color: #5d5d5d;
+        max-width: 800px;
+    
+}

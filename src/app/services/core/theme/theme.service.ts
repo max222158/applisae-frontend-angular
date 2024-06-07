@@ -11,6 +11,7 @@ export class ThemeService {
 
   private isMiniSidebarSubject = new BehaviorSubject<boolean>(false);
   isMiniSidebar$ = this.isMiniSidebarSubject.asObservable();
+  mini_sidebar = "h-100 mm-show simplebar-scrollable-y"
 
   toggleSidebar() {
     this.isMiniSidebarSubject.next(!this.isMiniSidebarSubject.value);
@@ -38,6 +39,8 @@ export class ThemeService {
   isDarkMode() {
     return this.darkMode;
   }
-
+   getSidebarStatus(){
+    return this.mini_sidebar
+   }
   
 }

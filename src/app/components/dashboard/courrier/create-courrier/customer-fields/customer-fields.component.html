@@ -1,0 +1,45 @@
+<div class="card" *ngIf="selectedModele !=='' || selectedModele !==''">
+    <h5 class="card-header bg-transparent border-bottom ">Champs personnalisés du modèle </h5>
+   
+        <div class="card-body">
+          <div>
+            <div *ngFor="let field of customer_fields; let i = index">
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">{{ field.label }}</label>
+                <input *ngIf="field.type === 'text'" type="text" class="form-control" #inputRef>
+                <input *ngIf="field.type === 'number'" type="number" class="form-control" #inputRef>
+                <input *ngIf="field.type === 'date'" type="date" class="form-control" #inputRef>
+                <textarea *ngIf="field.type === 'textarea'" class="form-control" id="exampleFormControlTextarea1" rows="4" #inputRef></textarea>
+                
+                <div class="mb-3" *ngIf="field.type === 'select'">
+                  <div class="col-md-12 pl-0">
+                    <select class="form-select">
+                      <option *ngFor="let option of field.field_values" [value]="option.value">{{ option.value }}</option>
+                    </select>
+                  </div>
+                </div>
+
+
+                <div class="mb-3" *ngIf="field.type === 'checkbox'">
+
+                    <div class="form-check form-check-inline" *ngFor="let option of field.field_values">
+                        <input class="form-check-input" style="width: 20px; height: 20px;" type="checkbox" id="inlineCheckbox1" [value]="option.value">
+                        <label class="form-check-label" for="">{{option.value}}</label>
+                      </div>
+                  </div>
+
+                  <div class="mb-3" *ngIf="field.type === 'radio'">
+
+                    <div class="form-check form-check-inline" *ngFor="let option of field.field_values">
+                        <input class="form-radio-input" style="width: 20px; height: 20px;" type="radio" id="inlineCheckbox1" [value]="field.id">
+                        <label class="form-check-label" for="">{{option.value}}</label>
+                      </div>
+                  </div>
+     
+
+              </div>
+            </div>
+          </div>
+        </div>
+      
+</div>

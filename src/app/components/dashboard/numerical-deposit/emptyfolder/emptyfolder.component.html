@@ -1,0 +1,28 @@
+<div
+style="width: 500px; height: 500px; background: #eeeeee00; display: flex; align-items: center;justify-content: center;">
+<div style="">
+
+
+    <h3 style="text-align: center;">Ce dossier est vide</h3>
+
+
+
+    <div class="" style="display: flex; justify-content: center; align-items: center;">
+        <img src="../../../../assets/images/allmedia.png" alt="">
+    </div>
+    <p class="text-center">Importer des document ici ou créer des dossier</p>
+    <br><br>
+    <div class="" style="display: flex; justify-content: center; align-items: center;">
+        
+        <label style="position: absolute;" for="upload" mat-raised-button
+            matTooltip="Uploader des fichiers ici"
+            class="btn btn-success border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
+            <span class="text-gray-600 font-medium"><i class="fa-solid fa-upload"></i> Uploader des fichiers
+                ici</span>
+        </label>
+
+        <input id="upload" type="file" (change)="onFileChange($event)" class="hidden"
+            style="visibility: hidden;" multiple />
+    </div>
+</div>
+</div>

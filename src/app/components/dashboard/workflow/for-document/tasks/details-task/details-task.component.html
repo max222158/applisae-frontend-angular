@@ -1,0 +1,183 @@
+<div class="container">
+    <h2>
+        <img  *ngIf="detailstask.is_finish || isWorkfowCloture" src="../../../../../../../assets/images/task-done.gif" alt="" srcset="" width="50px" height="50px"> 
+        {{
+        detailstask.type == 1 ? '' :
+        detailstask.type == 2 ? 'Réviser et approuver en groupe' :
+        detailstask.type == 3 ? 'Réviser et approuver en groupe Lecture uniquement' :
+        detailstask.type == 4 ? '' :
+        detailstask.type == 5 ? 'Réviser et approuver par plusieurs utilisateurs' :
+
+        detailstask.type
+        }}      
+        <span class="badge badge-success" *ngIf="(detailstask.is_finish  || isWorkfowCloture) && isWorkfowApprouved">
+            Approuvé avec {{ utilsService.calculateValidationPercentage(detailstask.user_in_workflow) }} %
+        </span>
+        <span class="badge badge-danger" *ngIf="(detailstask.is_finish  || isWorkfowCloture) && !isWorkfowApprouved">
+            Non approuvé
+        </span>
+        
+        
+    </h2>
+
+
+    <p class="font-size-20">Initié par: <span class="badge badge-success">{{detailstask.initiatedBy.name}}</span></p>
+
+    <p class="font-size-14 mb-0" class="p-description">{{detailstask.description}} Campagne ouverte jusqu'au 18 Novembre 2023
+        Pour participer, vous devez avoir complété la vérification d’identité de votre compte. Cliquez ici pour compléter la vérification si ce n’est pas le cas.
+         Les récompenses seront distribuées aux premiers (03/jours) à rejoindre Binance Afrique sur Twitter, Facebook et Instagram.
+        Les récompenses seront distribuées 2 semaines après la fin de la campagne.
+        Binance se réserve le droit d'annuler ou de modifier toute activité ou règle d'activité à sa seule discrétion.</p>
+
+    <div class="flex1">
+        <div style="width: 400px; height: 600px; ">
+            <div style="width: 400px; height: 500px; background: #79000032;">
+                <div style="display: flex;position: absolute; z-index: 4;">
+
+                    <button  class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
+                        style="background: #730066;"><i class="fa-solid fa-minus"></i></button>
+
+                    <button class="btn btn-success  mt-1 ml-0" (click)="setZoom('add')" style="background: #730066;"><i
+                            class="fa-solid fa-plus"></i></button>
+
+                    <button (click)="setIsModalFullcreenDocumentOpen()" class="btn btn-success  mt-1 ml-1" style="background: #007336;"><i
+                            class="fa-solid fa-expand"></i></button>
+                </div>
+
+                <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [zoom]="zoom" [render-text]="true" [original-size]="false"
+                style="width: 100%;height: 100%;z-index: 2;background: #4c4c4c;">
+
+            </pdf-viewer>
+            <div *ngIf="pdfSrc == ''" class="flex1" style="height: 100%; width: 100%; justify-content: center; align-items: center;">
+
+                <i *ngIf="!isFileLoading" class="fa-solid fa-file-lines" style="font-size: 100px;"></i>
+                <div *ngIf="isFileLoading" class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+
+            </div>
+            </div>
+
+
+
+
+        </div>
+
+        <div class="action-div" style="width: calc(100% - 400px);  padding-left: 40px;">
+
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30">
+                    <div   class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h4 class="m-0 mb-3">Actions sur le document</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!isWorkfowExpired">
+                        <div *ngIf="detailstask.task_details.is_validate === null" class="white_card_body">
+                            <button type="button" (click)="setisModalApproveRejectOpen('approved')" class="btn mb-3 mr-1 btn-primary" mat-raised-button
+                                matTooltip="Valider le document">
+                                <i class="fa-solid fa-circle-check"></i> Approuver</button>
+                            <button type="button" class="btn mb-3 mr-1 btn-danger" (click)="setisModalApproveRejectOpen('reject')"  mat-raised-button
+                                matTooltip="Rejeter le document">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                Rejeter</button>
+                            <button *ngIf="detailstask.type == 2" type="button" class="btn mb-3 mr-1 btn-success" mat-raised-button
+                                matTooltip="Ajouter une annotation"><i class="fa-solid fa-pen-to-square"></i>
+                                Annotation</button>
+
+                        </div>
+                    </div>
+
+                    <div *ngIf="detailstask.is_finish || isWorkfowCloture" class="white_card_body">
+
+
+                        <h3 class="mt-1"><img src="../../../../../../../assets/images/task-done.gif" alt="" srcset="" width="50px" height="50px">  Ce workflow a été clôturé</h3>
+
+                    </div>
+
+                    <div *ngIf="detailstask.task_details.is_validate !== null " class="white_card_body">
+
+                        <p *ngIf="detailstask.task_details.is_validate === true"
+                         class="font-size-20" style="color: #007336;"><i class="fa-solid fa-circle-check"></i> Vous avez valider l'action</p>
+
+                         <p *ngIf="detailstask.task_details.is_validate === false"
+                         class="font-size-20" style="color: red;"><i class="fa-solid fa-circle-xmark"></i> Vous avez rejeter l'action</p>            
+                    </div>
+                    <p *ngIf="isWorkfowExpired"
+                    class="font-size-20" style="color: rgb(255, 191, 0);">
+                    <i class="fa-solid fa-circle-xmark"></i> La date a expiré</p>            
+
+
+                </div>
+                <hr>
+                <h4 class="m-0 mb-3">Approbation: 
+                    <span style="width: 40px; height: 40px;
+                     border-radius: 50%; background: #730066; 
+                     color: white; padding: 10px;">{{utilsService.calculateValidationPercentage(detailstask.user_in_workflow)}} %</span>
+                     
+                    </h4>
+                <p><strong><mark style="background-color: yellow;">Requis: {{detailstask.percentage_approval}} %</mark></strong></p>
+                <hr>
+                <h4 class="m-0 mb-3">Pièces jointes</h4>
+                <p *ngIf="detailstask.attachment_file.length == 0">Pas de pièces jointes</p>
+                <ol>
+                    <li *ngFor="let file of detailstask.attachment_file">
+                     
+                      <span style="color: rgb(76, 135, 255);"><u>{{ file.document.title }}</u></span>
+                    </li>
+                </ol>
+
+                <hr>
+                <h4 class="m-0 mb-3">Historique</h4>
+
+                <div *ngFor="let history of detailstask.user_in_workflow">
+
+                    <div class="div-user" *ngIf="history.is_validate !== null"
+                    style="display: flex; padding-bottom: 1rem; padding: 1rem; border-radius: 12px; margin-bottom: 10px;"
+                    >
+                    <i class="fa-solid fa-circle-user" title=""
+                        style="font-size: 30px; color: rgb(0, 58, 109);"></i>
+                    <div class="ml-1">
+                        <p class="mb-0 font-weight-bold">{{history.user.name || ""}}</p>
+                        <p class="mb-0">{{history.user.email || ""}}
+                        </p>
+                        <p *ngIf="history.is_validate === true"
+                        class="font-size-20" style="color: #007336;"><i class="fa-solid fa-circle-check"></i> a validé l'action</p>
+        
+                        <p *ngIf="history.is_validate === false"
+                        class="font-size-20" style="color: red;"><i class="fa-solid fa-circle-xmark"></i> a rejeté l'action</p>            
+        
+                        <hr style="height: 1px; color: rgb(197, 197, 197);" />
+                    </div>
+
+
+                </div>
+
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-alert [isOpenModal] = "isModalApproveRejectOpen"
+ [textButtonValidation]="textButtonValidation" 
+ [title]="titleModal"
+ [color]="colorIcon"
+ (validationEvent)="approuveReject()"
+ (closeModalEvent)="closeModal()"
+ [icon]="iconModal"
+ ></app-modal-alert>
+
+ <app-modal-view-document 
+[isOpenModal] = "isModalFullcreenDocumentOpen"
+(closeModalEvent)="setIsModalFullcreenDocumentOpen()"
+[pdfSrc]="pdfSrc"
+  >
+
+ </app-modal-view-document>

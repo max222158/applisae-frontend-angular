@@ -9,6 +9,7 @@ export class ButtonSpinnerComponent {
   @Input() backgroundColor: string = '';
   @Input() textColor: string = 'white';
   @Input() disabled: boolean = false;
+  @Input() isSpinnerLoading: boolean = false;
   @Input() buttonText: string = 'Cliquez ici';
 
 }

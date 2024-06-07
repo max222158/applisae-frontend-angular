@@ -1,0 +1,111 @@
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card overflow-hidden">
+            <div class="bg-primary-subtle">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="text-primary p-3">
+                            <h5 class="text-primary">Bienvenue !</h5>
+                            <p>{{userDetails.name}}</p>
+                        </div>
+                    </div>
+                    <div class="col-5 align-self-end" style="width: 90px; height: 90px;">
+                        <img [src]="media_url_public + userDetails.image" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="avatar-md profile-user-wid mb-4" style="width: 90px; height: 90px;">
+                            <img [src]="media_url_public + userDetails.image" style="width: 90px; height: 90px;" alt="" class="img-thumbnail rounded-circle">
+                        </div>
+                        <h5 class="font-size-15 text-truncate">{{userDetails.name}}</h5>
+                        <p class="text-muted mb-0 text-truncate">{{userDetails.grade}}</p>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <div class="pt-4">
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="font-size-15">12</h5>
+                                    <p class="text-muted mb-0">Tâches en cours</p>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="font-size-15">12</h5>
+                                    <p class="text-muted mb-0">Courriers</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body m-0 p-0">
+                <h2 class="card-title mb-4 p-4" style="background: #fccdcd;">Mes tâches</h2>
+
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex flex-wrap">
+                    <h2 class="card-title mb-4" style="background: #cde9fc;">Mes Courriers</h2>
+                    <div class="ms-auto">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Urgents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Clôturés</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="stacked-column-chart" class="apex-charts"
+                    data-colors="[&quot;--bs-primary&quot;, &quot;--bs-warning&quot;, &quot;--bs-success&quot;]"
+                    dir="ltr"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body m-0 p-0">
+                <h2 class="card-title mb-4 p-4" style="background: #e2fccd;">Documents récemments consultés</h2>
+
+            </div>
+        </div>
+        <!-- end row -->
+
+
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body m-0 p-0">
+                <h2 class="card-title mb-4 p-4" style="background: #fccdf8;">Mes activités</h2>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body m-0 p-0">
+                <h2 class="card-title mb-4 p-4" style="background: #cdf3fc;">Workflows que j'ai initié</h2>
+
+            </div>
+        </div>
+    </div>
+</div>

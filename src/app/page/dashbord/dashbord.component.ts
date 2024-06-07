@@ -18,17 +18,7 @@ export class DashbordComponent {
       this.isMiniSidebar = isMiniSidebar;
     });
 
-    this.authService.getUserLogin().subscribe({
-      next: (response) => {
-        // Gérer la réponse du backend après la connexion réussie
-        this.authService.getUserLogin()
-        console.log('Connexion réussie', response);
-      },
-      error: (error) => {
-        // Gérer les erreurs de connexion
-        console.error('Erreur de connexion', error);
-      },
-    });
+
   }
 
 

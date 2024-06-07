@@ -1,0 +1,94 @@
+
+<div *ngIf="disposition == 'mosaic'" style="width: 100%;" class="row">
+    <div  class="hover-effect"
+      style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;" 
+      >
+      <i class="fa-solid fa-folder" 
+        style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+      <p>Dossiers que j'ai créé</p>
+    </div>
+
+    <div  class="hover-effect"
+    style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;" 
+    >
+    <i class="fa-solid fa-folder" 
+      style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+    <p>Dossiers partagés avec moi</p>
+  </div>
+
+  <div  class="hover-effect"
+  style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;" 
+  >
+  <i class="fa-solid fa-folder" 
+    style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+  <p>Dossiers importants</p>
+</div>
+
+<div  class="hover-effect"
+style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;" 
+>
+<i class="fa-solid fa-folder" 
+  style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+<p>Documents</p>
+</div>
+
+  </div>
+  
+  <div *ngIf="disposition == 'list'" style="width: 100%;" class="row">
+    <table class="table table-hover" style="margin-bottom: 0px;">
+
+      <tbody>
+
+  
+        <tr style="cursor: pointer;" 
+          >
+          <th scope="row" style="vertical-align: middle; width: 60px;">
+            <i class="fa-solid fa-folder" style="font-size: 25px; color: rgb(42, 140, 194) !important; padding-top: 5px;"></i>
+          </th>
+          <td style="word-break: break-word; font-size: 16px; vertical-align: middle; " 
+            >
+            <p (click)="openHomeUserFolder(0,'Dossiers que j\'ai créé')" class="mb-0">Dossiers que j'ai créé</p>
+          </td>
+
+        </tr>
+        <tr style="cursor: pointer;" 
+        >
+        <th scope="row" style="vertical-align: middle; width: 60px;">
+          <i class="fa-solid fa-folder" style="font-size: 25px; color: rgb(42, 140, 194) !important; padding-top: 5px;"></i>
+        </th>
+        <td style="word-break: break-word; font-size: 16px; vertical-align: middle; " 
+          >
+          <p class="mb-0" (click)="openHomeUserFolder(2,'Dossiers partagés avec moi')">Dossiers partagés avec moi</p>
+        </td>
+
+      </tr>
+      <tr style="cursor: pointer;" 
+      >
+      <th scope="row" style="vertical-align: middle; width: 60px;">
+        <i class="fa-solid fa-folder" style="font-size: 25px; color: rgb(42, 140, 194) !important; padding-top: 5px;"></i>
+      </th>
+      <td style="word-break: break-word; font-size: 16px; vertical-align: middle; " 
+        >
+        <p class="mb-0" (click)="openHomeUserFolder(1,'Dossiers importants')">Dossiers importants</p>
+      </td>
+
+
+    </tr>
+
+
+    <tr style="cursor: pointer;" 
+    >
+    <th scope="row" style="vertical-align: middle; width: 60px;">
+      <i class="fa-solid fa-folder" style="font-size: 25px; color: rgb(42, 140, 194) !important; padding-top: 5px;"></i>
+    </th>
+
+
+    <td style="word-break: break-word; font-size: 16px; vertical-align: middle; " 
+    >
+    <p class="mb-0" (click)="openHomeUserFolder(10,'Documents')">Documents</p>
+  </td>
+
+  </tr>
+      </tbody>
+    </table>
+  </div>

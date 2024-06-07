@@ -1,0 +1,173 @@
+<div class="container">
+    <div class="flex1">
+
+        <div style="width: 350px; height: 400px; background: #d5f9ff8e; justify-content: center; align-items: center;">
+            <button (click)="setIsModalFullcreenDocumentOpen()" class="btn btn-success  mt-1 ml-1" style="background: #007336; position: absolute;z-index: 100;"><i
+                class="fa-solid fa-expand"></i></button>
+            <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [zoom]="zoom" [render-text]="true" [original-size]="false"
+                style="width: 100%;height: 100%;z-index: 2;background: #4c4c4c;">
+
+            </pdf-viewer>
+            <div *ngIf="pdfSrc == ''" class="flex1" style="height: 100%; width: 100%; justify-content: center; align-items: center;">
+
+                <i *ngIf="!isFileLoading" class="fa-solid fa-file-lines" style="font-size: 100px;"></i>
+                <div *ngIf="isFileLoading" class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+
+            </div>
+
+            <br>
+           
+            
+            <button type="button" class="btn btn-light waves-effect waves-light w-sm" 
+             (click)="fileInput.click()" [disabled]="isFileLoading"  style="background: #6c0000; color: white; font-size: 14px; padding-left: 30px; padding-right: 30px; border-radius: 20px;">
+                <i class="fas fa-upload font-size-16"></i> Charger un fichier
+            </button>
+            <input type="file"  (change)="onFileSelected($event)" #fileInput id="file" hidden>
+
+
+            <p class="mt-1" *ngIf="detailsDocument && detailsDocument.title && fileName == ''">Nom du document: {{detailsDocument.title || fileName}}</p>
+            <p class="mt-1" *ngIf="fileName!==''">Nom du document: {{fileName}}</p>
+
+        </div>
+
+        <div class="pl-4" style="width: calc(100% - 200px);">
+            <form [formGroup]="workflowForm" (ngSubmit)="onSubmit()">
+                <h4>Workflow: {{workflow_name}}</h4>
+                <label for="exampleFormControlTextarea1" class="form-label">Type De Workflow</label>
+                <select class="form-select" aria-label="Default select example" formControlName="type" style="
+                    border: 2px solid #006715;font-size: 13px;font-weight: 500">
+                    <option value="1">Créer un nouveau workflow</option>
+                    <option value="2">Réviser et approuver en groupe</option>
+                    <option value="3">Réviser et approuver en groupe Lecture uniquement </option>
+                    <option value="4">Modèle par défaut</option>
+                    <option value="5">Réviser et approuver par plusieurs utilisateurs</option>
+
+                </select>
+                <br>
+                <div>
+                    <div *ngIf="workflow_name == 'Créer un nouveau workflow' " class="form-group">
+                        <label for="exampleInputEmail1">Nom du workflow</label>
+                        <input type="text" class="form-control" placeholder="Nom du workflow" formControlName="name">
+                    </div>
+
+                    <div class="mb-3" style="width: 100%;">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description de ce workflow</label>
+                        <textarea id="exampleFormControlTextarea1" rows="2" class="form-control"
+                            formControlName="description"></textarea>
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="row">
+                        <div class="mb-3 col-md-6" style="">
+                            <label for="exampleFormControlTextarea1" class="form-label">Date de clôture</label>
+                            <input type="date" name="" class="form-control" id="" formControlName="date_cloture">
+                        </div>
+                        <div class="mb-3 col-md-6" style="">
+                            <label for="exampleFormControlTextarea1" class="form-label">Priorité</label>
+                            <select class="form-select" aria-label="Default select example" formControlName="priority">
+                                <option selected value="1">Normal</option>
+                                <option value="2">Urgent</option>
+                                <option value="3">Très Urgent </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h5 *ngIf="workflow_name !== 'Réviser et approuver par plusieurs utilisateurs'">Groupe ajouté pour
+                        effectuer la révision et l'approbation</h5>
+
+                    <h5 *ngIf="workflow_name == 'Réviser et approuver par plusieurs utilisateurs'">Utilisateurs ajoutés
+                        pour effectuer la révision et l'approbation</h5>
+                    <div class="flex1" style="overflow-x: scroll;">
+
+                        <div *ngFor="let user of usersSelect" style="display: flex;background: #7b0042;border-radius: 20px; 
+                                margin-right: 10px;padding: 5px; padding-left: 10px;
+                                padding-right: 10px; ">
+                            <p class="mb-0" style="color: #fff;width: max-content; ">{{user.name}}</p>
+                            <p class="mb-0" style="margin-left: 10px;
+                                background: #565656;
+                                color: white;
+                                width: 20px;
+                                height: 20px;
+                                border-radius: 50%;
+                                text-align: center;
+                                cursor: pointer;" (click)="removeUser(user.id)">X</p>
+                        </div>
+
+                    </div>
+
+                    <div *ngIf="workflow_name !== 'Réviser et approuver par plusieurs utilisateurs'"
+                        style="background: #04006c36;">
+                        <p class="font-size-20" *ngFor="let group of groupSelect"><u>Groupe choisi: </u> <span class="ml-2 badge badge-success">
+                                {{group.name}}</span> </p>
+                    </div>
+
+                    <button type="button" *ngIf="workflow_name !== 'Réviser et approuver par plusieurs utilisateurs'"
+                        (click)="openGroupUserModal()" class="btn mt-3"
+                        style="background: #04006c; color: white; font-size: 17px; padding-left: 30px; padding-right: 30px; border-radius: 20px;">
+                        <i class="fa-solid fa-users h4  mb-0"></i> Ajouter un groupe
+                    </button>
+                    <button type="button" *ngIf="workflow_name == 'Réviser et approuver par plusieurs utilisateurs'"
+                        (click)="openUserModal()" class="btn mt-3"
+                        style="background: #6c6700; color: white; font-size: 17px; padding-left: 30px; padding-right: 30px; border-radius: 20px;">
+                        <i class="fa-solid fa-users h4  mb-0"></i> Ajouter des utilisateurs
+                    </button>
+
+                    <hr>
+
+
+                    <div class="mb-3 col-md-6" style="">
+                        <h5>Pourcentage d'approbation requis:</h5>
+                        <select class="form-select" aria-label="Default select example"
+                            formControlName="percentage_approval">
+                            <option value="25">25%</option>
+                            <option selected value="50">50%</option>
+                            <option value="75">75%</option>
+                            <option value="100">100% </option>
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="mb-3" style="">
+                        <h5>Associer des pièces jointes :</h5>
+                    </div>
+                    <app-attachment-files (filesSelected)="onAttachementFilesSelected($event)" ></app-attachment-files>
+
+                </div>
+                <hr>
+                <button type="submit" class="btn mt-3" [disabled]="disabled"
+                    style="background: #0f3500;color: white;font-size: 17px;padding-left: 30px;padding-right: 30px;border-radius: 10px;display: flex;justify-content: center;align-items: center;">
+                
+                <span *ngIf="isSpinnerLoading" class="spinner-border text-success" style="
+                    width: 20px;
+                    height: 20px;
+                "></span> 
+                <p  class="mb-0 pl-2"> Démarrer le workflow</p>
+                </button>
+            </form>
+        </div>
+
+
+    </div>
+</div>
+
+<app-modal-users [users]="users" [query]="query" (inputQueryValueChange)="onInputSearchValueChange($event)"
+    [isOpenModalUser]="isOpenModalUser" (closeModalEvent)="openUserModal()" [(usersSelect)]="usersSelect"
+    (searchEvent)="getUsers($event)" (usersSelectChange)="onUsersSelectChange($event)">
+
+</app-modal-users>
+<app-modal-group-users [groupUser]="groupUser" [isOpenModalGroupUser]="isOpenModalGroupUser"
+    (closeModalEvent)="openGroupUserModal()" [(groupSelect)]="groupSelect" [multiple_selection]="false"
+    (groupSelectChange)="onGroupSelectChange($event)">
+
+</app-modal-group-users>
+
+<app-modal-view-document 
+[isOpenModal] = "isModalFullcreenDocumentOpen"
+(closeModalEvent)="setIsModalFullcreenDocumentOpen()"
+[pdfSrc]="pdfSrc"
+  >
+
+ </app-modal-view-document>

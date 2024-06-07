@@ -1,0 +1,92 @@
+<div class="p-2 "
+    style="background: #d2ffab;border-radius: 10px;padding-left: 30px !important;padding-top: 10px !important;">
+    <div class="flex1">
+        <i class="fa-solid fa-circle-info font-size-20 m-2" style="color: black !important;"></i>
+        <div class="">
+            <h3 style="color: black !important;">Liste des groupes d'utilisateurs</h3>
+            <p class="font-size-14 mb-O" style="color: black !important;">Associer des utilisateurs à groupe pour le partage de dossiers
+                et de documents pour le travail <b>en collabaration</b></p>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-sm">
+              <div class="search-box me-2 d-inline-block">
+                <div class="position-relative">
+                  <input class="form-control" type="text" (input)="onInputChange($event)" placeholder="Recherche un groupe" >
+
+                  <button class="btn btn-success mt-1" (click)="onSearch()">Recherche</button>
+                  <i class="bx bx-search-alt search-icon"></i>
+                </div>
+              </div>
+            </div>
+            <!-- end col -->
+            <div class="col-sm-auto">
+              <div class="text-sm-end">
+                <a routerLink="/tableau-de-bord/utilisateurs/groupes/create" routerLinkActive="active"
+                  class="btn btn-success btn-rounded" id="addProject-btn"><i class="mdi mdi-plus me-1"></i> Nouveau groupe</a>
+              </div>
+            </div>
+            <!-- end col -->
+          </div>
+          <!-- end row -->
+          <div class="table-responsive">
+          <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+              <tr>
+                <th></th>
+                <th>Nom du groupe</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let groupe of groupeList |
+              paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }">
+                <td>
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">{{groupe.id}}</p>
+  
+                  </div>
+                </td>
+                <td>
+                  <p class="fw-normal mb-1">{{groupe.name}}</p>
+                </td>
+                <td>
+                  <p class="fw-normal mb-1">{{groupe.description}}</p>
+                </td>
+
+      
+                <td>
+
+                  <a routerLink="/tableau-de-bord/utilisateurs/groupe/id/{{groupe.id}}" routerLinkActive="active"
+                  class="btn btn-link btn-sm btn-rounded" >Modifier</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-5">
+                 Total: {{totalItems}} Groupes
+            </div>
+            <div class="col-5">
+                <pagination-controls 
+                (pageChange)="pageChanged($event)"
+                previousLabel="Précédent"
+                nextLabel="Suivant"
+
+                
+                ></pagination-controls>
+            </div>
+        </div>
+        </div>
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+  </div>

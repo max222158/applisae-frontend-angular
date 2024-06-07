@@ -15,107 +15,30 @@
                             <div id="sidebar-menu" class="mm-active">
                                 <!-- Left Menu Start -->
                                 <ul class="metismenu list-unstyled mm-show" id="side-menu">
-                                    <li class="menu-title" key="t-menu">Menu</li>
-
-                                    <li>
-                                        <a routerLink="/dashboard" routerLinkActive="active"
-                                            class="waves-effect mm-active" aria-expanded="true">
-                                            <i class="fa-solid fa-gauge"></i>
-                                            <span key="t-dashboards">Tableau de bord</span>
-                                        </a>
+                                  <li class="menu-title" key="t-menu">Menu</li>
+                              
+                                  <ng-container *ngFor="let menuItem of menu">
+                                    <li [class.mm-active]="activeIndex === menuItem.id" *ngIf="menuItem.submenus.length === 0">
+                                      <a [routerLink]="menuItem.link" routerLinkActive="active" class="waves-effect" (click)="setActive(menuItem.id)">
+                                        <i [class]="menuItem.icon"></i>
+                                        <span>{{ menuItem.name }}</span>
+                                      </a>
                                     </li>
-                                    <li [class.mm-active]="activeIndex === 2">
-                                        <a href="javascript: void(0);" (click)="handleItemClick(2,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
-                                            >
-                                            <i class="fa-regular fa-envelope"></i>
-                                            <span key="t-layouts">Courrier</span>
-                                        </a>
-                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 2" aria-expanded="false">
-                                            <li><a routerLink="/dashboard/ajouter-un-courrier" routerLinkActive="active"
-                                                    key="t-default">Ajouter un courrier</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/courriers/mes-courriers"
-                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Mes
-                                                    courriers</a></li>
-
-                                        </ul>
+                                    <li [class.mm-active]="activeIndex === menuItem.id" *ngIf="menuItem.submenus.length > 0">
+                                      <a href="javascript:void(0);" (click)="toggleSubmenu(menuItem.id)" class="has-arrow waves-effect">
+                                        <i [class]="menuItem.icon"></i>
+                                        <span>{{ menuItem.name }}</span>
+                                      </a>
+                                      <ul class="sub-menu mm-collapse" [class.mm-show]="activeIndex === menuItem.id" aria-expanded="false">
+                                        <li *ngFor="let submenu of menuItem.submenus">
+                                          <a [routerLink]="submenu.link" routerLinkActive="active">{{ submenu.name }}</a>
+                                        </li>
+                                      </ul>
                                     </li>
-                                    <li>
-                                        <a href="#" class="waves-effect">
-                                            <i class="fa-solid fa-box"></i>
-                                            <span key="t-layouts">Fonds Numériques</span>
-                                        </a>
-
-                                    </li>
-
-                                    <li>
-                                        <a href="#" class="waves-effect">
-                                            <i class="fa-solid fa-magnifying-glass"></i>
-                                            <span key="t-layouts">Recherche</span>
-                                        </a>
-
-
-
-                                    </li>
-                                    <li [class.mm-active]="activeIndex === 1">
-                                        <a href="javascript: void(0);" (click)="handleItemClick(1,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
-                                            >
-                                            <i class="fa-regular fa-file-lines"></i>
-                                            <span key="t-layouts">Modèle de document</span>
-                                        </a>
-                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 1" aria-expanded="false">
-                                            <li><a routerLink="/dashboard/creer-modele-document"
-                                                    routerLinkActive="active" key="t-default">Créer un modèle</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/modele-documents"
-                                                    routerLinkActive="active" key="t-saas" class="active"
-                                                    aria-expanded="false">Tous les modèles</a></li>
-                                            <li><a routerLink="/dashboard/creer-champs-personnalises"
-                                                    routerLinkActive="active" key="t-default">Champs Personnalisés</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-
-
-
-                                    <li [class.mm-active]="activeIndex === 3">
-                                        <a href="javascript: void(0);" (click)="handleItemClick(3,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
-                                            >
-                                            <i class="fa-solid fa-users"></i>
-                                            <span key="t-layouts">Workflows</span>
-                                        </a>
-                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 3" aria-expanded="false">
-                                            <li><a routerLink="/dashboard/creer-un-workflow" routerLinkActive="active"
-                                                    key="t-default">Créer un workflow</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/liste-des-workflows"
-                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Tous les workflows</a></li>
-                
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="waves-effect">
-                                            <i class="fa-solid fa-chart-pie"></i>
-                                            <span key="t-layouts">Statistiques</span>
-                                        </a>
-
-                                    </li>
-                                    <li [class.mm-active]="activeIndex === 4">
-                                        <a href="javascript: void(0);" (click)="handleItemClick(4,$event)" [attr.aria-expanded]="activeIndex === 0 ? 'true' : 'false'" class="has-arrow waves-effect"
-                                            >
-                                            <i class="fa-solid fa-users-gear"></i>
-                                            <span key="t-layouts">Utilisateurs permissions</span>
-                                        </a>
-                                        <ul class="sub-menu mm-collapse " [class.mm-show]="activeIndex === 4" aria-expanded="false">
-                                            <li><a routerLink="/dashboard/utilisateurs" routerLinkActive="active"
-                                                    key="t-default">Utilisateurs</a></li>
-                                            <li class="mm-active"><a routerLink="/dashboard/permissions"
-                                                    routerLinkActive="active" key="t-saas" aria-expanded="true">Permissions</a></li>
-                
-                                        </ul>
-                                    </li>
-
-
+                                  </ng-container>
                                 </ul>
-                            </div>
+                              </div>
+                              
                             <!-- Sidebar -->
                         </div>
                     </div>

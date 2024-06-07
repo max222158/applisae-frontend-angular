@@ -3,7 +3,7 @@
       <div class="d-flex">
           <!-- LOGO -->
           <div class="navbar-brand-box">
-              <a href="https://themesbrand.com/skote/layouts/index.html" class="logo logo-dark">
+              <a href="" class="logo logo-dark">
                   <span class="logo-sm">
                       <img src="assets/theme/logo.svg" alt="" height="22">
                   </span>
@@ -12,9 +12,9 @@
                   </span>
               </a>
 
-              <a href="https://themesbrand.com/skote/layouts/index.html" class="logo logo-light">
+              <a href="" class="logo logo-light">
                   <span class="logo-sm">
-                      <img src="assets/theme/logo-light.svg" alt="" height="22">
+                      <img src="" alt="" height="22">
                   </span>
                   <span class="logo-lg">
                       <img src="assets/theme/logo-light.png" alt="" height="19">
@@ -22,8 +22,8 @@
               </a>
           </div>
 
-          <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
-              <i class="fa fa-fw fa-bars"></i>
+          <button   (click)="toggleSidebar()" type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
+              <i class="fa fa-fw fa-bars" style="color: white;"></i>
           </button>
 
           <!-- App Search-->
@@ -69,10 +69,10 @@
 
 
           <div class="dropdown d-inline-block">
-            <mat-slide-toggle class="text-warning" (click)="toggleDarkMode()"><p class="p-toggle-theme" style="margin-top: 20px; color: #000;">Thème Sombre</p></mat-slide-toggle>
+            <mat-slide-toggle class="text-warning" (click)="toggleDarkMode()"><p class="p-toggle-theme" style="margin-top: 20px; color: #ffffff;">Thème Sombre</p></mat-slide-toggle>
               <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img class="rounded-circle header-profile-user" src="assets/theme/avatar-1.jpg" alt="Header Avatar">
-                  <span class="d-none d-xl-inline-block ms-1" key="t-henry">Henry</span>
+                  <img class="rounded-circle header-profile-user" [src]="media_url_public + userDetails.image" alt="Header Avatar">
+                  <span class="d-none d-xl-inline-block ms-1" style="color: white;" key="t-henry">{{userDetails.name}}</span>
                   <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-end">

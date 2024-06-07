@@ -1,0 +1,39 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+    style="padding-right: 17px; background: #00000063;"
+    [ngStyle]="{'display': isOpenModalUploadFile? 'block' : 'none' }">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLiveLabel">{{ modalTitle }}</h5>
+                <button type="button" (click)="closeModal(false)" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+              <ng-content></ng-content>
+
+
+
+            </div>
+            <div class="modal-footer">
+
+
+                <div class="">
+                    <label for="upload" mat-raised-button matTooltip="Uploader des fichiers ici"
+                        class="btn btn-warning border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
+                        <span class="text-gray-600 font-medium"> Ajouter des fichiers</span>
+                    </label>
+                    <input id="upload" type="file" (change)="onFileChange($event)" class="hidden"
+                        style="visibility: hidden;" multiple />
+                </div>
+
+                <button class="btn btn-success" (click)="uploadFiles()">Envoyer les fichiers</button>
+
+                <button type="button" class="btn btn-secondary" (click)="openUploadFileModal(false)"
+                    data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>

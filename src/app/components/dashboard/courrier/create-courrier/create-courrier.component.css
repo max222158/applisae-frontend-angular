@@ -22,3 +22,10 @@ input.mat-mdc-chip-input {
     margin-left: 8px;
     color: rgb(0, 0, 116) !important;
 }
+
+.dropzone {
+    min-height: 230px;
+    border: 2px dashed #0056e5;
+    background: var(--bs-secondary-bg);
+    border-radius: 6px;
+}
