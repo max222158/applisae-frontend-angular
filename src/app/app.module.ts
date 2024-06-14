@@ -75,6 +75,14 @@ import { ModalViewDocumentComponent } from './components/commons/modal/modal-vie
 import { CustomerFieldsComponent } from './components/dashboard/courrier/create-courrier/customer-fields/customer-fields.component';
 import { ModelCourrierHtmlComponent } from './components/dashboard/courrier/create-courrier/model-courrier-html/model-courrier-html.component';
 import { ModalAnnotationsComponent } from './components/commons/modal/modal-annotations/modal-annotations.component';
+import { HistoryComponent } from './components/dashboard/history/history.component';
+import { CustomerFieldsModalComponent } from './components/commons/customer-fields-modal/customer-fields-modal.component';
+import { AllDetailsComponent } from './components/dashboard/numerical-deposit/details-file/actions/all-details/all-details.component';
+import { AllDetailsModalComponent } from './components/commons/modal/all-details-modal/all-details-modal.component';
+import { EditMetadataComponent } from './components/dashboard/numerical-deposit/details-file/actions/edit-metadata/edit-metadata.component';
+import { DocumentInWorkflowComponent } from './components/dashboard/numerical-deposit/details-file/actions/document-in-workflow/document-in-workflow.component';
+import { AddNewVersionDocumentComponent } from './components/commons/modal/add-new-version-document/add-new-version-document.component';
+import { DocumentHistoryComponent } from './components/dashboard/numerical-deposit/details-file/actions/document-history/document-history.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +94,7 @@ import { ModalAnnotationsComponent } from './components/commons/modal/modal-anno
     , ModelComponent, ButtonSpinnerComponent, CreateComponent,CreateGroupComponent,
      CustomfielsComponent, CourrierComponent, MyCourrierComponent, 
      UserComponent, RoleComponent, CreateUserComponent,ModalUsersComponent,ModalGroupUsersComponent,
-      ListWorkflowComponent, CreateworkFlowComponent,CustomDateFormatPipe, CourrierDetailsComponent, CreateCourrierComponent, DetailsFileComponent, ModalCopyComponent, ModalDeleteComponent, GroupComponent, EditComponent, HomeUserComponent, UserDispositionComponent, AdminDispositionComponent, EmptyfolderComponent, IndexUserComponent, CreateWorkflowDocumentComponent, DetailsWorkflowComponent, AttachmentFilesComponent, MyTaskComponent, DetailsTaskComponent, ModalAlertComponent, ModalViewDocumentComponent, CustomerFieldsComponent, ModelCourrierHtmlComponent, ModalAnnotationsComponent
+      ListWorkflowComponent, CreateworkFlowComponent,CustomDateFormatPipe, CourrierDetailsComponent, CreateCourrierComponent, DetailsFileComponent, ModalCopyComponent, ModalDeleteComponent, GroupComponent, EditComponent, HomeUserComponent, UserDispositionComponent, AdminDispositionComponent, EmptyfolderComponent, IndexUserComponent, CreateWorkflowDocumentComponent, DetailsWorkflowComponent, AttachmentFilesComponent, MyTaskComponent, DetailsTaskComponent, ModalAlertComponent, ModalViewDocumentComponent, CustomerFieldsComponent, ModelCourrierHtmlComponent, ModalAnnotationsComponent, HistoryComponent, CustomerFieldsModalComponent, AllDetailsComponent, AllDetailsModalComponent, EditMetadataComponent, DocumentInWorkflowComponent, AddNewVersionDocumentComponent, DocumentHistoryComponent
   ],
 
   imports: [

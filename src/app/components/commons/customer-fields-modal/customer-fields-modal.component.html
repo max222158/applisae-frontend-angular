@@ -1,0 +1,15 @@
+
+
+    <div style="width: 300px; height:400px;border:1px solid #bbb;border-radius: 5px; padding: 10px; ">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Rechercher un champs" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSearch()" type="submit">Chercher</button>
+          </form>
+
+          <div *ngFor="let field of fields">
+
+                <p>{{field.label}}</p>
+
+          </div>
+
+    </div>

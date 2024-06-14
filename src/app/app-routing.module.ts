@@ -28,6 +28,7 @@ import { CreateWorkflowDocumentComponent } from './components/dashboard/workflow
 import { DetailsWorkflowComponent } from './components/dashboard/workflow/for-document/details-workflow/details-workflow.component';
 import { MyTaskComponent } from './components/dashboard/workflow/for-document/tasks/my-task/my-task.component';
 import { DetailsTaskComponent } from './components/dashboard/workflow/for-document/tasks/details-task/details-task.component';
+import { HistoryComponent } from './components/dashboard/history/history.component';
 
 
 
@@ -133,6 +134,8 @@ const routes: Routes = [{
                     path: 'details-courrier/:id', component: CourrierDetailsComponent
                 },
             ]
+        },{
+            path: 'historique', component: HistoryComponent
         },
         {
             path: 'utilisateurs', component: UserComponent

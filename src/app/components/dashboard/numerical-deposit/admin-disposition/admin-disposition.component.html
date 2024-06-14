@@ -48,7 +48,7 @@
             <p>{{ folder.name }}</p>
           </td>
           <td></td>
-          <td>{{ folder.author }}</td>
+          <td>{{ folder?.created_by?.name || '' }}</td>
           <td>{{ folder.created_at | customDateFormat }}</td>
           <td>
             <div class="dropdown">
@@ -78,7 +78,7 @@
             <p>{{ document.title }}</p>
           </td>
           <td>150 ko</td>
-          <td>{{ document.author }}</td>
+          <td>{{ document?.author?.name }}</td>
           <td>{{ document.created_at | customDateFormat }}</td>
           <td>
             <div class="dropdown">

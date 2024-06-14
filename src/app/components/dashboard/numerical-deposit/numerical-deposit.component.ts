@@ -10,6 +10,8 @@ import { UserService } from '../../../services/api/user/user.service';
 import { clearInput } from '../../../helpers/helper';
 import { identifierName } from '@angular/compiler';
 import { AuthService } from '../../../services/api/auth/auth.service';
+import { CustomfieldService } from '../../../services/api/customfield/customfield.service';
+
 
 @Component({
   selector: 'app-numerical-deposit',
@@ -51,11 +53,14 @@ export class NumericalDepositComponent {
   isOpenModalDelete:boolean = false
   isOpenModalUser:boolean = false
   isOpenModalGroupUser:boolean = false
-  
+
+  searchFieldText:string = ''
+  pageField:number = 1
   users: any[] = [];
   usersSelect: any[] = []
   groupSelect: any[] = []
   groupUser: any[] = []
+  customerFields:any[] = []
   ngOnInit() {
 
     let permissions = this.authService.getUser().permissions
@@ -100,9 +105,11 @@ export class NumericalDepositComponent {
     });
 
     this.getGroup("");
+    this.getCustomersFields()
+
   }
  
-  constructor(private http: HttpClient,private router:Router,
+  constructor(private http: HttpClient,private router:Router,private customfieldService: CustomfieldService,
      private toastr: ToastrService,private fb: FormBuilder,private userService: UserService, 
      private fileManagerService: FilemanagerService,private utilsService: UtilsService, private authService:AuthService) { }
  
@@ -153,6 +160,18 @@ export class NumericalDepositComponent {
     });
   }
 
+  getCustomersFields(){
+
+    
+    this.customfieldService.getFieldCustom(this.searchFieldText, this.pageField).subscribe({
+      next: (response: any) => {
+        this.customerFields  = response.results
+      },
+      error: (error: any) => {
+
+      }
+    });
+  }
   onUsersSelectChange(updatedUsersSelect: any[]) {
     this.usersSelect = updatedUsersSelect;
     console.log('Updated usersSelect:', this.usersSelect);

@@ -1,0 +1,9 @@
+if (obj.hasOwnProperty('name')) {
+  console.log('La propriété "name" existe dans l\'objet.');
+} else {
+  console.log('La propriété "name" n\'existe pas dans l\'objet.');
+}
+
+
+
+-----------------------------------------------------

@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ModalViewDocumentComponent {
   @Input() isOpenModal: boolean = false;
   @Input() pdfSrc:string = ''
-  @Input() zoom:number = 0.9 
+  @Input() zoom:number = 1 
   @Output() closeModalEvent = new EventEmitter<void>();
   @Output() setPdfSrcEvent = new EventEmitter<void>();
 

@@ -1,0 +1,22 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content ">
+
+            <div class="modal-body p-4">
+                <h5 class="modal-title" id="exampleModalLiveLabel"></h5>
+                
+
+                
+                     <div *ngFor="let history of histories" class="border-1 p-2 mt-3" 
+                     style="border: 1px solid #ffadad; border-radius: 10px; ">
+
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+           </div>
+        </div>
+    </div>
+</div>
