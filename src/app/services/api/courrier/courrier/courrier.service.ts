@@ -46,4 +46,12 @@ export class CourrierService {
   
       return this.http.post(`${this.apiUrl}/courriers/get_model_by_courrier/`, formData, { withCredentials: true });
     }
+
+    approvedDocument(id: number, approvation:boolean): Observable<any> {
+      const formData = new FormData();
+      formData.append('id', id.toString());
+      formData.append('approvation', approvation.toString());
+      return this.http.post(`${this.apiUrl}/courriers/approve-document/`, formData,  { withCredentials: true });
+    }
+  
 }

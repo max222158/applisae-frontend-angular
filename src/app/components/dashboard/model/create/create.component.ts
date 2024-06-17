@@ -21,14 +21,22 @@ export class CreateComponent {
   disabled:boolean = true
   field_no_drop : any[] = [];
   modeleCourrierForm: FormGroup;
-
+  search:string = ''
+   page: number = 1
 
   
   constructor(private apiService: CustomfieldService, private toastr: ToastrService,private fb: FormBuilder,private courrierModeleService:CourrierModeleService) { }
 
   ngOnInit(): void {
-    this.apiService.getFieldCustom().subscribe(data => {
-      this.field_no_drop = data;
+
+
+    this.apiService.getFieldCustom(this.search, this.page).subscribe({
+      next: (response: any) => {
+        this.field_no_drop  = response.results
+      },
+      error: (error: any) => {
+
+      }
     });
 
     this.modeleCourrierForm= this.fb.group({

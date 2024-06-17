@@ -1,31 +1,39 @@
 <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
-     style="padding-right: 17px; background: #00000063;"  [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
-    <div class="modal-dialog modal-dialog-centered modal-lg "  role="document">
-        <div class="modal-content" style="">
-            <div class="modal-header">
-                <h5 class="modal-title">Le document</h5>
-                <button type="button" class="close" (click)="closeModal()" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            <div class="modal-body p-4" style="text-align: center;">
-                <div style="display: flex;position: absolute; z-index: 4;">
+     style="padding-right: 17px; background: #0000008c; " 
+      [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
 
-                    <button  class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
-                        style="background: #730066;"><i class="fa-solid fa-minus"></i></button>
+    <div style="position: absolute; left: 15px;top: 15px;">
+        <div style="display: flex;position: absolute; z-index: 4;">
 
-                    <button class="btn btn-success  mt-1 ml-0" (click)="setZoom('add')" style="background: #730066;"><i
-                            class="fa-solid fa-plus"></i></button>
+            <button  class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
+                style="background: #730066;"><i class="fa-solid fa-minus"></i></button>
 
-                </div>
+            <button class="btn btn-success  mt-1 ml-0" (click)="setZoom('add')" style="background: #730066;"><i
+                    class="fa-solid fa-plus"></i></button>
+
+        </div>
+    </div>
+
+    <div style="position: absolute; right: 15px;top: 15px;">
+        <button type="button" class="btn" (click)="closeModal()"
+        style="color: red;font-size: 36px"
+        data-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+    </div>
+
+
+    <div class="modal-dialog modal-dialog-centered modal-lg " style="margin-bottom: 0px;
+    margin-top: 0px;"  role="document">
+
+        <div class="modal-content " style="height: 100vh;">
+            <div class="modal-body p-0" style="text-align: center;">
+
                 <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [zoom]="zoom" [render-text]="true" [original-size]="false"
-                style="width: 100%;height:calc(100vh - 100px);z-index: 2;background: #4c4c4c;">
+                style="width: 100%;height: 100vh;z-index: 2;background: #000000;">
 
             </pdf-viewer>
              
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary text-white" (click)="closeModal()">Fermer</button>
             </div>
         </div>
     </div>

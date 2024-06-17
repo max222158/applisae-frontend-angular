@@ -11,8 +11,12 @@ export class CustomfieldService {
 
   constructor(private http: HttpClient) { }
 
-  getFieldCustom(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/customs-field/?format=json`,  { withCredentials: true });
+  getFieldCustom(search:string, page:number): Observable<any[]> {
+
+    let formData = new FormData()
+    formData.append('searchText',search)
+    formData.append('page',page.toString())
+    return this.http.post<any[]>(`${this.apiUrl}/customs-field/?format=json`,formData,  { withCredentials: true });
   }
 
 

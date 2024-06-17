@@ -17,7 +17,7 @@
             <div class="card-body pt-0">
                 <div class="row">
                     <div class="col-sm-4">
-                        <div class="avatar-md profile-user-wid mb-4" style="width: 90px; height: 90px;">
+                        <div class="avatar-md profile-user-wid mb-0" style="width: 90px; height: 90px;">
                             <img [src]="media_url_public + userDetails.image" style="width: 90px; height: 90px;" alt="" class="img-thumbnail rounded-circle">
                         </div>
                         <h5 class="font-size-15 text-truncate">{{userDetails.name}}</h5>
@@ -29,11 +29,11 @@
 
                             <div class="row">
                                 <div class="col-6">
-                                    <h5 class="font-size-15">12</h5>
+                                    <h5 class="font-size-15">{{numberOfTaskInProgress}}</h5>
                                     <p class="text-muted mb-0">Tâches en cours</p>
                                 </div>
                                 <div class="col-6">
-                                    <h5 class="font-size-15">12</h5>
+                                    <h5 class="font-size-15">{{numberOfCourrierUrgent}}</h5>
                                     <p class="text-muted mb-0">Courriers</p>
                                 </div>
                             </div>
@@ -47,8 +47,70 @@
     <div class="col-xl-6">
         <div class="card">
             <div class="card-body m-0 p-0">
-                <h2 class="card-title mb-4 p-4" style="background: #fccdcd;">Mes tâches</h2>
+                <h2 class="card-title mb-0 p-4" style="background: #fccdcd;">Mes tâches</h2>
 
+
+                <div class="table-responsive">
+                    <p class="m-2 font-size-15" *ngIf="taskInProgress.length == 0 && isLoading == false && error == false">Pas de tâches pour le moment</p>
+                    <table class="table table-hover">
+                        <tbody>
+    
+                            <tr *ngFor="let task of taskInProgress" 
+                                        
+                                        [ngStyle]="{'background-color': task.read ? '#effbff99' : ''}"
+                                          
+                                          style="cursor: pointer;" (click)="gotoDetailsTask(task.workflow.id, task.id)">
+                                <td class="action" style="width: 40px;">
+                                    <i class="fa-solid fa-bullseye" *ngIf="!task.workflow.is_finish" style="color: rgb(255, 81, 0); font-size: 20px;"></i>
+                       
+    
+                                    <i *ngIf="task.workflow.is_finish" class="fa-regular fa-circle-check"
+                                        style="color: rgb(0, 88, 0); font-size: 30px;"></i>
+                                </td>
+                                <td class="name" style="width: 60px;" [ngStyle]="{ 'font-weight': task.read ? '' : '600'}" >
+                                
+                                    <app-circle-name-component [name]="task.workflow.initiatedBy.name"></app-circle-name-component>
+                                
+                                </td>
+                                <td class="action" style="width: 40px;"><i _ngcontent-ng-c1605945726=""
+                                        class="fa-solid fa-paperclip"></i></td>
+    
+                                <td class="subject">
+                                    <p class="ont-size-12 font-weigther-500 mb-0">{{task.workflow.initiatedBy.name}}</p>
+                                    <span [ngClass]="{
+                                        'bg-warning': task.workflow.priority == 2,
+                                        'bg-success': task.workflow.priority == 1,
+                                        'bg-danger': task.workflow.priority == 3,
+                                        'badge': true,
+                                        'me-2': true
+                                      }" >
+                                        {{
+                                        task.workflow.priority == 1 ? 'Normale' :
+                                        task.workflow.priority == 2 ? 'Urgente' :
+                                        task.workflow.priority == 3 ? 'Très Urgente' :
+                                        task.workflow.priority
+                                        }}</span><span style="font-weight: 700;  font-size: 16px;" [ngStyle]="{ 'font-weight': task.read ? '' : '500'}">
+    
+                                        {{
+                                        task.workflow.type == 1 ? '' :
+                                        task.workflow.type == 2 ? 'Réviser et approuver en groupe' :
+                                        task.workflow.type == 3 ? 'Réviser et approuver en groupe Lecture uniquement' :
+                                        task.workflow.type == 4 ? '' :
+                                        task.workflow.type == 5 ? 'Réviser et approuver par plusieurs utilisateurs' :
+    
+                                        task.workflow.type
+                                        }}</span>
+    
+                                    <p class="mb-0">{{task.workflow.description | slice:0:120 }}...</p>
+                                </td>
+    
+                                <td class="time" style="width: 100px;">{{task.workflow.created_at | customDateFormat}}</td>
+                            </tr>
+    
+                        </tbody>
+                    </table>
+                </div>
+    
             </div>
         </div>
     </div>
@@ -57,15 +119,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-sm-flex flex-wrap">
-                    <h2 class="card-title mb-4" style="background: #cde9fc;">Mes Courriers</h2>
+                    <h2 class="card-title mb-0" style="background: #cde9fc;">Courriers Urgents</h2>
                     <div class="ms-auto">
                         <ul class="nav nav-pills">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Urgents</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Clôturés</a>
-                            </li>
+          
 
                         </ul>
                     </div>
@@ -74,6 +131,52 @@
                 <div id="stacked-column-chart" class="apex-charts"
                     data-colors="[&quot;--bs-primary&quot;, &quot;--bs-warning&quot;, &quot;--bs-success&quot;]"
                     dir="ltr"></div>
+
+
+
+
+                    <div class="table-responsive">
+                        <p class="m-2 font-size-15" *ngIf="courrierUrgent.length == 0 && isLoading == false && error == false">Pas de courriers pour le moment</p>
+         
+                        <table class="table table-hover">
+                            <tbody>
+        
+                                <tr *ngFor="let courrier of courrierUrgent "
+                                    (click)="gotoDetailsCourrierPage(courrier.courrier.id,
+                                     courrier.courrier.subject,courrier.courrier.last_annotation,
+                                     courrier.courrier.user_sender_info.email,
+                                     courrier.courrier.user_sender_info.name,courrier.courrier.created_at)"
+
+                                    [ngStyle]="{'background': courrier.read ? '#d5dbff78' : ''}" style="cursor: pointer;">
+                                    <td class="name" style="width: 50px;">
+                                        <app-circle-name-component [name]="courrier.courrier.user_sender_info.name"></app-circle-name-component>
+                                    </td>
+                      
+                                    <td class="subject">
+                                        <p class="font-size-10 font-weigther-500 mb-0">{{courrier.courrier.user_sender_info.name}}</p>
+                                        <span  class="font-size-12" [ngClass]="{
+                                                'bg-warning': courrier.courrier.priority == 2,
+                                                'bg-success': courrier.courrier.priority == 1,
+                                                'bg-danger': courrier.courrier.priority == 3,
+                                                'badge': true,
+                                                'me-2': true
+                                              }">
+                                            {{
+                                            courrier.courrier.priority == 1 ? 'Normale' :
+                                            courrier.courrier.priority == 2 ? 'Urgente' :
+                                            courrier.courrier.priority == 3 ? 'Très Urgente' :
+                                            courrier.courrier.priority
+                                            }}</span><span
+                                            style="font-weight: 500;  font-size: 13px;">{{courrier.courrier.subject}}</span>
+        
+                                    </td>
+        
+                                    <td class="time" style="width: 100px;">{{courrier.courrier.updated_at | customDateFormat}}</td>
+                                </tr>
+        
+                            </tbody>
+                        </table>
+                    </div>
             </div>
         </div>
 
@@ -82,7 +185,7 @@
     <div class="col-xl-6">
         <div class="card">
             <div class="card-body m-0 p-0">
-                <h2 class="card-title mb-4 p-4" style="background: #e2fccd;">Documents récemments consultés</h2>
+                <h2 class="card-title mb-0 p-4" style="background: #e2fccd;">Documents récemments consultés</h2>
 
             </div>
         </div>
@@ -94,7 +197,7 @@
     <div class="col-xl-6">
         <div class="card">
             <div class="card-body m-0 p-0">
-                <h2 class="card-title mb-4 p-4" style="background: #fccdf8;">Mes activités</h2>
+                <h2 class="card-title mb-0 p-4" style="background: #fccdf8;">Mes activités</h2>
 
             </div>
         </div>
@@ -102,8 +205,37 @@
 
     <div class="col-xl-6">
         <div class="card">
-            <div class="card-body m-0 p-0">
-                <h2 class="card-title mb-4 p-4" style="background: #cdf3fc;">Workflows que j'ai initié</h2>
+            <div class="card-body m-0 p-0" >
+                <h2 class="card-title mb-0 p-4" style="background: #cdf3fc;">Workflows que j'ai initié</h2>
+                <p class="m-2 font-size-15" *ngIf="userInitiatedWorkflow.length == 0 && isLoading == false && error == false">Pas de workflows initiés</p>
+                <div style="overflow-y: scroll; height: 285px;padding: 10px; ">
+                <div *ngFor="let work of userInitiatedWorkflow">
+                    <p class="font-size-13 font-weight-500 mb-0">
+                       {{
+                        work.type == 1 ? 'Workflow personnalisé' :
+                        work.type == 2 ? 'Réviser et approuver en groupe' :
+                        work.type == 3 ? 'Réviser et approuver en groupe Lecture uniquement' :
+                        work.type == 4 ? 'Modèle par défaut' :
+                        work.type == 5 ? 'Réviser et approuver par plusieurs utilisateurs' : ''
+                        }} 
+
+                        <span  class="font-size-12" [ngClass]="{
+                            'bg-warning': work.is_finish == false,
+                            'bg-success': work.is_finish == true,
+
+                            'badge': true,
+                            'me-2': true
+                          }">
+                        {{
+                        work.is_finish == true ? 'Terminé' :
+                        work.is_finish == false ? 'En cours' : ''
+                        }}</span>
+                    </p>
+                    <p>{{work.description}}</p>
+
+                    <hr>
+                </div>
+            </div>
 
             </div>
         </div>

@@ -11,6 +11,7 @@ import { AuthService } from '../../services/api/auth/auth.service';
 export class HeaderComponent {
 
   isMiniSidebar:boolean = false
+  show:boolean = false
 
   userDetails:any = {};
   media_url_public:string = Media_url_public;
@@ -41,12 +42,29 @@ export class HeaderComponent {
     
   }
 
+  setShowParameter(){
+
+    if(this.show == true){
+      this.show = false
+    }else{
+
+      this.show = true
+    }
+  }
+
   toggleDarkMode() {
     this.themeService.toggleDarkMode();
   }
 
   isDarkMode() {
     return this.themeService.isDarkMode();
+  }
+
+  logout(){
+
+    this.authService.logout()
+
+
   }
 
 }

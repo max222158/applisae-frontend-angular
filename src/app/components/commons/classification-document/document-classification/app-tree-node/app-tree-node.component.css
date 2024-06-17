@@ -1,0 +1,136 @@
+/* tree-node.component.css */
+
+li {
+    position: relative;
+  }
+  
+  /* Style pour les lignes verticales */
+  li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -20px; /* Ajustez selon vos besoins */
+    border-left: 1px solid #ccc; /* Couleur et style de la ligne */
+  }
+  
+  /* Désactivez les lignes pour les derniers éléments de la liste */
+  li:last-child::before {
+    display: none;
+  }
+  
+
+    
+  .fa-folder-open, .fa-folder{
+
+    font-size: 30px;
+    color: rgb(182, 88, 0);
+    cursor: pointer;
+  }
+
+
+  ul, .treeview {
+    list-style-type: none;
+    padding-left: 1em;
+    position: relative;
+  }
+  
+  .treeview .tree-node {
+    position: relative;
+    padding-left: 1em;
+  }
+  
+  .treeview .tree-node::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 1px solid #ccc;
+    bottom: 0;
+  }
+  
+  .treeview .tree-node::after {
+    content: '';
+    position: absolute;
+    top: 1em;
+    left: -1em;
+    width: 1em;
+    height: 1px;
+    background: #ccc;
+  }
+  
+  .treeview .tree-node > .caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  
+  .treeview .tree-node .caret-down::before {
+    transform: rotate(90deg);
+  }
+  
+
+   .active {
+    display: block !important;
+  }
+  
+  .treeview li::before {
+    content: '';
+    position: absolute;
+    top: -0.5em;
+    left: -1em;
+    border-top: 1px solid #ccc;
+    width: 1em;
+    height: 0;
+  }
+  
+  .treeview li::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -1em;
+    border-left: 1px solid #ccc;
+    height: 100%;
+    width: 0;
+  }
+  
+  .treeview > li::before, .treeview > li::after {
+    border: none;
+  }
+  
+  .treeview > li > .tree-node::before, .treeview > li > .tree-node::after {
+    display: none;
+  }
+  
+  .treeview > li > .tree-node .tree-node::before, 
+  .treeview > li > .tree-node .tree-node::after {
+    display: none;
+  }
+  .nested {
+    display: none ;
+    margin-left: 1em;
+  }
+  .caret {
+
+    padding-top: 10px;
+
+  }
+  
+  li{
+  }
+  .selected {
+    background-color: rgba(0, 204, 255, 0.495);
+    border-radius: 7px;
+    padding: 10px;
+    padding-left: 4px;
+}
+
+  .name-folder{
+    cursor: pointer;
+    font-weight: 500;
+    align-items: center;
+
+  }
+
+  

@@ -83,5 +83,21 @@ getFolderById1(id: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/file-manager/delete-file/`, formData,{withCredentials:true});
   }
 
+
+  EditMetadaDocument(formData:any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/file-manager/edit-metadata/`, formData,{withCredentials:true});
+  }
+  getDetailsCourrierById(id: number, page:number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());  // Envoyer l'ID du modèle de courrier
+
+    return this.http.post(`${this.apiUrl}/courriers/get_details_courrier/?page=${page}`, formData, { withCredentials: true });
+  }
+
+
+  getDocumentFile(formData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/get-file-document/`, formData,  { withCredentials: true });
+  }
   
 }

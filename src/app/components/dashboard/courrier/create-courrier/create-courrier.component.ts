@@ -206,7 +206,11 @@ export class CreateCourrierComponent {
     formData.append('subject', this.courrierForm.value.subject);
     formData.append('priority', this.courrierForm.value.priority);
     formData.append('date', this.courrierForm.value.date);
-    formData.append('closure_date', this.courrierForm.value.closure_date);
+    if(this.courrierForm.value.closure_date !== null){
+      formData.append('closure_date', this.courrierForm.value.closure_date);
+
+    }
+
     formData.append('recipient', this.courrierForm.value.recipient);
     formData.append('sender', this.courrierForm.value.sender);
     formData.append('annotation', this.courrierForm.value.annotation);

@@ -37,12 +37,14 @@
                             [ngStyle]="{'background': courrier.read ? '#d5dbff78' : ''}" style="cursor: pointer;">
                             <td class="action" style="width: 40px;"><input type="checkbox" /></td>
                             <td class="action" style="width: 40px;"><i class="fa-regular fa-star"></i></td>
-                            <td class="name" style="width: 200px;">{{courrier.user_sender_info.name}}</td>
+                            <td class="name" style="width: 50px;">
+                                <app-circle-name-component [name]="courrier.user_sender_info.name"></app-circle-name-component>
+                            </td>
                             <td class="action" style="width: 40px;"><i _ngcontent-ng-c1605945726=""
                                     class="fa-solid fa-paperclip"></i></td>
 
                             <td class="subject">
-
+                                <p class="font-size-12 font-weigther-500 mb-0">{{courrier.user_sender_info.name}}</p>
                                 <span [ngClass]="{
                                         'bg-warning': courrier.priority == 2,
                                         'bg-success': courrier.priority == 1,
@@ -58,11 +60,10 @@
                                     }}</span><span
                                     style="font-weight: 500;  font-size: 16px;">{{courrier.subject}}</span>
 
-                                <p class="mb-0">{{courrier.last_annotation | slice:0:120 }}...</p>
+                                <p class="mb-0">{{courrier.last_annotation | safeHtml |  slice:0:120 }}...</p>
                             </td>
 
-                            <td class="time" style="width: 100px;">{{courrier.created_at | customDateFormat}} Date
-                                annotation</td>
+                            <td class="time" style="width: 100px;">{{courrier.updated_at | customDateFormat}}</td>
                         </tr>
 
                     </tbody>

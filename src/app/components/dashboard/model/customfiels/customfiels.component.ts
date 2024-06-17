@@ -4,7 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 interface DivData {
   label: string;
   placeholder: string;
-  type: string;
+
+  
   options?: { label: string; value: string; selected: boolean; }[];
 
   optionsForSelect?: { label: string; value: string; selected: boolean; }[];
@@ -20,7 +21,9 @@ interface DivData {
 export class CustomfielsComponent implements OnInit {
   divsData: any[] = [];
 
-
+  type: string;
+  page:number = 1
+  search:string = ''
   fieldsExist: any[] | undefined; // Utilisation d'un tableau générique pour stocker les données
   showButtonValidate: boolean = false;
   champsVides: boolean = false;
@@ -34,9 +37,9 @@ export class CustomfielsComponent implements OnInit {
   }
 
   getFieldCustomer(){
-    this.apiService.getFieldCustom().subscribe({
+    this.apiService.getFieldCustom(this.search, this.page).subscribe({
       next: (response: any) => {
-        this.fieldsExist = response
+        this.fieldsExist = response.results
       },
       error: (error: any) => {
 

@@ -71,12 +71,16 @@
                                 <i *ngIf="task.workflow.is_finish" class="fa-regular fa-circle-check"
                                     style="color: rgb(0, 88, 0); font-size: 30px;"></i>
                             </td>
-                            <td class="name" style="width: 200px;" [ngStyle]="{ 'font-weight': task.read ? '' : '600'}" >{{task.workflow.initiatedBy.name}}</td>
+                            <td class="name" style="width: 60px;" [ngStyle]="{ 'font-weight': task.read ? '' : '600'}" >
+                            
+                                <app-circle-name-component [name]="task.workflow.initiatedBy.name"></app-circle-name-component>
+                            
+                            </td>
                             <td class="action" style="width: 40px;"><i _ngcontent-ng-c1605945726=""
                                     class="fa-solid fa-paperclip"></i></td>
 
                             <td class="subject">
-
+                                <p class="ont-size-12 font-weigther-500 mb-0">{{task.workflow.initiatedBy.name}}</p>
                                 <span [ngClass]="{
                                     'bg-warning': task.workflow.priority == 2,
                                     'bg-success': task.workflow.priority == 1,

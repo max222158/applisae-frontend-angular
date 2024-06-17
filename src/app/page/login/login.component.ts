@@ -19,7 +19,13 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    localStorage.removeItem('menu')
+    if(localStorage.getItem('islogged') == null){
+      localStorage.removeItem('menu')
+
+    }else{
+      this.router.navigate(['/tableau-de-bord']); 
+    }
+
   }
   onSubmit(): void {
     this.loading = true;
@@ -35,7 +41,14 @@ export class LoginComponent {
         localStorage.setItem('userDetails', JSON.stringify(response.userDetails));
         console.log("6666666", AuthService.menuShared); 
         this.authService.setMenu(response.menu)
-        this.router.navigate(['/tableau-de-bord']); 
+        if(response.userDetails.hasOwnProperty('admin')){
+
+          this.router.navigate(['/tableau-de-bord']); 
+        }else{
+          this.router.navigate(['/utilisateur']); 
+
+        }
+
       },
       error: (error) => {
         this.loading = false;

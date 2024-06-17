@@ -1,0 +1,42 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable" role="document">
+        <div class="modal-content ">
+
+            <div class="modal-body p-4">
+                <h5 class="modal-title" id="exampleModalLiveLabel">Ce document se trouve dans les workflows</h5>
+                
+                <p *ngIf="workflows.length == 0" class="font-size-16">
+                    <br><br>
+                    <i class="fa-solid fa-circle-info"></i>
+                     Ce document ne se trouve dans aucun workflow</p>
+                
+                     <div *ngFor="let workflow of workflows" class="border-1 p-2 mt-3" 
+                     style="border: 1px solid #ffadad; border-radius: 10px; ">
+
+                        <p class="font-size-16 font-weight-500">{{
+                            workflow.type == 1 ? '' :
+                            workflow.type == 2 ? 'Réviser et approuver en groupe' :
+                            workflow.type == 3 ? 'Réviser et approuver en groupe Lecture uniquement' :
+                            workflow.type == 4 ? '' :
+                            workflow.type == 5 ? 'Réviser et approuver par plusieurs utilisateurs' :
+                    
+                            workflow.type
+                            }}  </p>
+
+                            <p class="font-size-16">Initié par: <span class="badge bg bg-success">{{workflow?.initiatedBy.name}}</span></p>
+                  
+                            <p style="font-size: 14px;">Etat:
+                                 <span style="color: orange;" [ngStyle]="{color:workflow.is_finish==true?'orange':'green'}">
+                                {{workflow.is_finish == true ? 'Terminé':'En Cours'}}
+                            </span>
+                            </p>
+                        </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+           </div>
+        </div>
+    </div>
+</div>

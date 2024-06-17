@@ -1,0 +1,13 @@
+<!-- src/app/tree-node/tree-node.component.html -->
+<li>
+    <div class="caret flex1"  [ngClass]="{'selected': selectedNodeId === node.id}" >
+      <i  class="fas" (click)="onToggle()" [ngClass]="node.expanded ? 'fa-folder-open' : 'fa-folder'"></i> 
+      <p  class="ml-1 name-folder mb-0 flex1" (click)="onSelect()">{{ node.name }}</p>
+    </div>
+    <ul class="nested" [class.active]="node.expanded">
+      <ng-container *ngFor="let child of node.children">
+        <app-app-tree-node [node]="child" (toggle)="toggle.emit($event)" (selectNode)="selectNode.emit($event)" [selectedNodeId]="selectedNodeId"></app-app-tree-node>
+      </ng-container>
+    </ul>
+  </li>
+  

@@ -1,0 +1,30 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content ">
+
+            <div class="modal-body p-4">
+                <h5 class="modal-title mb-4" id="exampleModalLiveLabel">Historique du documents</h5>
+                
+
+                    <div *ngFor="let history of histories |
+                    paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItemsHistory  }" class="pl-1"
+                            style="padding-left: 1rem;">
+
+                            <p style="display: flex;"><span style="width: 130px; color: rgb(148, 0, 114);">{{history.created_at | customDateFormat}} </span> <span style="font-weight:500 ;" class="mr-1"> {{history.user.name}} </span> {{history.text}} </p>
+                            <hr style="color:#bbb">
+                        </div>
+            
+                        <div class="col-12">
+                            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                                nextLabel="Suivant"></pagination-controls>
+            
+                        </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+           </div>
+        </div>
+    </div>
+</div>

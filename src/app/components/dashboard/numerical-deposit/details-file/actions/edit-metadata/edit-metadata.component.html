@@ -1,0 +1,61 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+     style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #014306;">
+                <h5 class="modal-title text-white" id="exampleModalLiveLabel">Modifier les métadonnées</h5>
+            </div>
+            <div class="modal-body p-4">
+                <div class="form-group">
+                    <label for="documentName">Nom du document</label>
+                    <input type="text" class="form-control" id="documentName" placeholder="Nom du titre"
+                           [(ngModel)]="details.title" (ngModelChange)="checkTextAnnotation()">
+                </div>
+                <div class="form-group">
+                    <label for="documentDescription">Description</label>
+                    <textarea class="form-control" id="documentDescription" cols="30" rows="5"
+                              [(ngModel)]="details.description" (ngModelChange)="checkTextAnnotation()"></textarea>
+                </div>
+
+                <div class="card" >
+                    <h5 class="card-header bg-transparent border-bottom ">Mot clé</h5>
+                    <div class="card-body">
+
+                        <mat-form-field class="example-chip-list">
+                            <mat-label>Cliquer pour ajouter un mot clé</mat-label>
+                            <mat-chip-grid #chipGrid aria-label="Enter keywords">
+                                @for (keyword of keywords; track keyword) {
+                                <mat-chip-row (removed)="remove(keyword)" [editable]="true"
+                                    (edited)="editKey(keyword, $event)"
+                                    [aria-description]="'press enter to edit ' + keyword.name">
+                                    {{keyword.name}}
+                                    <button matChipRemove [attr.aria-label]="'remove ' + keyword.name">
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                </mat-chip-row>
+                                }
+                                <input placeholder="Ajouter un mot clé..." [matChipInputFor]="chipGrid"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)" />
+                            </mat-chip-grid>
+                        </mat-form-field>
+
+
+
+                    </div>
+                </div>
+
+                <button (click)="edit()"  [disabled]="isTextAnnotationEmpty" class="btn btn-primary
+                font-weight-700
+                mt-2 font-size-15">
+                    <span *ngIf="isSpinnerLoading" class="spinner-border text-success" style="
+                    width: 20px;
+                    height: 20px;
+                "></span> Modifier les métadonnées</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+@media (min-width: 1200px) {
+    .modal-lg, .modal-xl {
+        --bs-modal-width: 90% !important;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        height: 100vh;
+        
+    }
+}
+
+.modal-lg[_ngcontent-ng-c3429350579], .modal-xl[_ngcontent-ng-c3429350579] {
+    --bs-modal-width: 90% !important;
+    margin-top: 0px;
+}

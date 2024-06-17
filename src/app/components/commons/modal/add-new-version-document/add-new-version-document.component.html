@@ -1,0 +1,105 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+    style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content " style="">
+
+            <div class="modal-body p-4 container" style="">
+                <h2 class="modal-title" id="exampleModalLiveLabel">Versions du document</h2>
+                <br>
+                <div style="width: 100%; overflow-x: scroll;">
+                    <button class="btn mr-2" *ngFor="let number of getIterable(versionNumber)" 
+                    style="color:white;
+                        border: 1px solid #002f8c; border-radius: 10px; background: #002f8c;">
+
+                         Version {{number}}
+
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div (click)="fileInputSelect1.click()" class="flex1" style="width: 150px; height: 150px;
+                        justify-content: center; align-items: center;
+                        border: 1px solid #bbb; border-radius: 10px; background: #bbbbbb6a;">
+                            <div>
+                                <input type="file" (change)="onFileSelected($event)" id="file" #fileInputSelect1 hidden>
+
+
+                                <i class="fa-solid fa-circle-plus text-center" style="font-size: 50px;"></i>
+                                <p class="font-weight-500; font-size-16 mb-0 text-center">Cliquez-ici</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="documentDescription">Description de cette version</label>
+                            <textarea class="form-control" [(ngModel)]="description" id="documentDescription" cols="30" rows="5"
+                                      ></textarea>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-8">
+                        <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [render-text]="true" [original-size]="false"
+                            style="width: 100%;height: calc(100vh - 200px);z-index: 2;background: #4c4c4c; border: 1px solid #ebebeb;">
+
+                        </pdf-viewer>
+                        <div *ngIf="pdfSrc == '' " class="card"
+                            style=" background-color: #0096880a; height: calc(100vh - 200px);">
+
+
+                 
+                            <div class="card-body" style=" background-color: #ffffff00;">
+
+                                <h4 class="" style="position: absolute;">Prévusialiser le document</h4>
+                                <p class="" style="position: absolute; margin-top: 20px;">Ajouter le fichier word ou pdf
+                                    ou
+                                    image
+                                </p>
+
+                                <div style="
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;">
+                                    <div>
+                                        <div class="dropzone dz-clickable mt-4" style=" background-color: #ffffff00; ">
+
+                                            <div class="dz-message needsclick" style=""
+                                           >
+                                                <div class="mb-3" style="text-align: center;">
+                                                    <i style="color: #000000 !important;"
+                                                        class="display-4 text-muted bx bxs-cloud-upload fa-solid fa-cloud-arrow-up"></i>
+                                                </div>
+
+                                                <h4 class="m-4" style="text-align: center;"></h4>
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button (click)="saveVersion()" [disabled]="disabled"
+                class="btn btn-primary
+                font-weight-700
+                mt-2 font-size-15">
+                    <span *ngIf="isSpinnerLoading"  class="spinner-border text-success" style="
+                    width: 20px;
+                    height: 20px;
+                "></span> Envoyer</button>
+                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>

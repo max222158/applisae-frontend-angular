@@ -14,10 +14,10 @@
     <div style="display: flex;  margin-bottom: 20px; background: #ffffff00;">
         <i class="fa-regular fa-file-lines" style="font-size: 60px;"></i>
         <div class="ml-2">
-            <h4>{{detailsDocument.title}} <span class="span bg-success badge me-2">1.0</span></h4>
+            <h4>{{detailsDocument.title}} <span class="span bg-success badge me-2">{{versionDocument}}.0</span></h4>
             <div style="display: flex;">
-                Auteur:
-                Ajouté le {{detailsDocument.created_at | customDateFormat}}
+                <span class="font-weight-700">Auteur: </span> {{detailsDocument.author.name}}
+                <span class="font-weight-700">Ajouté le: </span> {{detailsDocument.created_at | customDateFormat}}
 
             </div>
 
@@ -67,16 +67,18 @@
                 </pdf-viewer>
             </div>
 
-            <br>
-            <h4>Commentaires:</h4>
-            <textarea class="form-control" name="" id="" rows="5"></textarea>
-
         </div>
         <div class="col-md-4 p-2">
             <h4 style="background: #4caf5012;padding: 7px;">Action sur le document</h4>
+            <p class="action-button" style=""><i class="fa-solid fa-sitemap"></i> Classer le document</p>
+            <p 
+                class="action-button"
+                (click)="openHistoryModal()"
+                style=""><i class="fa-solid fa-clock-rotate-left"></i> Historique dans le document</p>
 
-            <p class="action-button" style=""><i class="fa-solid fa-circle-info"></i> Tous les propriétés</p>
-            <p class="action-button" style=""><i class="fa-regular fa-pen-to-square"></i> Modifier le métadonnées</p>
+            <p class="action-button" style="" (click)="setIsModalAllDetailsOpen()"><i class="fa-solid fa-circle-info"></i> Tous les propriétés</p>
+            <p class="action-button" style="" (click)="setIsModalEditMetadataOpen()"><i class="fa-regular fa-pen-to-square"></i> Modifier le métadonnées</p>
+            <p class="action-button" style="" (click)="openAnnotationModal()" ><i class="fa-regular fa-pen-to-square"></i> Annoter</p>
             <p class="action-button" style=""><i class="fa-regular fa-copy"></i> Copier vers</p>
             <p class="action-button" style=""><i class="fa-solid fa-circle-arrow-right"></i> Déplacer vers</p>
             <p class="action-button" style=""><i class="fa-solid fa-trash-can "></i> Supprimer</p>
@@ -84,12 +86,15 @@
                 class="action-button mb-1">
                 <i class="fa-solid fa-users" style="margin-bottom: 1rem;"></i> Démarrer un workflow
             </a>
+            <p class="action-button" (click)="setIsModalDocumentInWorkflowOpen()" style="">
+                <i class="fa-solid fa-users"></i> Dans les workflows
+            </p>
             <p class="action-button" style=""><i class="fa-solid fa-lock"></i> Gérer les permissions</p>
-            <p class="action-button" style=""><i class="fa-solid fa-code-branch"></i> Ajouter une nouvelle version du
+            <p class="action-button" style="" 
+                (click)="setModalNewVersionDocumentOpen()"
+            ><i class="fa-solid fa-code-branch"></i>  Versions du
                 document</p>
             <p class="action-button" style=""><i class="fa-solid fa-download"></i> Télécharger</p>
-            <br><br>
-            <h4 style="background: #4caf5012;padding: 7px;">Propriétés du document</h4>
 
 
 
@@ -103,3 +108,45 @@
   >
 
  </app-modal-view-document>
+
+ <app-all-details [isOpenModal]="isModalAllDetailsOpen"  (closeModalEvent)="closeModalAllDetailsOpen()" [details]="detailsDocument"></app-all-details>
+ <app-edit-metadata [isOpenModal]="isModalEditMetadataOpen"
+  (closeModalEvent)="closeModalEditMetadataOpen()" [details]="detailsDocument"
+   (editEvent)="onEditMetadata($event)" [notifySuccessEdit]="notifySuccessEditMetaData"></app-edit-metadata>
+
+
+<app-modal-annotations [isOpenModalAnnotation]="isOpenModalAnnotation" [annotations]="annotations"
+   [perPage]="annotationPerPage" [page]="currentAnnotationPage" (closeModalEvent)="closeAnnotationModal()" 
+   (saveAnnotationEvent)="saveAnnotation($event)"
+   (pageChangedEvent)="currentAnnotationPageChanged($event)" [totalItems]="totalItemsAnnotation"
+   [notifySuccessSaveNotification]="notifySuccessSaveNotification"
+   [isNotifyPaginationAnnotation]="isNotifyPaginationAnnotation"
+
+   >
+</app-modal-annotations>
+
+<app-document-in-workflow 
+[workflows]="workflows"
+[isOpenModal]="isModalDocumentInWorkflowOpen"
+ (closeModalEvent)="closeModalDocumentInWorkflowOpen()">
+
+</app-document-in-workflow>
+
+<app-add-new-version-document 
+[isOpenModal]="isModalNewVersionDocumentOpen"
+(closeModalEvent)="closeModalNewVersion()"
+(saveVersionEvent)="saveNewVersion($event)"
+[notifySuccessSaveVersion]="notifySuccessSaveNewVersion"
+[versionNumber]="versionDocument"
+></app-add-new-version-document>
+
+<app-document-history
+[isOpenModal]="isModalHistoryOpen"
+[histories]="histories"
+[page]="currentPaginationHistoryPage"
+(closeModalEvent)="closeHistoryModal()"
+(pageChangedEvent)="currentHistoryPageChanged($event)"
+[totalItemsHistory]="totalItemsHistory"
+[perPage]="annotationPerPage"
+></app-document-history>
+
