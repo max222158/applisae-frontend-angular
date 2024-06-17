@@ -31,5 +31,10 @@ export class HistoryService {
     return this.http.post(`${this.apiUrl}/history/save-history-for-document/`, formData, { withCredentials: true });
   }
 
+
+  getHistoryDocument(formData:any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/history/list-history-for-document/`, formData, { withCredentials: true });
+  }
   
 }

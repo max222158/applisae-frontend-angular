@@ -83,10 +83,17 @@ import { EditMetadataComponent } from './components/dashboard/numerical-deposit/
 import { DocumentInWorkflowComponent } from './components/dashboard/numerical-deposit/details-file/actions/document-in-workflow/document-in-workflow.component';
 import { AddNewVersionDocumentComponent } from './components/commons/modal/add-new-version-document/add-new-version-document.component';
 import { DocumentHistoryComponent } from './components/dashboard/numerical-deposit/details-file/actions/document-history/document-history.component';
+import { NgxEditorModule } from 'ngx-editor';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { CircleNameComponentComponent } from './components/commons/CircleComponent/circle-name-component/circle-name-component.component';
+import { DocumentClassificationComponent } from './components/commons/classification-document/document-classification/document-classification.component';
+import {MatTreeModule} from '@angular/material/tree';
+import { AppTreeNodeComponent } from './components/commons/classification-document/document-classification/app-tree-node/app-tree-node.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
+
+    AppComponent,SafeHtmlPipe , 
     DashbordComponent, 
     LoginComponent, DashboardComponent, SearchComponent,
     PdfPreviewComponent, NumericalDepositComponent, HomeComponent, 
@@ -94,10 +101,11 @@ import { DocumentHistoryComponent } from './components/dashboard/numerical-depos
     , ModelComponent, ButtonSpinnerComponent, CreateComponent,CreateGroupComponent,
      CustomfielsComponent, CourrierComponent, MyCourrierComponent, 
      UserComponent, RoleComponent, CreateUserComponent,ModalUsersComponent,ModalGroupUsersComponent,
-      ListWorkflowComponent, CreateworkFlowComponent,CustomDateFormatPipe, CourrierDetailsComponent, CreateCourrierComponent, DetailsFileComponent, ModalCopyComponent, ModalDeleteComponent, GroupComponent, EditComponent, HomeUserComponent, UserDispositionComponent, AdminDispositionComponent, EmptyfolderComponent, IndexUserComponent, CreateWorkflowDocumentComponent, DetailsWorkflowComponent, AttachmentFilesComponent, MyTaskComponent, DetailsTaskComponent, ModalAlertComponent, ModalViewDocumentComponent, CustomerFieldsComponent, ModelCourrierHtmlComponent, ModalAnnotationsComponent, HistoryComponent, CustomerFieldsModalComponent, AllDetailsComponent, AllDetailsModalComponent, EditMetadataComponent, DocumentInWorkflowComponent, AddNewVersionDocumentComponent, DocumentHistoryComponent
+      ListWorkflowComponent, CreateworkFlowComponent,CustomDateFormatPipe, CourrierDetailsComponent, CreateCourrierComponent, DetailsFileComponent, ModalCopyComponent, ModalDeleteComponent, GroupComponent, EditComponent, HomeUserComponent, UserDispositionComponent, AdminDispositionComponent, EmptyfolderComponent, IndexUserComponent, CreateWorkflowDocumentComponent, DetailsWorkflowComponent, AttachmentFilesComponent, MyTaskComponent, DetailsTaskComponent, ModalAlertComponent, ModalViewDocumentComponent, CustomerFieldsComponent, ModelCourrierHtmlComponent, ModalAnnotationsComponent, HistoryComponent, CustomerFieldsModalComponent, AllDetailsComponent, AllDetailsModalComponent, EditMetadataComponent, DocumentInWorkflowComponent, AddNewVersionDocumentComponent, DocumentHistoryComponent, CircleNameComponentComponent, DocumentClassificationComponent, AppTreeNodeComponent
   ],
 
-  imports: [
+  imports: [ 
+    NgxEditorModule,MatTreeModule,
     BrowserModule,NgxPaginationModule,MatSelectModule,MatFormFieldModule,MatCheckboxModule,MatExpansionModule
     , PdfViewerModule,ReactiveFormsModule,ToastrModule.forRoot(),NgxMatSelectSearchModule,MatProgressBarModule,
     AppRoutingModule,RouterOutlet,FormsModule,CdkDropList,CdkDrag,

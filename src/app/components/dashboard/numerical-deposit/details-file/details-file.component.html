@@ -119,6 +119,8 @@
    [perPage]="annotationPerPage" [page]="currentAnnotationPage" (closeModalEvent)="closeAnnotationModal()" 
    (saveAnnotationEvent)="saveAnnotation($event)"
    (pageChangedEvent)="currentAnnotationPageChanged($event)" [totalItems]="totalItemsAnnotation"
+   [notifySuccessSaveNotification]="notifySuccessSaveNotification"
+   [isNotifyPaginationAnnotation]="isNotifyPaginationAnnotation"
 
    >
 </app-modal-annotations>
@@ -140,5 +142,11 @@
 
 <app-document-history
 [isOpenModal]="isModalHistoryOpen"
+[histories]="histories"
+[page]="currentPaginationHistoryPage"
 (closeModalEvent)="closeHistoryModal()"
+(pageChangedEvent)="currentHistoryPageChanged($event)"
+[totalItemsHistory]="totalItemsHistory"
+[perPage]="annotationPerPage"
 ></app-document-history>
+

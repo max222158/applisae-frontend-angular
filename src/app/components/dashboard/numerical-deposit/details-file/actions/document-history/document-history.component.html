@@ -4,14 +4,22 @@
         <div class="modal-content ">
 
             <div class="modal-body p-4">
-                <h5 class="modal-title" id="exampleModalLiveLabel"></h5>
+                <h5 class="modal-title mb-4" id="exampleModalLiveLabel">Historique du documents</h5>
                 
 
-                
-                     <div *ngFor="let history of histories" class="border-1 p-2 mt-3" 
-                     style="border: 1px solid #ffadad; border-radius: 10px; ">
+                    <div *ngFor="let history of histories |
+                    paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItemsHistory  }" class="pl-1"
+                            style="padding-left: 1rem;">
 
-                    </div>
+                            <p style="display: flex;"><span style="width: 130px; color: rgb(148, 0, 114);">{{history.created_at | customDateFormat}} </span> <span style="font-weight:500 ;" class="mr-1"> {{history.user.name}} </span> {{history.text}} </p>
+                            <hr style="color:#bbb">
+                        </div>
+            
+                        <div class="col-12">
+                            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                                nextLabel="Suivant"></pagination-controls>
+            
+                        </div>
 
             </div>
             <div class="modal-footer">

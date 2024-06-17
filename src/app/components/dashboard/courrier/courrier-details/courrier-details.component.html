@@ -55,7 +55,7 @@
                                 style="background: green; border-radius: 10px; color:#f9f9f9; padding: 2px 12px;">Initiateur</span>
                         </p>
                     </div>
-                    {{courrier.user_sender_info.created_at || "" | customDateFormat}}
+                    {{courrier.created_at || "" | customDateFormat}}
 
                 </div>
                 <p class="badge bg bg-danger font-size-16">Priorité {{
@@ -100,6 +100,11 @@
                         <i class="fa-solid fa-share-nodes"></i>
 
                     </button>
+                    <button (click)="openModalDocumentClassification()" class="btn btn-warning " mat-raised-button
+                    matTooltip="Classer le document" style="background: #00503c;">
+                    <i class="fa-solid fa-folder-tree"></i>
+
+                    </button>
                     <div *ngIf="isVote !== true && isVote !== false">
                         <button type="button" (click)="setisModalApproveRejectOpen('approved')"
                             class="btn  btn-primary" mat-raised-button matTooltip="Valider le document">
@@ -122,21 +127,21 @@
                 <div style="display: flex; padding: 1rem;">
                     <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 77, 144);"></i>
                     <div class="ml-1">
-                        <p class="mb-0 font-weight-bold">{{last_annotation.user.name}}</p>
-                        <p>{{last_annotation.user.email}} </p>
+                        <p class="mb-0 font-weight-bold">{{last_annotation?.user.name}}</p>
+                        <p>{{last_annotation?.user.email}} </p>
                     </div>
-                    {{last_annotation.created_at | customDateFormat}}
+                    {{last_annotation?.created_at | customDateFormat}}
 
                 </div>
                 <div class="p-3  col-md-11 annot-div" style="background: #f9f9f9; border-radius: 10px;"
                     *ngIf="last_annotation !== null">
                     <p style="color: #6d18c2;">Dernière annotation</p>
-                    <p style="font-size: 16px;">{{last_annotation.annotation || ''}}</p>
+                    <p style="font-size: 16px;" [innerHtml]="last_annotation?.annotation"></p>
                 </div>
                 <hr style="color:#bbb">
 
 
-                <div *ngFor="let history of courrier.user_in_diffusion">
+                <div *ngFor="let history of courrier?.user_in_diffusion">
 
                     <div class="div-user" *ngIf="history.is_validate !== null"
                     style="display: flex; padding-bottom: 1rem; padding: 1rem; border-radius: 12px; margin-bottom: 10px;"
@@ -168,23 +173,8 @@
 
 
 
-            <button (click)="setMessageBlock()" class="btn btn-success border-radius round " style="position: fixed; bottom: 20px;
-    font-size: 20px; right: 20px;padding-left: 60px;padding-right: 60px;" mat-fab color="primary"
-                aria-label="Example icon button with a delete icon">
-                {{textResponseButton}}
-            </button>
-
         </div>
-        <div *ngIf="messageBlock == true" style="position: fixed; width: 400px; height: 400px; right: 20px;bottom: 70px;
-    border-radius: 15px; border: 2px solid #d7d7d7; background:#f9f9f9;">
-            <br>
-            <p style="font-size: 18px; margin-bottom: 0px;font-weight: 500;">Ajouter un message ici</p>
-            <textarea name="" class="form-control" id="" cols="30" rows="15"></textarea>
 
-            <app-button-spinner backgroundColor="green" textColor="white" [disabled]="isLoading"
-                [buttonText]="'Enregistrer le modele'">
-            </app-button-spinner>
-        </div>
     </div>
 
     <!-- Modal pieces jointes -->
@@ -221,6 +211,8 @@
         (saveAnnotationEvent)="saveAnnotation($event)"
         [alertMessage]="notifySuccessAnnotation"
         (pageChangedEvent)="pageChanged($event)" [totalItems]="totalItems"
+        [notifySuccessSaveNotification]="notifySuccessSaveNotification"
+        [isNotifyPaginationAnnotation]="isNotifyPaginationAnnotation"
 
         >
     </app-modal-annotations>
@@ -246,11 +238,7 @@
                     <div class="col-5">
                         <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
                             nextLabel="Suivant"></pagination-controls>
-                        <button (click)="setMessageBlock()" class="btn btn-success border-radius round " style="position: fixed; bottom: 20px;
-                        font-size: 20px; right: 20px;padding-left: 60px;padding-right: 60px;" mat-fab color="primary"
-                            aria-label="Example icon button with a delete icon">
-                            {{textResponseButton}}
-                        </button>
+ 
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -335,3 +323,10 @@
     <app-modal-alert [isOpenModal]="isModalApproveRejectOpen" [textButtonValidation]="textButtonValidation"
         [title]="titleModal" [color]="colorIcon" (validationEvent)="approuveReject()" (closeModalEvent)="closeModalApprove()"
         [icon]="iconModal"></app-modal-alert>
+
+        
+        
+<app-document-classification
+(closeModalEvent)="closeModalDocumentClassification()" [documentId]="courrierId"
+ [isOpenModal]="isModalDocumentClassificationOpen"
+  ></app-document-classification>

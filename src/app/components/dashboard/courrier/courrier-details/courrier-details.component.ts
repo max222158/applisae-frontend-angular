@@ -63,10 +63,25 @@ export class CourrierDetailsComponent {
   isModalApproveRejectOpen: boolean = false
   notifySuccessAnnotation: string;
   isVote:boolean 
-
+  notifySuccessSaveNotification: any
+  isNotifyPaginationAnnotation: any
+  isModalDocumentClassificationOpen:boolean = false
   setNotifySuccessAnnotation() {
     this.notifySuccessAnnotation = 'This is an alert from the parent component!';
   }
+  
+
+  setSuccessSaveNotification() {
+    this.notifySuccessSaveNotification = { timestamp: new Date() };
+    console.log('Function executed in parent');
+  }
+
+  
+  notifyPaginationAnnotation() {
+    this.isNotifyPaginationAnnotation = { timestamp: new Date() };
+    console.log('Function executed in parent');
+  }
+
 
   constructor(private courrierService: CourrierService,private toastr: ToastrService, private annotationService:AnnotationService, private workflowService: WorkflowService, public dialog: MatDialog, private route: ActivatedRoute, private router: Router, private cdr: ChangeDetectorRef) {
 
@@ -107,9 +122,11 @@ export class CourrierDetailsComponent {
           // Spécifiez le type 'any' pour les données
           console.log(this.pdfsource);
           this.annotations = data.results.annotations
+          
           this.attachment_file = data.results.attachment_file
           this.totalItems = data.count;
           this.last_annotation = data.results.annotations[0]
+          this.notifyPaginationAnnotation()
           if (data.results.workflow !== null) {
             this.workflowService.getUserInWorkflow(data.results.workflow).subscribe({
               next: (data) => {
@@ -178,12 +195,100 @@ export class CourrierDetailsComponent {
 
 
   }
+
+  getCourrierDetailsById(){
+
+    console.log(this.courrierId)
+    if (this.courrierId) {
+      this.courrierService.getDetailsCourrierById(parseInt(this.courrierId), this.page).subscribe((data: any) => {
+        console.log(data)
+
+        this.courrier = data.results
+        this.position_in_workflow = data.results.position_in_workflow
+
+        if(data.results.hasOwnProperty('vote')){
+       
+          console.log(data.results.vote)
+          this.isVote = data.results.vote
+
+  
+        }
+        // Spécifiez le type 'any' pour les données
+        console.log(this.pdfsource);
+        this.annotations = data.results.annotations
+        this.attachment_file = data.results.attachment_file
+        this.totalItems = data.count;
+        this.last_annotation = data.results.annotations[0]
+        if (data.results.workflow !== null) {
+          this.workflowService.getUserInWorkflow(data.results.workflow).subscribe({
+            next: (data) => {
+
+
+
+              
+              this.workflow = data.workflow;
+              // Ajoutez ici la gestion de la réponse de l'API
+            },
+            error: (error) => {
+              console.error('Erreur lors de la requête vers l\'API:', error);
+              // Ajoutez ici la gestion des erreurs
+            }
+          })
+        }else{
+
+          this.workflowService.getUsersCourrier(data.results.customuser).subscribe({
+            next: (data) => {
+
+              this.users = data;
+
+
+              
+              // Ajoutez ici la gestion de la réponse de l'API
+            },
+            error: (error) => {
+              console.error('Erreur lors de la requête vers l\'API:', error);
+              
+              // Ajoutez ici la gestion des erreurs
+            }
+          })
+
+
+        }
+        //this.message = data;
+      });
+
+
+      // Fetcher le fichier principal du courrier pdf ou autres
+
+
+
+      this.courrierService.getFileCourrierById(parseInt(this.courrierId)).subscribe((data: any) => {
+        this.isFileLoading = false
+        if (data.base64) {
+
+
+          let binary_string = window.atob(data.base64);
+          let len = binary_string.length;
+          let bytes = new Uint8Array(len);
+          for (let i = 0; i < len; i++) {
+            bytes[i] = binary_string.charCodeAt(i);
+          }
+
+          this.pdfSrc = bytes.buffer;
+          this.isFileLoading = false
+        }
+      });
+    }
+
+  }
   fetchAnnotation() {
     if (this.courrierId) {
       this.courrierService.getDetailsCourrierById(parseInt(this.courrierId), this.page).subscribe((data: any) => { // Spécifiez le type 'any' pour les données
         console.log(data.results);
         this.annotations = data.results.annotations
         this.totalItems = data.count
+        this.notifyPaginationAnnotation()
+        
 
         //this.message = data;
       });
@@ -206,14 +311,19 @@ export class CourrierDetailsComponent {
 
         
         this.toastr.success('Vous avez ajouté une annotation!','Annotation');
-        this.setNotifySuccessAnnotation()
-        
+        this.setSuccessSaveNotification()
+        let newAnnotation = data.annotation
+
+        this.annotations.unshift(newAnnotation);
+        this.notifyPaginationAnnotation()
         // Ajoutez ici la gestion de la réponse de l'API
       },
       error: (error) => {
         
         this.toastr.error('Erreur lors de l\'enregistrement!','Erreur');
         console.error('Erreur lors de la requête vers l\'API:', error);
+        this.setSuccessSaveNotification()
+        
         
         // Ajoutez ici la gestion des erreurs
       }
@@ -240,15 +350,7 @@ export class CourrierDetailsComponent {
     });
   }
 
-  setMessageBlock() {
-    if (this.messageBlock) {
-      this.messageBlock = false
-      this.textResponseButton = "Répondre"
-    } else {
-      this.messageBlock = true
-      this.textResponseButton = "X"
-    }
-  }
+
   closeWorkflow_or_user_view(view: boolean) {
     this.user_or_workflow = view
 
@@ -271,6 +373,12 @@ export class CourrierDetailsComponent {
 
 }
 
+closeModalDocumentClassification(){
+    
+  this.isModalDocumentClassificationOpen = false;
+
+}
+
   openHistoriqueVersionModal(){
     if(this.isOpenModalHistoriqueVersion == false){
       this.isOpenModalHistoriqueVersion = true;
@@ -278,6 +386,12 @@ export class CourrierDetailsComponent {
       this.isOpenModalHistoriqueVersion = false;
     }
   }
+
+  openModalDocumentClassification(){
+    
+    this.isModalDocumentClassificationOpen = true;
+
+}
 
 
   
@@ -356,6 +470,8 @@ approuveReject() {
         
 
         this.isModalApproveRejectOpen = false;
+
+        this.getCourrierDetailsById()
         //this.getInfoTaskById() 
         this.closeModal()
  

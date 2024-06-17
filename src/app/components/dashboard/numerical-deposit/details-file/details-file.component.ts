@@ -26,6 +26,7 @@ export class DetailsFileComponent {
   users: any = []
   isFileLoading: boolean = false
   paths: any = []
+  histories: any = []
   videoLink = ""
   link_video_server: string = File_server_url;
   link_nginx_server: string = File_server_url;
@@ -41,7 +42,9 @@ export class DetailsFileComponent {
   annotationPerPage: number = 20;
   pageAnnotation: number = 1;
   totalItemsAnnotation: number = 0;
+  totalItemsHistory:number = 0
   currentAnnotationPage: number = 1
+  currentPaginationHistoryPage: number = 1
   document_id: number
   isVote: boolean
   /* 
@@ -49,8 +52,8 @@ export class DetailsFileComponent {
      */
   notifySuccessEditMetaData: any;
   notifySuccessSaveNewVersion: any;
-
-
+  notifySuccessSaveNotification: any
+  isNotifyPaginationAnnotation: any
   setNotifySuccessEditMetaData() {
     this.notifySuccessEditMetaData = { timestamp: new Date() };
     console.log('Function executed in parent');
@@ -60,10 +63,24 @@ export class DetailsFileComponent {
     this.notifySuccessSaveNewVersion = { timestamp: new Date() };
     console.log('Function executed in parent');
   }
+
+
+  setSuccessSaveNotification() {
+    this.notifySuccessSaveNotification = { timestamp: new Date() };
+    console.log('Function executed in parent');
+  }
+
+  
+  notifyPaginationAnnotation() {
+    this.isNotifyPaginationAnnotation = { timestamp: new Date() };
+    console.log('Function executed in parent');
+  }
+
+  
   /*   ----------------------------------fin-----------------------
    */
   constructor(private fileManagerService: FilemanagerService, private route: ActivatedRoute, private toastr: ToastrService
-    , private userService: UserService, private history: HistoryService, private annotationService: AnnotationService, private globalStateService: GlobalStateService, private workflowService: WorkflowService) {
+    , private userService: UserService, private historyService: HistoryService, private annotationService: AnnotationService, private globalStateService: GlobalStateService, private workflowService: WorkflowService) {
 
   }
   ngOnInit(): void {
@@ -87,6 +104,19 @@ export class DetailsFileComponent {
     });
   }
 
+
+  getDocumentDetailsById(){
+    this.fileManagerService.getDetailsDocumentById(this.document_id).subscribe({
+      next: (response: any) => {
+
+        this.handleDocumentDetailsResponse(response);
+      },
+      error: (error: any) => {
+        console.error('Erreur lors de la requête vers l\'API:', error);
+        // Ajoutez ici la gestion des erreurs
+      }
+    });
+  }
   private handleDocumentDetailsResponse(response: any): void {
     this.isLoading = false;
     this.detailsDocument = response.details;
@@ -96,7 +126,7 @@ export class DetailsFileComponent {
     this.setIdDocument(response.details.id);
     this.totalItemsAnnotation = response.count;
     this.versionDocument = response.version
-
+    this.getHistoryDocument()
     console.log('Réponse de l\'API:', response);
 
     if (this.isVideoExtension(response.details.extension)) {
@@ -295,6 +325,8 @@ export class DetailsFileComponent {
     this.annotationService.getAnnotationPagination(formData).subscribe({
       next: (data) => {
         this.annotations = data.results;
+        this.notifyPaginationAnnotation()
+
         // Handle API response here
       },
       error: (error) => {
@@ -306,16 +338,47 @@ export class DetailsFileComponent {
   }
 
 
+
+  getHistoryDocument(): void {
+    const formData = new FormData();
+    formData.append('page', this.currentPaginationHistoryPage.toString());
+    formData.append('filterBy', '');
+    formData.append('document_id', this.document_id.toString());
+
+    this.historyService.getHistoryDocument(formData).subscribe({
+      next: (data) => {
+        this.histories = data.results;
+        this.totalItemsHistory = data.count;
+
+
+        // Handle API response here
+      },
+      error: (error) => {
+
+        console.error('Error making API request:', error);
+        // Handle errors here
+      }
+    });
+  }
   /* 
     Lorsque la pagination des annotation du document change
     
     */
   currentAnnotationPageChanged(event: any) {
+
     this.currentAnnotationPage = event;
     this.fetchAnnotation()
 
+
   }
 
+  currentHistoryPageChanged(event: any) {
+
+    this.currentPaginationHistoryPage = event;
+    this.getHistoryDocument()
+
+
+  }
   openAnnotationModal() {
 
     this.isOpenModalAnnotation = true;
@@ -353,9 +416,15 @@ export class DetailsFileComponent {
     this.annotationService.saveDocumentAnnotation(formData).subscribe({
       next: (data) => {
         this.handleSaveAnnotationSuccess("Annotation enregistrée");
+        this.setSuccessSaveNotification()
+        let newAnnotation = data.annotation
+
+        this.annotations.unshift(newAnnotation);
+        this.notifyPaginationAnnotation()
       },
       error: (error) => {
         this.handleSaveAnnotationError();
+        this.setSuccessSaveNotification()
       }
     });
   }
@@ -387,10 +456,11 @@ export class DetailsFileComponent {
     formData.append('description', $event.description)
     formData.append('document_id', this.document_id.toString())
 
-    this.history.saveHistoryForDocument(formData).subscribe({
+    this.historyService.saveHistoryForDocument(formData).subscribe({
       next: (data) => {
         this.handleSaveAnnotationSuccess('La version a été ajouté avec succès');
         this.setNotifySuccessNewVersionSave()
+        this.getDocumentDetailsById()
       },
       error: (error) => {
         this.handleSaveAnnotationError();

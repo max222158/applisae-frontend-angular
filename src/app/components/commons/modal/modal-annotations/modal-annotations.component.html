@@ -1,60 +1,65 @@
-<div  class="modal-user-workflow" [ngStyle]="{'display': isOpenModalAnnotation? 'block' : 'none' }"
-style="position: fixed;padding-top: 70px; width: 400px; display: none; background-color: #f9f9f9;
+<div class="modal-user-workflow" [ngStyle]="{'display': isOpenModalAnnotation? 'block' : 'none' }" style="position: fixed;padding-top: 70px; width: 400px; display: none; background-color: #f9f9f9;
 height: 100vh; top: 0px;z-index: 10;  right: 0px; box-shadow: -10px 0px 10px rgba(0, 0, 0, 0.1); ">
-<div class="col-12" style="">
-    <div class="flex1 " style="justify-content: space-between;" >
-        <button (click)="setWriteAnnotation()" class="btn btn-success"
-        style="margin: 5px;">Ajouter une annotation</button>
-        <button (click)="closeModal()" class="btn btn-danger"
-        style="margin: 5px;">X</button>
+    <div class="col-12" style="">
+        <div class="flex1 " style="justify-content: space-between;">
+            <button (click)="setWriteAnnotation()" class="btn btn-success" style="margin: 5px;">Ajouter une
+                annotation</button>
+            <button (click)="closeModal()" class="btn btn-danger" style="margin: 5px;">X</button>
 
-    </div>
-    <div style="background: #bbbbbb30; padding: 10px;" *ngIf="writeAnnotation">
-        <h5>Ecrire ici</h5>
+        </div>
+        <div style="background: #bbbbbb30; padding: 10px;" *ngIf="writeAnnotation">
+            <h5>Ecrire ici</h5>
 
-        <textarea class="form-control" [(ngModel)]="textAnnotation" (ngModelChange)="checkTextAnnotation()" name="" id="" rows="10"></textarea>
-        <button (click)="SaveAnnotation(textAnnotation)" [disabled]="isTextAnnotationEmpty" class="btn btn-secondary mt-2">
-            <i *ngIf="!isSpinnerLoading" class="fa-regular fa-paper-plane"></i>
-            <span *ngIf="isSpinnerLoading" class="spinner-border text-success" style="
+            <div class="NgxEditor__Wrapper">
+                <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
+                <ngx-editor [editor]="editor" [(ngModel)]="textAnnotation"
+                 (ngModelChange)="checkTextAnnotation()"  [disabled]="false"     
+                 class="custom-editor"
+                 [placeholder]="'Ecrire ici...'"></ngx-editor>
+            </div>
+
+            <button (click)="SaveAnnotation(textAnnotation)" [disabled]="isTextAnnotationEmpty"
+                class="btn btn-secondary mt-2">
+                <i *ngIf="!isSpinnerLoading" class="fa-regular fa-paper-plane"></i>
+                <span *ngIf="isSpinnerLoading" class="spinner-border text-success" style="
             width: 20px;
             height: 20px;
         "></span> Envoyer</button>
 
-    </div>
+        </div>
 
-    <div class="p-2" style="overflow-y: scroll; height: calc(100vh - 170px);">
+        <div class="p-2" style="overflow-y: scroll; height: calc(100vh - 170px);">
 
 
 
-        <hr>
+            <hr>
 
-        <div *ngFor="let details of annotations |
-        paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }" class="pl-1"
-                        style="padding-left: 1rem;">
-                        <div style="display: flex; padding-left: 1rem;">
-                            <h3 class="" style="">{{details.subject}}</h3>
-                        </div>
-                        <div style="display: flex; padding: 1rem;">
-                            <i class="fa-solid fa-circle-user" title=""
-                                style="font-size: 40px; color: rgb(0, 77, 144);"></i>
-                            <div class="ml-1">
-                                <p class="mb-0 font-weight-bold">{{details.user.name}}</p>
-                                <p>{{details.user.email}}</p>
-                            </div>
-                            {{details.created_at | customDateFormat}}
-        
-                        </div>
-                        <div class="p-3  col-md-11 annot-div" style="background: #48ff0034 !important; border-radius: 10px;">
-                            <p style="font-size: 16px;">{{details.annotation}}</p>
-                        </div>
-                        <hr style="color:#bbb">
+            <div *ngFor="let details of annotations |
+        paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }" class=""
+                style="padding-left: 1rem;">
+                <div style="display: flex; padding-left: 1rem;">
+                    <h3 class="" style="">{{details.subject}}</h3>
+                </div>
+                <div style="display: flex; padding: 1rem;">
+                    <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 77, 144);"></i>
+                    <div class="ml-1">
+                        <p class="mb-0 font-weight-bold">{{details.user.name}}</p>
+                        <p>{{details.user.email}}</p>
                     </div>
-        
-                    <div class="col-12">
-                        <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
-                            nextLabel="Suivant"></pagination-controls>
-        
-                    </div>
+                    {{details.created_at | customDateFormat}}
+
+                </div>
+                <div class="p-3  col-md-11" style="background: #48ff0034 !important; border-radius: 10px;">
+                    <div  [innerHTML]="sanitizedAnnotations[details.id]"></div>
+                </div>
+                <hr style="color:#bbb">
+            </div>
+
+            <div class="col-12">
+                <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                    nextLabel="Suivant"></pagination-controls>
+
+            </div>
+        </div>
     </div>
-</div>
 </div>
