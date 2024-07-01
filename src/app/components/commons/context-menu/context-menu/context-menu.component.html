@@ -1,0 +1,20 @@
+<!-- src/app/context-menu/context-menu.component.html -->
+<div class="context-menu" [ngStyle]="{'left.px': x, 'top.px': y, 'display': display}">
+    <ul>
+      <li (click)="onOptionClick('Option 1')"><i class="fa-solid fa-pencil"></i> Modifier</li>
+      <li (click)="onOptionClick('Option 2')"><i class="fa-solid fa-copy"></i> Copier</li>
+      <li (click)="onOptionClick('Option 3')"><i class="fa-solid fa-circle-arrow-right"></i> Déplacer</li>
+      <hr>
+      <li (click)="onOptionClick('Option 4')"><i class="fa-solid fa-pencil"></i> Renommer</li>
+
+      <li (click)="onOptionClick('Option 6')"><i class="fa-solid fa-trash-can"></i> Supprimer</li>
+      <hr>
+      <a [routerLink]="['/tableau-de-bord/fonds-numeriques/permissions/dossier', idParsed]"><i class="fa-solid fa-lock"></i> Gérer les permissions</a>
+
+
+    </ul>
+  </div>
+
+
+
+  

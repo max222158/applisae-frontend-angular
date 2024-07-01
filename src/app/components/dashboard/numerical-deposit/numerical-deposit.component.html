@@ -1,208 +1,231 @@
+<!-- file-upload.component.html -->
+
+
 <div class="container">
-<div class="" style="display: flex; justify-content: space-between;" *ngIf="paths_user.length > 1 || paths.length >= 0" >
-    <div>
-        <button class="btn btn-success" (click)="openFolderModal()">Nouveau dossier</button>
+    <div class="" style="display: flex; justify-content: space-between;"
+        *ngIf="paths_user.length > 1 || paths.length >= 0">
+        <div>
+            <button class="btn btn-success" (click)="openFolderModal()">Nouveau dossier</button>
 
 
 
-        <button [disabled]="selectedCheckItems.length <= 0" class="btn btn-secondary" mat-raised-button
-            matTooltip="Renommer">
-            <i class="fa-solid fa-clock-rotate-left"></i>
+            <button [disabled]="selectedCheckItems.length <= 0" class="btn btn-secondary" mat-raised-button
+                matTooltip="Renommer">
+                <i class="fa-solid fa-clock-rotate-left"></i>
 
-        </button>
-        <button (click)="openModalCopy()" [disabled]="selectedCheckItems.length <= 0" class="btn btn-success"
-            mat-raised-button matTooltip="Copier">
-            <i class="fa-solid fa-copy"></i>
+            </button>
+            <button (click)="openModalAction('Copier ', 'Copier ici')" [disabled]="selectedCheckItems.length <= 0"
+                class="btn btn-success" mat-raised-button matTooltip="Copier">
+                <i class="fa-solid fa-copy"></i>
 
-        </button>
-        <button [disabled]="selectedCheckItems.length <= 0" class="btn btn-secondary" mat-raised-button
-            matTooltip="Déplacer">
-            <i class="fa-solid fa-right-to-bracket"></i>
+            </button>
+            <button (click)="openModalAction('Déplacer ', 'Déplacer ici')" [disabled]="selectedCheckItems.length <= 0"
+                class="btn btn-secondary" mat-raised-button matTooltip="Déplacer">
+                <i class="fa-solid fa-right-to-bracket"></i>
 
-        </button>
-        <button [disabled]="selectedCheckItems.length <= 0" (click)="openDeleteModal()" class="btn btn-danger "
-            mat-raised-button matTooltip="Supprimer">
-            <i class="fa-solid fa-trash"></i>
+            </button>
+            <button [disabled]="selectedCheckItems.length <= 0" (click)="openDeleteModal()" class="btn btn-danger "
+                mat-raised-button matTooltip="Supprimer">
+                <i class="fa-solid fa-trash"></i>
 
-        </button>
+            </button>
 
-        <label style="position: absolute;" (click)="openUploadFileModal(true)" for="upload" mat-raised-button
-            matTooltip="Uploader des fichiers ici"
-            class="btn btn-success border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
-            <span class="text-gray-600 font-medium"><i class="fa-solid fa-upload"></i>
-            </span>
-        </label>
+            <button (click)="openModalAction('Plan de Classement général ', '')" class="btn btn-danger "
+                mat-raised-button matTooltip="Plan de classement général" style="background: #7b0042;">
+                <i class="fa-solid fa-sitemap"></i>
+
+            </button>
+
+            <label style="position: absolute;" (click)="openUploadFileModal(true)" for="upload" mat-raised-button
+                matTooltip="Uploader des fichiers ici"
+                class="btn btn-success border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
+                <input type="file" id="upload" (change)="onFilesSelected($event)" class="hidden" style="display: none;"
+                    multiple>
+                <span class="text-gray-600 font-medium"><i class="fa-solid fa-upload"></i>
+                </span>
+            </label>
+        </div>
+        <div>
+            <input style="float: right;" class="form-control" type="text" placeholder="Rechercher ici" />
+        </div>
     </div>
-    <div>
-        <input style="float: right;" class="form-control" type="text" placeholder="Rechercher ici" />
-    </div>
-</div>
-<div style="display: flex;margin-bottom: 10px;background: #efefef72;margin-top: 10px;">
-    <div style="display: flex;width: 90%;padding: 4px;padding-left: 17px;
+    <div style="display: flex;margin-bottom: 10px;background: #efefef72;margin-top: 10px;">
+        <div style="display: flex;width: 90%;padding: 4px;padding-left: 17px;
     padding-top: 8px;">
 
-        <!-- brumcost visible for user no admin -->
+            <!-- brumcost visible for user no admin -->
 
-        <div style="display: flex;"  *ngIf="isSimpleUser">
-        <p (click)="firstMenuNameClick(i,path.name)"
-          *ngFor="let path of paths_user; let i=index"
-           style="color: rgb(0, 71, 157);
-                font-size: 16px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
-                padding-left: 10px;"><i class="fa-regular fa-folder-open"></i> 
-                {{path.name}} 
-                <i
-                class="fa-solid fa-chevron-right" style="font-size: 12px; margin-left: 10px;"></i> 
-        </p>
-    </div>
+            <div style="display: flex;" *ngIf="isSimpleUser">
+                <p (click)="firstMenuNameClick(i,path.name)" *ngFor="let path of paths_user; let i=index" style="color: rgb(0, 71, 157);
+                font-size: 15px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
+                padding-left: 10px;"><i class="fa-regular fa-folder-open"></i>
+                    {{path.name}}
+                    <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-left: 10px;"></i>
+                </p>
+            </div>
 
-   <!-- brumcost visible for user Admin -->
-        <p (click)="getPathFolder(path.id,path.name)" *ngFor="let path of paths" style="color: rgb(0, 71, 157);
-    font-size: 16px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
+            <!-- brumcost visible for user Admin -->
+            <p (click)="getFilesAndFoldersByPath(path.id,path.name)" *ngFor="let path of paths" style="color: rgb(0, 71, 157);
+    font-size: 15px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
     padding-left: 10px;"><i class="fa-regular fa-folder-open"></i> {{path.name}} <i class="fa-solid fa-chevron-right"
-                style="font-size: 12px; margin-left: 10px;"></i> </p>
-        <p *ngIf="current_folder_name !==''" style="color: rgb(117, 117, 117);
-    font-size: 16px; font-weight: 500; " class="mb-0"><i class="fa-regular fa-folder-open"></i> {{current_folder_name}}
-        </p>
+                    style="font-size: 12px; margin-left: 10px;"></i> </p>
+            <p *ngIf="current_folder_name !==''" style="color: rgb(117, 117, 117);
+    font-size: 15px; font-weight: 500; " class="mb-0"><i class="fa-regular fa-folder-open"></i> {{current_folder_name}}
+            </p>
+        </div>
+        <div style="display: flex;justify-content: flex-end;">
+            <button class="btn" (click)="changeDisposition('list')"><i class="fa-solid fa-list" mat-raised-button
+                    matTooltip="Disposition en liste" style="font-size: 20px;"></i></button>
+            <button class="btn" (click)="changeDisposition('mosaic')"><i class="fa-solid fa-grip" mat-raised-button
+                    matTooltip="Disposition en mosaïque" style="font-size: 20px;"></i></button>
+
+        </div>
     </div>
-    <div style="display: flex;justify-content: flex-end;">
-        <button class="btn" (click)="changeDisposition('list')"><i class="fa-solid fa-list" mat-raised-button
-                matTooltip="Disposition en liste" style="font-size: 20px;"></i></button>
-        <button class="btn" (click)="changeDisposition('mosaic')"><i class="fa-solid fa-grip" mat-raised-button
-                matTooltip="Disposition en mosaïque" style="font-size: 20px;"></i></button>
 
-    </div>
-</div>
+    <div class="row" style="" *ngIf="paths_user.length > 1 || paths.length > 0 ">
 
-<div class="row" style="" *ngIf="paths_user.length > 1 || paths.length > 0 ">
-
-    <div *ngIf="folder.length == 0 && documents.length == 0" style="border: 3px dotted #00e1ff40; width: 100%;height: 70vh;display: flex;
+        <div *ngIf="folder.length == 0 && documents.length == 0" style="border: 3px dotted #00e1ff40; width: 100%;height: 70vh;display: flex;
     background: #f4f4f441;align-items: center;justify-content: center">
 
-        <div
-            style="width: 500px; height: 500px; background: #eeeeee00; display: flex; align-items: center;justify-content: center;">
-            <div style="">
+            <div
+                style="width: 500px; height: 500px; background: #eeeeee00; display: flex; align-items: center;justify-content: center;">
+                <div style="">
 
 
-                <h3 style="text-align: center;">Ce dossier est vide</h3>
+                    <h3 style="text-align: center;">Ce dossier est vide</h3>
 
 
 
-                <div class="" style="display: flex; justify-content: center; align-items: center;">
-                    <img src="../../../../assets/images/allmedia.png" alt="">
-                </div>
-                <p class="text-center">Importer des document ici ou créer des dossier</p>
-                <br><br>
-                <div class="" style="display: flex; justify-content: center; align-items: center;">
+                    <div class="" style="display: flex; justify-content: center; align-items: center;">
+                        <img src="../../../../assets/images/allmedia.png" alt="">
+                    </div>
+                    <p class="text-center">Importer des document ici ou créer des dossier</p>
+                    <br><br>
+                    <div class="" style="display: flex; justify-content: center; align-items: center;">
 
-                    <label style="position: absolute;" for="upload" mat-raised-button
-                        matTooltip="Uploader des fichiers ici"
-                        class="btn btn-success border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
-                        <span class="text-gray-600 font-medium"><i class="fa-solid fa-upload"></i> Uploader des fichiers
-                            ici</span>
-                    </label>
+                        <label style="position: absolute;" for="upload" mat-raised-button
+                            matTooltip="Uploader des fichiers ici"
+                            class="btn btn-success border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
+                            <span class="text-gray-600 font-medium"><i class="fa-solid fa-upload"></i> Uploader des
+                                fichiers
+                                ici</span>
+                        </label>
 
-                    <input id="upload" type="file" (change)="onFileChange($event)" class="hidden"
-                        style="visibility: hidden;" multiple />
+                        <input id="upload" type="file" (change)="onFilesSelected($event)" class="hidden"
+                            style="visibility: hidden;" multiple />
+                    </div>
                 </div>
             </div>
+
+
         </div>
 
-
     </div>
 
-</div>
+    <div *ngIf="!isSimpleUser">
 
-<div *ngIf="!isSimpleUser">
-
-    <app-admin-disposition [disposition]="disposition" [folders]="folder" [documents]="documents"
-        [activeActionBtnIndex]="activeActionBtnIndex" [selectedCheckItems]="selectedCheckItems"
-        (folderSelected)="openFolderById($event.id, $event.name)" (documentSelected)="gotoDetailsDocument($event)"
-        (checkboxChange)="onCheckboxChange($event.event, $event.item)"
-        (actionBtnIndexChanged)="setActiveActionBtnIndex($event)" [page]="page" [totalItems]="totalItems" (pageChange)="pageChanged($event)">
-    </app-admin-disposition>
-</div>
-
-<div *ngIf="isSimpleUser">
-    <div *ngIf="paths_user.length == 1">
-        <!-- Screen displayed when user is in home sreen -->
-        <app-index-user [disposition]="disposition"
-            (folder)="openHomeUserFolder($event.id, $event.name)"></app-index-user>
+        <app-admin-disposition [isFilesLoading]="isFilesAndFolderLoading" [disposition]="disposition" [folders]="folder"
+            [documents]="documents" [activeActionBtnIndex]="activeActionBtnIndex"
+            [selectedCheckItems]="selectedCheckItems" (folderSelected)="openFolderById($event.id, $event.name)"
+            (documentSelected)="gotoDetailsDocument($event)"
+            (checkboxChange)="onCheckboxChange($event.event, $event.item)"
+            (actionBtnIndexChanged)="setActiveActionBtnIndex($event)" [page]="page" [totalItems]="totalItems"
+            (pageChange)="pageChanged($event)">
+        </app-admin-disposition>
     </div>
-    <app-admin-disposition *ngIf="paths_user.length > 1" [disposition]="disposition" [folders]="folder"
-        [documents]="documents" [activeActionBtnIndex]="activeActionBtnIndex" [selectedCheckItems]="selectedCheckItems"
-        (folderSelected)="openFolderById($event.id, $event.name)" (documentSelected)="gotoDetailsDocument($event)"
-        (checkboxChange)="onCheckboxChange($event.event, $event.item)" [page]="page" [totalItems]="totalItems" (pageChange)="pageChanged($event)"
-        (actionBtnIndexChanged)="setActiveActionBtnIndex($event)">
-    </app-admin-disposition>
-</div>
 
-<!--  #######################  Modal Create folder ################################### -->
-<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
-    style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModalFolder? 'block' : 'none' }">
-    <div class="modal-dialog modal-lg modal-dialog-centered  modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLiveLabel">Créer un dossier</h5>
-                <button type="button" (click)="openFolderModal()" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <form [formGroup]="folderForm" (ngSubmit)="onCreateFolder()">
+    <div *ngIf="isSimpleUser">
+        <div *ngIf="paths_user.length == 1">
+            <!-- Screen displayed when user is in home sreen -->
+            <app-index-user [disposition]="disposition"
+                (folder)="openHomeUserFolder($event.id, $event.name)"></app-index-user>
+        </div>
+        <app-admin-disposition *ngIf="paths_user.length > 1" [isFilesLoading]="isFilesAndFolderLoading"
+            [disposition]="disposition" [folders]="folder" [documents]="documents"
+            [activeActionBtnIndex]="activeActionBtnIndex" [selectedCheckItems]="selectedCheckItems"
+            (folderSelected)="openFolderById($event.id, $event.name)" (documentSelected)="gotoDetailsDocument($event)"
+            (checkboxChange)="onCheckboxChange($event.event, $event.item)" [page]="page" [totalItems]="totalItems"
+            (pageChange)="pageChanged($event)" (actionBtnIndexChanged)="setActiveActionBtnIndex($event)">
+        </app-admin-disposition>
+    </div>
+    <!--  #######################  Modal Create folder ################################### -->
+    <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+        style="padding-right: 17px; background: #00000063;"
+        [ngStyle]="{'display': isOpenModalFolder? 'block' : 'none' }">
+        <div class="modal-dialog modal-lg modal-dialog-centered  modal-dialog-scrollable scale-in" role="document">
+            <div class="modal-content" style="height: 100vh;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLiveLabel">Créer un dossier</h5>
+                    <button type="button" (click)="openFolderModal()" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form [formGroup]="folderForm" (ngSubmit)="onCreateFolder()">
 
-                <div class="modal-body">
-                    <div class="flex1">
-                        <button type="button" class="btn actve-tabs" (click)="onSelectedIndexActionFolder(1)"
-                            [ngClass]="{'actve-tabs': selectedIndexActionFolder === 1, 'no-actve-tabs': selectedIndexActionFolder !== 1}">Par
-                            Défaut</button>
-                        <button type="button" class="btn no-actve-tabs" (click)="onSelectedIndexActionFolder(2)"
-                            [ngClass]="{'actve-tabs': selectedIndexActionFolder === 2, 'no-actve-tabs': selectedIndexActionFolder !== 2}">Permissions</button>
-                        <button type="button" class="btn no-actve-tabs" (click)="onSelectedIndexActionFolder(3)"
-                            [ngClass]="{'actve-tabs': selectedIndexActionFolder === 3, 'no-actve-tabs': selectedIndexActionFolder !== 3}">Champs
-                            personnalisés</button>
-                    </div>
-
-                    <hr>
-                    <div *ngIf="selectedIndexActionFolder == 1">
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Identifiant</label>
-                            <input type="text" formControlName="identifiant" class="form-control"
-                                id="exampleInputEmail1" aria-describedby="emailHelp"
-                                placeholder="Identifiant du dossier">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nom du dossier</label>
-                            <input type="text" formControlName="name" class="form-control" id="exampleInputEmail1"
-                                aria-describedby="emailHelp" placeholder="Nom du titre">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Description</label>
-                            <textarea name="" class="form-control" formControlName="description" id="" cols="30"
-                                rows="5"></textarea>
-                        </div>
-                        <div class="flex1 p-3" style="background:#7b0042; color: #fff;"><input type="checkbox">
-                            <p class="mb-0 ml-1" style="color: #fff;"> visible à tous le monde</p>
+                    <div class="modal-body" style="height: 100vh;">
+                        <div class="flex1">
+                            <button type="button" class="btn actve-tabs" (click)="onSelectedIndexActionFolder(1)"
+                                [ngClass]="{'actve-tabs': selectedIndexActionFolder === 1, 'no-actve-tabs': selectedIndexActionFolder !== 1}">Par
+                                Défaut</button>
+                            <button type="button" *ngIf="!isfoderVisibleAllChecked" class="btn no-actve-tabs" (click)="onSelectedIndexActionFolder(2)"
+                                [ngClass]="{'actve-tabs': selectedIndexActionFolder === 2,
+                                 'no-actve-tabs': selectedIndexActionFolder !== 2}">Permissions</button>
+                            <button type="button" class="btn no-actve-tabs" (click)="onSelectedIndexActionFolder(3)"
+                                [ngClass]="{'actve-tabs': selectedIndexActionFolder === 3, 'no-actve-tabs': selectedIndexActionFolder !== 3}">Champs
+                                personnalisés</button>
                         </div>
 
+                        <hr>
+                        <div *ngIf="selectedIndexActionFolder == 1">
 
-                    </div>
-                    <div *ngIf="selectedIndexActionFolder ==2">
-                        <button type="button" class="btn btn-success p-0" (click)="openUserModal()">Ajouter des
-                            utilisateurs</button>
-                        <button type="button" class="btn btn-danger p-0" (click)="openGroupUserModal()">Ajouter des
-                            groupes d'utilisateurs</button>
+                            <div class="form-group">
+                                <label for="identifiant">Identifiant</label>
+                                <input type="text" formControlName="identifiant" class="form-control is-invalid"
+                                       id="identifiant" aria-describedby="emailHelp"
+                                       placeholder="Identifiant du dossier"
+                                       [ngClass]="{'is-invalid': folderForm.get('identifiant')?.invalid && (folderForm.get('identifiant')?.dirty || folderForm.get('identifiant')?.touched),
+                                                   'is-valid': folderForm.get('identifiant')?.valid && (folderForm.get('identifiant')?.dirty || folderForm.get('identifiant')?.touched)}">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Nom du dossier</label>
+                                <input type="text" formControlName="name" class="form-control is-invalid" id="name"
+                                       aria-describedby="emailHelp" placeholder="Nom du titre"
+                                       [ngClass]="{'is-invalid': folderForm.get('name')?.invalid && (folderForm.get('name')?.dirty || folderForm.get('name')?.touched),
+                                                   'is-valid': folderForm.get('name')?.valid && (folderForm.get('name')?.dirty || folderForm.get('name')?.touched)}">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" formControlName="description" id="description" cols="30" rows="5"></textarea>
+                            </div>
+                            <p class="font-weight-500 mt-4 font-size-15">Activer le mode visible à tous</p>
+                            <div class="flex1 mt-2" style="">
+                              
+                                <mat-slide-toggle class="text-warning" (click)="visibilityFolderChange()"></mat-slide-toggle>
+                                <p class="mb-0 ml-1" style=""> visible à tous le monde <span [ngClass]="isfoderVisibleAllChecked?'visi-all':'no-visible-all'"> {{isfoderVisibleAllChecked?'Activer':'Désactiver'}}</span></p>
+                            </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <br>
-                                <h4>Utilisateurs</h4>
-                                <div class="flex1" style="overflow-x: scroll;">
-  
-                                    <div *ngFor="let user of usersSelect" style="display: flex;background: #7b0042;border-radius: 20px; 
+                 
+
+
+                        </div>
+                        <div *ngIf="selectedIndexActionFolder ==2">
+                            <button type="button" class="btn btn-success p-0" (click)="openUserModal()">Ajouter des
+                                utilisateurs</button>
+                            <button type="button" class="btn btn-danger p-0" (click)="openGroupUserModal()">Ajouter des
+                                groupes d'utilisateurs</button>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <br>
+                                    <h4>Utilisateurs</h4>
+                                    <div class="flex1" style="overflow-x: scroll;">
+
+                                        <div *ngFor="let user of usersSelect" style="display: flex;background: #7b0042;border-radius: 20px; 
                                         margin-right: 10px;padding: 5px; padding-left: 10px;
                                         padding-right: 10px; ">
-                                        <p class="mb-0" style="color: #fff;width: max-content; ">{{user.name}}</p>
-                                        <p class="mb-0" style="margin-left: 10px;
+                                            <p class="mb-0" style="color: #fff;width: max-content; ">{{user.name}}</p>
+                                            <p class="mb-0" style="margin-left: 10px;
                                         background: #565656;
                                         color: white;
                                         width: 20px;
@@ -210,114 +233,101 @@
                                         border-radius: 50%;
                                         text-align: center;
                                         cursor: pointer;" (click)="removeUser(user.id)">X</p>
+                                        </div>
+
                                     </div>
-        
+
+                                </div>
+                                <div class="col-md-6">
+                                    <br>
+                                    <h4>Groupes</h4>
+
+                                    <button type="button" *ngFor="let group of groupSelect">{{group.name}} <i
+                                            class="fa-solid fa-circle-xmark"
+                                            (click)="removeUserGroup(group.id)"></i></button>
+
+
+
+
+                                </div>
                             </div>
 
-                            </div>
-                            <div class="col-md-6">
-                                <br>
-                                <h4>Groupes</h4>
-
-                                <button type="button" *ngFor="let group of groupSelect">{{group.name}} <i
-                                        class="fa-solid fa-circle-xmark"
-                                        (click)="removeUserGroup(group.id)"></i></button>
-
-
-
-
-                            </div>
                         </div>
+                        <div *ngIf="selectedIndexActionFolder ==3">
+                            <h5>Ajouter des champs personnalisés pour de dossier</h5>
+                            <div style="">
 
-                    </div>
-                    <div *ngIf="selectedIndexActionFolder ==3">
-                        <h3>Ajouter des champs personnalisés pour de dossier</h3>
-                        <div style="height: calc(100vh - 100px);">
-
-
-                        <app-customer-fields-modal [fields]="customerFields"></app-customer-fields-modal>
-
-                    </div>
-
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <app-button-spinner backgroundColor="green" textColor="white" [disabled]="isLoading"
-                        [buttonText]="'Créer le dossier'">
-                    </app-button-spinner>
-                    <button type="button" class="btn btn-secondary" (click)="openFolderModal()"
-                        data-dismiss="modal">Fermer</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!--  #######################  Modal upload multiple files ################################### -->
-<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
-    style="padding-right: 17px; background: #00000063;"
-    [ngStyle]="{'display': isOpenModalUploadFile? 'block' : 'none' }">
-    <div class="modal-dialog  modal-lg" role="document">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLiveLabel">Importer des fichiers ici</h5>
-                <button type="button" (click)="openUploadFileModal(false)" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div *ngFor="let file of files_uploader">
-                    <div>{{ file.file.name }}</div>
-                    <div style="">
-
-                        <div class="progress" style="height: 40px; background: #d1d3d5;" role="progressbar"
-                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                            <button class="btn btn-danger" (click)="removeFile(file.id)">X</button>
-                            <div class="progress-bar" style="height: 40px;"
-                                [ngStyle]="{ 'width.%': uploadProgress[file.id] }">
-                                <p
-                                    style="position: absolute;margin-bottom: 0px;font-size: 15px;margin-right: 12px;padding-left: 11px;">
-                                    {{ uploadProgress[file.id] }}%: {{ file.file.name }}</p>
+                                <app-customer-fields-dropdown></app-customer-fields-dropdown>
                             </div>
 
                         </div>
 
                     </div>
-
-                </div>
-
-
-
+                    <div class="modal-footer" style="
+                        position: absolute;
+                        bottom: 0px;
+                        width: 100%;">
+                        <app-button-spinner backgroundColor="green" textColor="white" [disabled]="isLoading"
+                            [buttonText]="'Créer le dossier'">
+                        </app-button-spinner>
+                        <button type="button" class="btn btn-secondary" (click)="openFolderModal()"
+                            data-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
+        </div>
+    </div>
+
+    <!--  #######################  Modal upload multiple files ################################### -->
+    <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+        style="padding-right: 17px; background: #00000063;"
+        [ngStyle]="{'display': isOpenModalUploadFile? 'block' : 'none' }">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLiveLabel">Importer des fichiers ici</h5>
+                    <button type="button" (click)="openUploadFileModal(false)" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div>
+
+                        <div *ngFor="let file of files; let i = index">
+                            <p>{{ file.name }}</p>
+                            <progress [value]="progress[i]" max="100"
+                                style="color: green; width: 80%; height:30px; margin-right: 20px;"></progress>
+                            <i class="fa-regular fa-circle-check" style="font-size: 30px;"
+                                *ngIf="uploadStatus[i] === 'success'"></i>
+                            <span *ngIf="uploadStatus[i] === 'error'" class="icon-error">❌</span>
+                            <i style="font-size: 30px;" *ngIf="uploadStatus[i] === 'pending' && progress[i] < 100"
+                                class="fa-solid fa-spinner"></i>
+                        </div>
+                    </div>
 
 
-                <div class="">
-                    <label for="upload" mat-raised-button matTooltip="Uploader des fichiers ici"
-                        class="btn btn-warning border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
-                        <span class="text-gray-600 font-medium"> Ajouter des fichiers</span>
-                    </label>
-                    <input id="upload" type="file" (change)="onFileChange($event)" class="hidden"
-                        style="visibility: hidden;" multiple />
+
                 </div>
 
-                <button class="btn btn-success" (click)="uploadFiles()">Envoyer les fichiers</button>
-
-                <button type="button" class="btn btn-secondary" (click)="openUploadFileModal(false)"
-                    data-dismiss="modal">Annuler</button>
             </div>
         </div>
     </div>
 </div>
-</div>
-<app-modal-copy [isOpenModalCopy]="isOpenModalCopy" (setFolderId)="getFolderByIdForCopyOrMove($event)"
+<!-- <app-modal-copy [isOpenModalCopy]="isOpenModalCopy" (setFolderId)="getFolderByIdForCopyOrMove($event)"
     (closeModalEvent)="closeModalCopy()" (copyFileEvent)="copyFile()" (selectId)="getSelectIdFolder($event)"
-    [folders]="folder_copy_move" [paths]="paths_copy_move" [current_folder_name]="current_folder_name_copy_move"
+    [folders]="folder_copy_move" [paths]="paths_copy_move" 
+    [current_folder_name]="current_folder_name_copy_move"
     [number_of_elements]="selectedCheckItems.length">
 
-</app-modal-copy>
+</app-modal-copy> -->
+
+<app-all-action [isOpenModal]="isOpenModalAction" (closeModalEvent)="closeModalAction()" [modalTitle]="modalActionTitle"
+    [modalButtonAction]="modalButtonAction" [number_of_elements]="selectedCheckItems.length"
+    [selectedFolders]="selectedCheckItems">
+
+</app-all-action>
 
 <app-modal-users [users]="users" [isOpenModalUser]="isOpenModalUser" (closeModalEvent)="openUserModal()"
     [(usersSelect)]="usersSelect" (usersSelectChange)="onUsersSelectChange($event)">

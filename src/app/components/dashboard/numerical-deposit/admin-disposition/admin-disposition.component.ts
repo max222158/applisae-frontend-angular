@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { UserService } from '../../../../services/api/user/user.service';
 import { UtilsService } from '../../../../services/core/utils/utils.service';
+import { ContextMenuComponent } from '../../../commons/context-menu/context-menu/context-menu.component';
 
 @Component({
   selector: 'app-admin-disposition',
@@ -8,11 +9,16 @@ import { UtilsService } from '../../../../services/core/utils/utils.service';
   styleUrl: './admin-disposition.component.css'
 })
 export class AdminDispositionComponent {
+
+  @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
+
   @Input() disposition: string;
+  @Input() parsedId: number;
   @Input() folders: any[];
   @Input() documents: any[];
   @Input() perPage: number = 20
   @Input() totalItems: number = 0;
+  @Input() isFilesLoading: boolean = true;
   @Input() page: number = 1
   @Input() activeActionBtnIndex: number;
   @Input() selectedCheckItems: any[] = []; // Ajout de la propriété selectedCheckItems
@@ -105,4 +111,16 @@ export class AdminDispositionComponent {
     this.pageChange.emit(event)
     // Vous pouvez également effectuer d'autres opérations liées au changement de page ici
   }
+
+  selectedRowIndex: number | null = null;
+
+  onRightClick(event: MouseEvent, index: number): void {
+    event.preventDefault();  // Empêche le menu contextuel par défaut
+    this.selectedRowIndex = index;
+    this.parsedId = index
+    this.contextMenu.onRightClick(event);
+    console.log(`Ligne sélectionnée : ${index}`);
+  }
+
+
 }

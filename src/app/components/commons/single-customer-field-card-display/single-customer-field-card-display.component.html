@@ -1,0 +1,14 @@
+<div class="flex-user">
+    <div class="flex1 ml-2  ">
+        <input type="checkbox" class="mr-1 " (change)="onCheckboxChange($event)" [checked]="isChecked$ | async" name="" id="">
+        <div class="circle">
+            <img src="/assets/images/7729914-min.png" alt="" width="30px" height="30px" srcset="">
+        </div>
+        <div class="ml-2">
+
+            <p class="font-size-13 mb-0 font-weight-500">{{field.label}}</p>
+            <p class="font-size-14  mb-0" style="color: #ff2f2f;"><i>Type: {{field.type}}</i></p>
+        </div>
+    </div>
+    
+</div>

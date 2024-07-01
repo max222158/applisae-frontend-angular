@@ -1,0 +1,31 @@
+
+<div class="user-search-dropdown">
+    <div class="input-group mb-3 search-input-group">
+        <input type="text"
+        [formControl]="searchControl"
+         class="input-search form-control border-0" placeholder="Rechercher un groupe" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </div>
+      </div>
+
+      <div class="users-container" *ngIf="(totalItems$ | async) as totalItems">
+        <div *ngIf="(groups$ | async) as groups">
+        <app-single-group-card-display *ngFor="let group of groups |
+        paginate: { itemsPerPage: itemsPerPage, currentPage: page,totalItems: totalItems }"
+        [group]="group"
+        (checkboxChange)="onCheckboxChange($event)"
+        ></app-single-group-card-display>
+        <br>
+        <div class="col-12" >
+         
+                <pagination-controls (pageChange)="pageChanged($event)" previousLabel=""
+                    nextLabel=""></pagination-controls>
+
+        </div>
+
+      </div>
+    </div>
+
+
+</div>

@@ -93,3 +93,21 @@ input[type=checkbox] {
   border: 1px solid #bbbbbb3d;
   border-radius: 2px;
 }
+
+.is-invalid {
+  border-color: red !important;
+}
+
+.is-valid {
+  border-color: green !important;
+}
+
+.no-visible-all{
+  color: rgb(242, 80, 80);
+  font-style: italic;
+}
+
+.visi-all{
+  color: rgb(36, 135, 0);
+  font-style: italic;
+}

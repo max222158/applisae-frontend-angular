@@ -1,23 +1,30 @@
 <div class="container">
+
+    <!-- breadcrumb  -->
     <div style="display: flex;margin-bottom: 20px;background: #f3f3f3b8;padding: 5px;">
         <p style="color: rgb(0, 95, 37);
-    font-size: 16px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
-    padding-left: 10px;"><u><i class="fa-regular fa-folder-closed"></i> Fonds numériques</u> > </p>
+    font-size: 13px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
+    padding-left: 10px;"><u><i class="fa-regular fa-folder-closed font-size-16"></i> Fonds numériques</u> > </p>
         <p *ngFor="let path of paths" style="color:rgb(0, 95, 37);;
-    font-size: 16px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
-    padding-left: 10px;"><u><i class="fa-regular fa-folder-closed"></i> {{path.name}}</u> > </p>
+    font-size: 13px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
+    padding-left: 10px;"><u><i class="fa-regular fa-folder-closed font-size-16"></i> {{path.name}}</u> > </p>
         <p style="
         font-size: 14px; font-weight: 500; " class="mb-0"> {{detailsDocument.title}}</p>
 
     </div>
 
+        <!-- fin breadcrumb  -->
+
     <div style="display: flex;  margin-bottom: 20px; background: #ffffff00;">
         <i class="fa-regular fa-file-lines" style="font-size: 60px;"></i>
         <div class="ml-2">
-            <h4>{{detailsDocument.title}} <span class="span bg-success badge me-2">{{versionDocument}}.0</span></h4>
-            <div style="display: flex;">
-                <span class="font-weight-700">Auteur: </span> {{detailsDocument.author.name}}
-                <span class="font-weight-700">Ajouté le: </span> {{detailsDocument.created_at | customDateFormat}}
+            <h4>{{detailsDocument.title}} 
+                <span class="span bg-success badge me-2">{{versionDocument}}.0</span>
+                 <span *ngIf="detailsDocument.document_type == 2" class="span bg-warning badge me-2" style="background: #f14c4c !important;">Issue d'un courrier</span>  <span *ngIf="detailsDocument.is_copy == true"  class="span bg-success badge me-2" style="background: #002dff !important;">Fichier copié</span>
+                </h4>
+                                 <div style="display: flex;">
+                <span class="font-weight-600" >Auteur: </span> <span class="mr-4"> {{detailsDocument.author.name}}</span>
+                <span class="font-weight-600">Ajouté le: </span> <span class="mr-4">{{detailsDocument.created_at | customDateFormat}}</span>
 
             </div>
 
@@ -27,7 +34,7 @@
 
     <div class="row">
         <div class="col-md-8">
-            <div *ngIf="pdfSrc == '' " class="" style="background-color: #adadad; 
+            <div *ngIf="pdfSrc == '' " class="" style="background-color: #f8f8f8; 
             z-index: 10;display: flex; align-items:center; 
             justify-content: center; width: 100%; height: calc(100vh - 100px); ">
 
@@ -46,10 +53,12 @@
                 </video>
             </div>
 
-            <div *ngIf="pdfSrc !== ''" style="height: calc(100vh - 100px);background: #adadad;
+            <div *ngIf="pdfSrc !== ''" style="height: calc(100vh - 100px);background: #f8f8f8;
             display: flex;padding: 0px; overflow: hidden;">
 
                 <div style="display: flex;position: absolute; right: 10px; z-index: 4;">
+                    <button class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
+                        style="background: #1be700;"><i class="fa-solid fa-volume-high"></i></button>
 
                     <button class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
                         style="background: #730066;"><i class="fa-solid fa-minus"></i></button>
@@ -62,7 +71,7 @@
                 </div>
                 <!-- Votre contenu à afficher si l'extension est une extension d'image -->
                 <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [zoom]="zoom" [render-text]="true"
-                    [original-size]="false" style="width: 100%;height: 100vh;z-index: 2;background: #adadad;">
+                    [original-size]="false" style="width: 100%;height: 100vh;z-index: 2;background: #f8f8f8;">
 
                 </pdf-viewer>
             </div>
@@ -138,6 +147,7 @@
 (saveVersionEvent)="saveNewVersion($event)"
 [notifySuccessSaveVersion]="notifySuccessSaveNewVersion"
 [versionNumber]="versionDocument"
+[document_id]="document_id"
 ></app-add-new-version-document>
 
 <app-document-history

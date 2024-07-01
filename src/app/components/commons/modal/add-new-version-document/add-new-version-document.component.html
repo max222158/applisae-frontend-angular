@@ -1,51 +1,96 @@
 <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
     style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
-    <div class="modal-dialog  modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg scale-in" role="document">
         <div class="modal-content " style="">
-
+            <div class="modal-header">
+                <h5 id="exampleModalLiveLabel" class="modal-title">Versions du document</h5><button type="button"
+                    data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            </div>
             <div class="modal-body p-4 container" style="">
-                <h2 class="modal-title" id="exampleModalLiveLabel">Versions du document</h2>
-                <br>
-                <div style="width: 100%; overflow-x: scroll;">
-                    <button class="btn mr-2" *ngFor="let number of getIterable(versionNumber)" 
-                    style="color:white;
-                        border: 1px solid #002f8c; border-radius: 10px; background: #002f8c;">
 
-                         Version {{number}}
-
-                    </button>
-                </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        <div (click)="fileInputSelect1.click()" class="flex1" style="width: 150px; height: 150px;
-                        justify-content: center; align-items: center;
-                        border: 1px solid #bbb; border-radius: 10px; background: #bbbbbb6a;">
-                            <div>
-                                <input type="file" (change)="onFileSelected($event)" id="file" #fileInputSelect1 hidden>
+                    <div class="col-md-6">
+                        <input type="file" (change)="onFileSelected($event)" id="file" #fileInputSelect1 hidden>
 
 
-                                <i class="fa-solid fa-circle-plus text-center" style="font-size: 50px;"></i>
-                                <p class="font-weight-500; font-size-16 mb-0 text-center">Cliquez-ici</p>
+                        <button (click)="fileInputSelect1.click()" class="btn btn-success"
+                            style="border:2px solid #aa00af">
+
+
+                            <i class="fa-solid fa-circle-plus text-center" style="font-size: 20px;"></i>
+                            Ajouter une nouvelle version
+
+                        </button>
+
+                        <div class="form-group mt-4">
+                            <label for="documentDescription">Description de cette version</label>
+                            <textarea class="form-control" [(ngModel)]="description" id="documentDescription" cols="30"
+                                rows="5"></textarea>
+                            <div class="mt-4">
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" checked type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio1" value="option1">
+                                    <label class="form-check-label ml-1" for="inlineRadio1">Version Majeure</label>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio2" value="option2">
+                                    <label class="form-check-label ml-1" for="inlineRadio2">Version Mineure</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="mt-4" *ngIf="(versionDocument$ | async) as versions">
+                            <hr>
+                            <div *ngFor="let version of versions; let i = index">
+                                <div class="flex1" style="justify-content: space-between;">
+                                    <div class="flex1" style="">
+
+                                        <i class="fa-regular fa-file-lines" style="font-size: 50px;"></i>
+                                        <div class="ml-2">
+                                            <p class="font-size-16 mb-0">{{version.name_file}}</p>
+                                            <p class="font-size-15 mb-0">
+                                                <span class="badge badge-warning" style="background: #005919;">Version
+                                                    {{version.version_number}}</span>
+                                            </p>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="dropdown" style="height: fit-content;">
+                                        <button class="btn" [class.show]="activeActionBtnIndex === i"
+                                            (click)="setActiveActionBtnIndex(i)" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-left"
+                                            [class.show]="activeActionBtnIndex === i"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#"><i class="fa-solid fa-pencil"></i> Revenir
+                                                à cette version </a>
+                                            <a class="dropdown-item" href="#"><i class="fa-solid fa-trash-can"></i>
+                                                Supprimer cette version</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="documentDescription">Description de cette version</label>
-                            <textarea class="form-control" [(ngModel)]="description" id="documentDescription" cols="30" rows="5"
-                                      ></textarea>
-                        </div>
-
 
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6" (click)="setActiveActionBtnIndex(-1)">
                         <pdf-viewer *ngIf="pdfSrc !== ''" [src]="pdfSrc" [render-text]="true" [original-size]="false"
-                            style="width: 100%;height: calc(100vh - 200px);z-index: 2;background: #4c4c4c; border: 1px solid #ebebeb;">
+                            style="width: 100%;height: 500px;z-index: 2;background: #4c4c4c; border: 1px solid #ebebeb;">
 
                         </pdf-viewer>
-                        <div *ngIf="pdfSrc == '' " class="card"
-                            style=" background-color: #0096880a; height: calc(100vh - 200px);">
+                        <div *ngIf="pdfSrc == '' " class="card" style=" background-color: #0096880a; height: 500px;">
 
 
-                 
+
                             <div class="card-body" style=" background-color: #ffffff00;">
 
                                 <h4 class="" style="position: absolute;">Prévusialiser le document</h4>
@@ -62,8 +107,7 @@
                                     <div>
                                         <div class="dropzone dz-clickable mt-4" style=" background-color: #ffffff00; ">
 
-                                            <div class="dz-message needsclick" style=""
-                                           >
+                                            <div class="dz-message needsclick" style="">
                                                 <div class="mb-3" style="text-align: center;">
                                                     <i style="color: #000000 !important;"
                                                         class="display-4 text-muted bx bxs-cloud-upload fa-solid fa-cloud-arrow-up"></i>
@@ -90,11 +134,10 @@
 
             </div>
             <div class="modal-footer">
-                <button (click)="saveVersion()" [disabled]="disabled"
-                class="btn btn-primary
+                <button (click)="saveVersion()" [disabled]="disabled" class="btn btn-primary
                 font-weight-700
                 mt-2 font-size-15">
-                    <span *ngIf="isSpinnerLoading"  class="spinner-border text-success" style="
+                    <span *ngIf="isSpinnerLoading" class="spinner-border text-success" style="
                     width: 20px;
                     height: 20px;
                 "></span> Envoyer</button>

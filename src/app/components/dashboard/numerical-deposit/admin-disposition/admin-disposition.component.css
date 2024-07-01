@@ -93,3 +93,20 @@ p{
     border: 1px solid #bbbbbb3d;
     border-radius: 2px;
   }
+
+  .selected{
+    background: #04c017;
+    color:white
+  }
+
+
+  .selected > td{
+ 
+    color:white
+  }
+
+  .spinner-loading-file{
+    font-size: 30px;
+    width: 85px;
+    height: 85px;
+}

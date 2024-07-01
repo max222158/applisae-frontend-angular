@@ -1,31 +1,33 @@
 <div class="container"> <!-- Right Sidebar -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Courriers</h4>
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">courriers</a></li>
+                        <li class="breadcrumb-item active">Boite de courriers</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class=" mb-3">
 
-        <div class="card">
+        <div class="card border-0">
             <div class="btn-toolbar p-3" role="toolbar">
-                <div class="btn-group me-2 mb-2 mb-sm-0">
-                    <button type="button" class="btn btn-primary waves-light waves-effect"><i
-                            class="fa fa-inbox"></i></button>
-                    <button type="button" class="btn btn-primary waves-light waves-effect"><i
-                            class="fa fa-exclamation-circle"></i></button>
-                    <button type="button" class="btn btn-primary waves-light waves-effect"><i
-                            class="far fa-trash-alt"></i></button>
-                </div>
-                <div class="btn-group me-2 mb-2 mb-sm-0">
-                    <button type="button" class="btn btn-primary waves-light waves-effect" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fa fa-folder"></i> <i class="mdi mdi-chevron-down ms-1"></i>
-                    </button>
-                </div>
 
 
-                <div class="btn-group me-2 mb-2 mb-sm-0">
-                    <button type="button" class="btn btn-primary waves-light waves-effect" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Plus<i class="mdi mdi-dots-vertical ms-2"></i>
-                    </button>
+                <button class="btn border-1 border-radius-20 mr-2 select-option-filter" style="background: #f6f8fa;">Tous les courriers</button>
+                
+                <button class="btn border-1 border-radius-20 mr-2" style="background: #f6f8fa;">Non lus</button>
 
-                </div>
+                <button class="btn border-1 border-radius-20 mr-2" style="background: #f6f8fa;">Que j'ai initiés</button>
+                
+                <button class="btn border-1 border-radius-20 mr-2" style="background: #f6f8fa;">Urgents</button>
+            
             </div>
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -58,7 +60,9 @@
                                     courrier.priority == 3 ? 'Très Urgente' :
                                     courrier.priority
                                     }}</span><span
-                                    style="font-weight: 500;  font-size: 16px;">{{courrier.subject}}</span>
+                                    style="font-weight: 500;  font-size: 16px;">{{courrier.subject}} 
+                                    <span *ngIf="courrier.position_in_workflow > 0" class="font-size-10 ml-2" style="color:#9e0086; margin-top:-5px; position:absolute">Workflow</span>
+                                 </span>
 
                                 <p class="mb-0">{{courrier.last_annotation | safeHtml |  slice:0:120 }}...</p>
                             </td>

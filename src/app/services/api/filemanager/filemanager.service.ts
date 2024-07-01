@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../../../constants/constants';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, map, switchMap } from 'rxjs';
 import { CsrfcookieService } from '../../core/utils/csrfcookie.service';
 
 @Injectable({
@@ -51,6 +51,11 @@ getFolderById1(id: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/file-manager/list-folder-by-id/`, formData,{withCredentials:true });
   }
 
+
+  getFolderAndFlesById(formData:any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/list-folder-by-id/`, formData,{withCredentials:true });
+  }
   getUserFolderByNameCategory(category: any): Observable<any> {
 
     return this.http.post(`${this.apiUrl}/file-manager/list-folder-by-user-category/`, category,{withCredentials:true });
@@ -79,6 +84,10 @@ getFolderById1(id: number): Observable<any> {
   copyFiles(formData:any): Observable<any> {
     return this.http.post(`${this.apiUrl}/file-manager/copy-file/`, formData,{withCredentials:true});
   }
+
+  moveFileAndFolder(formData:any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/file-manager/move-files-folders/`, formData,{withCredentials:true});
+  }
   deleteFileFolder(formData:any): Observable<any> {
     return this.http.post(`${this.apiUrl}/file-manager/delete-file/`, formData,{withCredentials:true});
   }
@@ -100,4 +109,55 @@ getFolderById1(id: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/file-manager/get-file-document/`, formData,  { withCredentials: true });
   }
   
+  sendListFilesAndFolder(formData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/send-list-files-and-folder/`, formData,  { withCredentials: true });
+  }
+
+  getAllVersionsByDocumentId(formData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/all-version-document/`, formData,  { withCredentials: true });
+  }
+
+
+
+  upload(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+
+    return this.http.post<any>(this.apiUrl, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(map((event: HttpEvent<any>) => {
+      switch (event.type) {
+        case HttpEventType.UploadProgress:
+          if (event.total !== undefined) {
+            const progress = Math.round(100 * event.loaded / event.total);
+            return { status: 'progress', message: progress };
+          } else {
+            return { status: 'progress', message: 'Calculating...' };
+          }
+
+        case HttpEventType.Response:
+          return { status: 'done', message: event.body };
+
+        default:
+          return `Unhandled event: ${event.type}`;
+      }
+    }));
+  }
+
+  sendPermissionListFilesAndFolder(formData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/add-permission-folder-document/`, formData,  { withCredentials: true });
+  }
+  getPermissionUsersGroupsByFolderId(formData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/get-permission-folder-users-group/`, formData,  { withCredentials: true });
+  }
+
+  getSingleDetailsFolderById(formData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/get-single-details-folder/`, formData,  { withCredentials: true });
+  }
 }

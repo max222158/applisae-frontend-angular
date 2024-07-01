@@ -16,3 +16,24 @@
 
     background: #a8ffae;
 }
+
+.header {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(227,251,255,1) 0%, rgba(247,230,255,1) 100%);
+
+}
+.header-icon {
+    font-size: 24px;
+    margin-right: 20px;
+}
+
+
+.form-control, .form-select {
+
+    border: 2px solid #627cff;
+}
