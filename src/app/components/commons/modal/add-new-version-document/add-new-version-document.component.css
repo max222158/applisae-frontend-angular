@@ -1,4 +1,4 @@
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
     .modal-lg, .modal-xl {
         --bs-modal-width: 90% !important;
         margin-top: 0px;
@@ -11,4 +11,53 @@
 .modal-lg[_ngcontent-ng-c3429350579], .modal-xl[_ngcontent-ng-c3429350579] {
     --bs-modal-width: 90% !important;
     margin-top: 0px;
+} */
+
+
+/* styles.css */
+
+/* styles.css ou dans les styles du composant */
+@keyframes scaleIn {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scaleOut {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
+  
+  .scale-in {
+    animation: scaleIn 0.3s forwards;
+  }
+  
+  .scale-out {
+    animation: scaleOut 0.3s forwards;
+  }
+  .form-check-input[type=radio] {
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+}
+.form-check-label{
+    font-size: 16px;
+}
+
+.form-check-input[type=radio] {
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid #014a12;
 }

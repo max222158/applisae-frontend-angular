@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FilemanagerService } from '../../../services/api/filemanager/filemanager.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { API_URL } from '../../../constants/constants';
 import { Router } from '@angular/router';
@@ -11,6 +11,13 @@ import { clearInput } from '../../../helpers/helper';
 import { identifierName } from '@angular/compiler';
 import { AuthService } from '../../../services/api/auth/auth.service';
 import { CustomfieldService } from '../../../services/api/customfield/customfield.service';
+import { ContextMenuComponent } from '../../commons/context-menu/context-menu/context-menu.component';
+import { AppState } from '../../../state/app.state';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { isCopyFolderAndFilesSuccess, moveFolderAndFilesSuccess } from '../../../state/selectors/numerical-deposit/numerical-deposite.selectors';
+import { resetFolderAndFiles, resetIsSuccessCopyState, resetIsSuccessMoveState } from '../../../state/actions/numerical-deposit/numerical-deposite.actions';
+import { CustomerFieldsSelectionService } from '../../../services/shared/customer-fields/customer-fields.service';
 
 
 @Component({
@@ -19,6 +26,7 @@ import { CustomfieldService } from '../../../services/api/customfield/customfiel
   styleUrl: './numerical-deposit.component.css'
 })
 export class NumericalDepositComponent {
+  @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
 
   isOpenModalFolder:boolean = false
   isOpenModalUploadFile:boolean = false
@@ -61,25 +69,80 @@ export class NumericalDepositComponent {
   groupSelect: any[] = []
   groupUser: any[] = []
   customerFields:any[] = []
+  modalActionTitle:string = ''
+  modalButtonAction:string = ''
+  isActionMoveSuccess$: Observable<boolean>; // Is  move elements success
+  files: File[] = [];
+  progress: number[] = [];
+  uploadStatus: string[] = []; 
+  allUploadsSuccessful: boolean = false; 
+  isFilesAndFolderLoading: boolean = true // Si les fichiers et les dossiers sont entrain de se charger
+  customerFieldsNewFolderWithValues$: Observable<any[]>
+  customerFieldsNewFolderWithValues: any[]; // Non observable
+
+
+  isCopySuccess$: Observable<boolean>; // Is copy elements success
+  private subscriptions: Subscription = new Subscription();
   ngOnInit() {
 
     let permissions = this.authService.getUser().permissions
 
+
+    // Action is moving a file and folder selection
+
+    const subscription2 = this.isActionMoveSuccess$.subscribe((action) => {
+      console.log('is action success ---- ',action); // Devrait imprimer true ou false
+      if(action == true){
+
+        this.toastr.success('Sélection déplacée avec succès','',{positionClass:'toast-bottom-right'})
+        this.openFolderById(this.folder_id,this.current_folder_name)
+        this.store.dispatch(resetIsSuccessMoveState());
+        this.store.dispatch(resetFolderAndFiles());
+        this.closeModalAction()
+      }
+
+    });
+
+    
+    const subscription1 = this.isCopySuccess$.subscribe(action => {
+      if(action == true){
+        this.toastr.success('Sélection copiée avec succès','',{positionClass:'toast-bottom-right'})
+        this.openFolderById(this.folder_id,this.current_folder_name)
+        this.closeModalAction()
+        this.store.dispatch(resetIsSuccessCopyState());
+        this.store.dispatch(resetFolderAndFiles());
+      }
+    });
+
+    this.customerFieldsNewFolderWithValues$ =  this.customerFieldsSelectionService.selectedfieldsWithValuesEntries$
+    
+    // Pour recuperer les valeurs des champs personalisés du dossier a créé global state
+    this.subscriptions.add(
+      this.customerFieldsNewFolderWithValues$.subscribe(fields => {
+        
+        this.customerFieldsNewFolderWithValues = fields
+        
+        console.log('fields with values ---- ', fields);
+      })
+    );
+    this.subscriptions.add(subscription1);
+    this.subscriptions.add(subscription2);
   
     if(permissions.some((permission: { code: string; }) => permission.code === "all_permissions")){
 
       this.isSimpleUser = false
     }
 
-
     this.folderForm = this.fb.group({
-      name: [''],
-      description:[''],
-      identifiant:['']
- 
-       // Add other form controls as needed
-     });
+      name: ['', [Validators.required]],
+      description: [''],
+      identifiant: ['', [Validators.required]]
+    });
 
+    // Marquer les champs comme touchés dès l'initialisation
+    this.folderForm.get('name')?.markAsTouched();
+    this.folderForm.get('identifiant')?.markAsTouched();
+  
      this.fileManagerService.getFolderById(0,this.page).subscribe({
       next: (response: any) => {
         this.isLoading = false;
@@ -87,7 +150,7 @@ export class NumericalDepositComponent {
         this.folder_copy_move = response.results.folders
         this.documents = response.results.files
         this.totalItems = response.count
- 
+        this.isFilesAndFolderLoading = false
 
         console.log('Réponse de l\'API:', response);
 
@@ -108,54 +171,66 @@ export class NumericalDepositComponent {
     this.getCustomersFields()
 
   }
+
+
+    ngOnDestroy() {
+    // Unsubscribe from all subscriptions
+    this.subscriptions.unsubscribe();
+    // Reset the copy state when the component is destroyed
+    this.store.dispatch(resetIsSuccessCopyState());
+    this.store.dispatch(resetIsSuccessMoveState());
+  }
  
   constructor(private http: HttpClient,private router:Router,private customfieldService: CustomfieldService,
      private toastr: ToastrService,private fb: FormBuilder,private userService: UserService, 
-     private fileManagerService: FilemanagerService,private utilsService: UtilsService, private authService:AuthService) { }
+     private fileManagerService: FilemanagerService, private store: Store<AppState>,private customerFieldsSelectionService: CustomerFieldsSelectionService,
+     private utilsService: UtilsService, private authService:AuthService) { 
+
+
+      this.isActionMoveSuccess$ = this.store.select(moveFolderAndFilesSuccess);
+      this.isCopySuccess$ = this.store.select(isCopyFolderAndFilesSuccess);
+     }
  
 
-  onCreateFolder() {
-
-    if(this.folderForm.value.name == "" || this.folderForm.value.identifiant == ""){
-      this.toastr.warning('Le nom et l\'identifiant du dossier ne peuvent pas etre vide!','Dossier');
+  /**
+   * Handles the creation of a new folder by validating form inputs, collecting user and group IDs,
+   * and sending a request to the backend service. Provides feedback to the user based on the success or failure of the operation.
+   */
+  onCreateFolder(): void {
+    if (this.folderForm.value.name === "" || this.folderForm.value.identifiant === "") {
+      this.toastr.warning('Le nom et l\'identifiant du dossier ne peuvent pas être vide!', 'Dossier');
       return;
     }
 
-    // Id users select for share folder
     const idsUser = this.usersSelect.map(item => item.id);
-    console.log(idsUser); // [21, 22, 23]
-
-        // Id users select for share folder
     const idsGroupUser = this.groupSelect.map(item => item.id);
-    console.log(idsGroupUser); // [21, 22, 23]
-    this.is_create_folder = true
-
+    this.is_create_folder = true;
     this.isLoading = true;
 
-    alert(this.path) 
+    const formData = {
+      name: this.folderForm.value.name,
+      identifiant: this.folderForm.value.identifiant,
+      parent_folder: this.folder_id,
+      path: this.path,
+      description: this.folderForm.value.description,
+      group_ids: JSON.stringify(idsGroupUser),
+      user_ids: JSON.stringify(idsUser),
+      customer_field: JSON.stringify(this.customerFieldsNewFolderWithValues),
+      folder_visibility: this.isfoderVisibleAllChecked
+    };
 
-    const formData = {name: this.folderForm.value.name, identifiant: this.folderForm.value.identifiant,
-       parent_folder:this.folder_id,path:this.path,description:this.folderForm.value.description,
-       group_ids:JSON.stringify(idsGroupUser),user_ids:JSON.stringify(idsUser)}
-      console.log(formData)
-      this.fileManagerService.createFolder(formData).subscribe({
+    this.fileManagerService.createFolder(formData).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-
-        this.toastr.success('Enregistré avec succès!','Dossier');
-        console.log('Réponse de l\'API:', response);
-        this.folderForm.value.name = ''
-        this.folderForm.value.description = ''
-
-        this.refreshCurrentFolder(this.folder_id,this.current_folder_name)
-        clearInput(this.folderForm, ['identifiant','name', 'description']);
-        // Ajoutez ici la gestion de la réponse de l'API
+        this.toastr.success('Enregistré avec succès!', 'Dossier');
+        this.folderForm.patchValue({ name: '', description: '' });
+        this.refreshCurrentFolder(this.folder_id, this.current_folder_name);
+        clearInput(this.folderForm, ['identifiant', 'name', 'description']);
       },
       error: (error: any) => {
         this.isLoading = false;
-        this.toastr.error( 'Lors de l\'enregistrement! Veuillez réésayer','Erreur');
+        this.toastr.error('Lors de l\'enregistrement! Veuillez réessayer', 'Erreur');
         console.error('Erreur lors de la requête vers l\'API:', error);
-        // Ajoutez ici la gestion des erreurs
       }
     });
   }
@@ -188,6 +263,7 @@ export class NumericalDepositComponent {
     console.log('Updated groupSelectChange:', this.groupSelect);
   }
   openFolderById(id:number,name:string){
+    this.isFilesAndFolderLoading = true
     this.setActiveActionBtnIndex(-1)
     this.folder_id = id
 
@@ -212,11 +288,12 @@ export class NumericalDepositComponent {
         this.totalItems = response.count
         console.log('Réponse de l\'API:', response);
         this.current_folder_name = name
+        this.isFilesAndFolderLoading = false
 
         // Ajoutez ici la gestion de la réponse de l'API
       },
       error: (error: any) => {
-        
+        this.isFilesAndFolderLoading = false
         console.error('Erreur lors de la requête vers l\'API:', error);
         // Ajoutez ici la gestion des erreurs
       }
@@ -228,6 +305,7 @@ export class NumericalDepositComponent {
   }
 
   openHomeUserFolder(id:number,categ:string){
+    this.isFilesAndFolderLoading = true
     this.setActiveActionBtnIndex(-1)
     this.folder_id = id
 
@@ -247,14 +325,16 @@ export class NumericalDepositComponent {
         this.folder = response.results.folders
         this.documents = response.results.files
 
+
         console.log('Réponse de l\'API:', response);
         this.paths_user.push({id:0,name:categ})
-
+        this.isFilesAndFolderLoading = false
         // Ajoutez ici la gestion de la réponse de l'API
       },
       error: (error: any) => {
         
         console.error('Erreur lors de la requête vers l\'API:', error);
+        this.isFilesAndFolderLoading = false
         // Ajoutez ici la gestion des erreurs
       }
     });
@@ -326,9 +406,9 @@ export class NumericalDepositComponent {
       }
     });
   }
-  getPathFolder(id:number,name:string){
+  getFilesAndFoldersByPath(id:number,name:string){
     this.folder_id = id
-
+    this.isFilesAndFolderLoading = true
     this.fileManagerService.getFolderById(id,this.page).subscribe({
       next: (response: any) => {
         this.isLoading = false;
@@ -344,12 +424,14 @@ export class NumericalDepositComponent {
 
         }
         this.current_folder_name = name
+        this.isFilesAndFolderLoading = false
 
         // Ajoutez ici la gestion de la réponse de l'API
       },
       error: (error: any) => {
         
         console.error('Erreur lors de la requête vers l\'API:', error);
+        this.isFilesAndFolderLoading = false
         // Ajoutez ici la gestion des erreurs
       }
     });
@@ -380,12 +462,8 @@ export class NumericalDepositComponent {
   }
 
   openUploadFileModal(value:boolean){
-  
-    if(value== false){
-      this.files_uploader = []
-    }
 
-    if(this.files_uploader.length == 0){
+    if(this.files.length == 0){
       this.isOpenModalUploadFile = false
     }else{
       this.isOpenModalUploadFile = value;
@@ -452,42 +530,7 @@ openGroupUserModal(){
     this.openUploadFileModal(true)
   }
 
-  uploadFiles() {
 
-    const formData = new FormData();
-    this.files_uploader.forEach(({ file, id }) => {
-      formData.append('file', file);
-      formData.append('idfolder', this.folder_id.toString());
-      formData.append('path', this.path);
-      this.uploadProgress[id] = 0;
-
-      const uploadReq = this.http.post<any>(`${this.apiUrl}/file-manager/upload-multiple-files/`, formData, {
-        reportProgress: true,
-        observe: 'events',
-        withCredentials:true
-      });
-
-      uploadReq.subscribe((event: HttpEvent<any>) => {
-        if (event.type === HttpEventType.UploadProgress && event.total) {
-          this.uploadProgress[id] = Math.round((100 * event.loaded) / event.total);
-        } else if (event.type === HttpEventType.Response) {
-          this.nber_of_response++
-          
-
-          if(this.nber_of_response == this.files_uploader.length){
-            alert(this.nber_of_response+" I am OK")
-            this.openUploadFileModal(false)
-            this.files_uploader = []
-          }
-          // File uploaded successfully
-        }
-      });
-    });
-
-
-    
-
-  }
   removeUser(id: number) {
 
     this.usersSelect = this.usersSelect.filter(item => item.id !== id);
@@ -542,77 +585,26 @@ removeUserGroup(id: number) {
 
 
   // action copy
-  isOpenModalCopy = false;
+  isOpenModalAction = false;
 
-  openModalCopy() {
-    this.isOpenModalCopy = true;
+  openModalAction(titleModal:string,modalButtonAction:string) {
+
+    this.modalActionTitle = titleModal
+    
+    this.modalButtonAction = modalButtonAction
+
+    this.isOpenModalAction = true;
   }
 
-  closeModalCopy() {
-    this.isOpenModalCopy = false;
+  closeModalAction() {
+    this.isOpenModalAction = false;
   }
 
-  getFolderByIdForCopyOrMove(event: {id: number, name: string}) {
-    this.setActiveActionBtnIndex(-1)
-
-
-
-
-    this.fileManagerService.getFolderById(event.id,this.page).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.folder_copy_move = response.results.folders
-        this.paths_copy_move = response.path
-        console.log('Réponse de l\'API:', response);
-        this.current_folder_name_copy_move = event.name
-
-        // Ajoutez ici la gestion de la réponse de l'API
-      },
-      error: (error: any) => {
-        
-        console.error('Erreur lors de la requête vers l\'API:', error);
-        // Ajoutez ici la gestion des erreurs
-      }
-    });
-
-
-    // Logique pour mettre à jour la liste en fonction de idFolder
-    // Par exemple, fetch les sous-dossiers de ce dossier
-    console.log('Folder selected with ID:', event.id);
-    // Implémentez ici la logique pour changer la liste des dossiers
-  }
 
   //send selectionne to backend
   getSelectIdFolder(id:number){
     this.folder_copy_move_id = id
   }
-  copyFile(){
-
-    const formData = new FormData();
-    formData.append('folders_files', JSON.stringify(this.selectedCheckItems));
-    formData.append('id', this.folder_copy_move_id.toString());
-
-    this.fileManagerService.copyFiles(formData).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-
-        this.toastr.success('Effectué avec succès!','Opération');
-        console.log('Réponse de l\'API:', response);
-        this.closeModalCopy()
-        this.refreshCurrentFolder(this.folder_id,this.current_folder_name)
-        // Ajoutez ici la gestion de la réponse de l'API
-      },
-      error: (error: any) => {
-        this.isLoading = false;
-        this.toastr.error( 'Lors de l\'enregistrement! Veuillez réésayer','Erreur');
-        console.error('Erreur lors de la requête vers l\'API:', error);
-        // Ajoutez ici la gestion des erreurs
-      }
-    });
-
-
-  }
-
 
 
   //////////////////// Delete folders and files //////////////
@@ -642,4 +634,76 @@ removeUserGroup(id: number) {
     });  
   }
 
+
+
+
+  onFilesSelected(event: any) {
+    this.files = event.target.files;
+    this.progress = new Array(this.files.length).fill(0);
+    this.uploadStatus = new Array(this.files.length).fill('pending'); // Initialize the status array
+    this.openUploadFileModal(true)
+    this.uploadFiless()
+ 
+  }
+
+  uploadFiless() {
+    for (let i = 0; i < this.files.length; i++) {
+      this.uploadFile(this.files[i], i);
+    }
+
+  }
+
+  uploadFile(file: File, index: number) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('idfolder', this.folder_id.toString());
+    formData.append('path', this.path);
+
+   
+
+    this.http.post(`${this.apiUrl}/upload/`, formData, {
+      reportProgress: true,
+      observe: 'events',
+        withCredentials:true
+    }).subscribe((event: HttpEvent<any>) => {
+      if (event.type === HttpEventType.UploadProgress) {
+        if (event.total) {
+          this.progress[index] = Math.round(100 * (event.loaded / event.total));
+        }
+      } else if (event instanceof HttpResponse) {
+        console.log('File uploaded successfully!');
+        this.uploadStatus[index] = 'success'; 
+        this.checkAllUploadsStatus(); 
+      }
+    }, error => {
+      this.uploadStatus[index] = 'error';
+      console.error('Error uploading file:', error);
+      this.checkAllUploadsStatus();
+    });
+  }
+
+  checkAllUploadsStatus() {
+    if (this.uploadStatus.every(status => status === 'success')) {
+      this.allUploadsSuccessful = true;
+      this.openUploadFileModal(false)
+      this.refreshCurrentFolder(this.folder_id,this.current_folder_name)
+    } else if (this.uploadStatus.some(status => status === 'error')) {
+      this.allUploadsSuccessful = false;
+      this.refreshCurrentFolder(this.folder_id,this.current_folder_name)
+    }
+  }
+
+  isfoderVisibleAllChecked:boolean = false
+  visibilityFolderChange(): void {
+
+    
+    this.isfoderVisibleAllChecked = !this.isfoderVisibleAllChecked;
+    
+    // You can use checkbox.checked to get the current state
+    // Instead of using alert, you might want to update your component's state or call a service
+    // For example:
+    // this.updateVisibility(checkbox.checked);
+  }
 }
+
+

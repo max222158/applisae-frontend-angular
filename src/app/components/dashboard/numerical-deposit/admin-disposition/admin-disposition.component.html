@@ -1,4 +1,12 @@
-<div *ngIf="disposition == 'mosaic'" style="width: 100%;" class="row">
+  <!-- Disposition en mosaic -->
+  <div class="flex1 item-center justify-center" *ngIf="isFilesLoading" style="height: calc(100vh - 300px);">
+    <div class="spinner-border text-primary spinner-loading-file" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div class="" *ngIf="!isFilesLoading">
+
+  <div *ngIf="disposition == 'mosaic'" style="width: 100%;" class="row">
     <div *ngFor="let folder of folders" class="hover-effect"
       style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;" 
       [ngClass]="{'selected': isSelected({id: folder.id, type: 'folder'})}">
@@ -22,6 +30,8 @@
       <p>{{ document.title }}</p>
     </div>
   </div>
+
+  <!-- Disposition en liste -->
   
   <div *ngIf="disposition == 'list'" style="width: 100%;" class="row">
     <table class="table table-hover" style="margin-bottom: 0px;">
@@ -32,12 +42,18 @@
           <th scope="col" style="width: 100px;"><i class="fa-solid fa-arrow-down-wide-short"></i> Taille </th>
           <th scope="col" style="width: 150px;"><i class="fa-solid fa-arrow-down-wide-short"></i> Ajouté par</th>
           <th scope="col" style="width: 150px;"><i class="fa-solid fa-arrow-down-wide-short"></i> Date </th>
-          <th scope="col" style="width: 15px"></th>
+
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let folder of folders | paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }; let i = index" style="cursor: pointer;" 
-          [ngClass]="{'selected': isSelected({id: folder.id, type: 'folder'})}">
+        <tr *ngFor="let folder of folders |
+         paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  };
+          let i = index" style="cursor: pointer;" 
+          [ngClass]="{'selected': isSelected({id: folder.id, type: 'folder'})}"
+          
+          (contextmenu)="onRightClick($event, folder.id)"
+          [class.selected]="folder.id === selectedRowIndex"
+          >
           <th scope="row" style="vertical-align: middle;">
             <input type="checkbox" (change)="onCheckboxChange($event, {id: folder.id, type: 'folder'})"
               style="margin-right: 10px;">
@@ -50,26 +66,14 @@
           <td></td>
           <td>{{ folder?.created_by?.name || '' }}</td>
           <td>{{ folder.created_at | customDateFormat }}</td>
-          <td>
-            <div class="dropdown">
-              <button class="btn" [class.show]="activeActionBtnIndex === i" (click)="setActiveActionBtnIndex(i)" 
-                type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-v"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end" [class.show]="activeActionBtnIndex === i"  
-                aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-pencil"></i> Modifier</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-copy"></i> Copier</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-circle-arrow-right"></i> Déplacer</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-lock"></i> Gérer les accès</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-trash-can"></i> Supprimer</a>
-              </div>
-            </div>
-          </td>
+
         </tr>
   
         <tr *ngFor="let document of documents; let i = index" style="cursor: pointer;" 
-          [ngClass]="{'selected': isSelected({id: document.id, type: 'file'})}">
+          [ngClass]="{'selected': isSelected({id: document.id, type: 'file'})}"
+          
+          
+          >
           <th scope="row" style="vertical-align: middle;">
             <input type="checkbox" style="margin-right: 10px;" (change)="onCheckboxChange($event, {id: document.id, type: 'file'})">
             <i [class]="getIconName(document.extension)" style="font-size: 25px;" [ngStyle]="{ color: getColor(document.extension) }"></i>
@@ -77,35 +81,17 @@
           <td style="word-break: break-word; font-size: 16px; vertical-align: middle;" (click)="gotoDetailsDocument(document.id)">
             <p>{{ document.title }}</p>
           </td>
-          <td>150 ko</td>
+          <td>{{document.size  | byteConverter }}</td>
           <td>{{ document?.author?.name }}</td>
           <td>{{ document.created_at | customDateFormat }}</td>
-          <td>
-            <div class="dropdown">
-              <button class="btn" [class.show]="activeActionBtnIndex === i + folders.length" 
-                (click)="setActiveActionBtnIndex(i + folders.length)" type="button" id="dropdownMenuButton" 
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-v"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end" [class.show]="activeActionBtnIndex === i + folders.length" 
-                aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-pencil"></i> Modifier</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-copy"></i> Copier</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-circle-arrow-right"></i> Déplacer</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-lock"></i> Gérer les accès</a>
-                <a class="dropdown-item" href="#"><i class="fa-solid fa-trash-can"></i> Supprimer</a>
-              </div>
-            </div>
-          </td>
+
         </tr>
       </tbody>
     </table>
   </div>
   <div class="col-12">
-  <pagination-controls 
-    (pageChange)="pageChanged($event)"
-    previousLabel="Précédent"
-    nextLabel="Suivant"
-    ></pagination-controls>
+
+</div>
 </div>
   
+<app-context-menu [idParsed]="parsedId"></app-context-menu>

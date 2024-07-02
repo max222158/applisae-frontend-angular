@@ -1,0 +1,135 @@
+<div class="container">
+  <div class="flex1">
+    <p class="font-size-12 mr-2">Fonds document  /  </p>
+    <p class="font-size-12">Permissions  /  </p>  <p>{{detailsSingleFolder.name}}</p>
+  </div>
+
+  <h3>Permissions pour le dossier <span style="color:green">{{detailsSingleFolder.name}} </span></h3>
+
+  <div class="flex1 mb-4">
+    <i class="fa-solid fa-folder mr-2 font-size-25" style="color:#65c930;font-size:30px"></i>
+    <p class="font-size-15 mb-0" *ngFor="let path of folderPath"> {{path.name}} / </p> 
+    <p class="font-size-15 font-weigther-500 mb-0"> {{detailsSingleFolder.name}} </p>
+
+  </div>
+
+  <div class="flex1">
+    <div>
+      <button class="btn add-user mr-4" (click)="setIsUsersBlockVisible()">
+        <i class="fa-solid fa-user-plus"></i>
+        Ajouter des utilisateurs
+      </button>
+      <div *ngIf="usersBlockVisible">
+        <app-users-dropdown-search></app-users-dropdown-search>
+      </div>
+    </div>
+    <div>
+      <button class="btn add-groupe" (click)="setIsGroupsBlockVisible()">
+        <i class="fa-solid fa-user-plus"></i> Ajouter des groupes
+      </button>
+
+      <div *ngIf="groupsBlockVisible">
+        <app-group-dropdown-search></app-group-dropdown-search>
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-success btn-save ml-2" (click)="sendData()">
+        Enregistrer
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="user_groupe_disposition col-md-6">
+      <h3 class="p-3">Les utilisateurs sélectionnés</h3>
+
+      <div>
+        <div
+          *ngIf="isLoading"
+          class="spinner-border text-success"
+          role="status"
+        >
+          <span class="sr-only"></span>
+        </div>
+        <div class="table-responsive" *ngIf="!isLoading">
+          <table class="table align-middle mb-0">
+            <div>
+              <table class="table">
+                <tbody *ngIf="selectedUsers$ | async as selectedUsers">
+                  <tr *ngFor="let user of selectedUsers">
+                    <td>
+                      <div class="ms-3">
+                        <p class="fw-bold mb-0">{{ user.name }}</p>
+                        <p class="mb-0">{{ user.email }}</p>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="mb-0">Permission</p>
+                      <select
+                        [value]="user.permission"
+                        (change)="updateUserPermission(user.id, $event)"
+                      >
+                        <option value="Reader">Lecteur</option>
+                        <option value="Collaborator">Collaborateur</option>
+
+                        <option value="Coordinator">Coordinateur</option>
+                        <option value="Editor">Editeur</option>
+                      </select>
+                    </td>
+                    <td>
+                      <button
+                        (click)="removeUser(user)"
+                        class="btn btn-link btn-sm btn-rounded"
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="user_groupe_disposition col-md-6">
+      <h3 class="p-3">Les groupes sélectionnés</h3>
+
+      <div>
+        <div
+          *ngIf="isLoading"
+          class="spinner-border text-success"
+          role="status"
+        >
+          <span class="sr-only"></span>
+        </div>
+        <div class="table-responsive" *ngIf="!isLoading">
+          <table class="table align-middle mb-0">
+            <div>
+              <table class="table">
+                <tbody *ngIf="selectedGroups$ | async as selectedGroups">
+                  <tr *ngFor="let group of selectedGroups">
+                    <td>
+                      <div class="ms-3">
+                        <p class="fw-bold mb-0">{{ group.name }}</p>
+                      </div>
+                    </td>
+
+                    <td>
+                      <button
+                        (click)="removeGroup(group)"
+                        class="btn btn-link btn-sm btn-rounded"
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

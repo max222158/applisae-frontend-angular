@@ -1,0 +1,32 @@
+
+<div class="user-search-dropdown">
+    <div class="input-group mb-3 search-input-group">
+        <input type="text"
+        [formControl]="searchControl"
+         class="input-search form-control border-0" placeholder="Rechercher un utilisateur" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </div>
+      </div>
+
+      <div class="users-container" *ngIf="(totalItems$ | async) as totalItems">
+        <div *ngIf="(users$ | async) as users">
+        <app-single-user *ngFor="let user of users |
+        paginate: { itemsPerPage: itemsPerPage, currentPage: page,totalItems: totalItems }"
+        [user]="user"
+        [name]="user.name"
+        (checkboxChange)="onCheckboxChange($event)"
+        ></app-single-user>
+        <br>
+        <div class="col-12" >
+         
+                <pagination-controls (pageChange)="pageChanged($event)" previousLabel=""
+                    nextLabel=""></pagination-controls>
+
+        </div>
+
+      </div>
+    </div>
+
+
+</div>

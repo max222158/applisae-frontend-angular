@@ -1,0 +1,14 @@
+<div class="flex-user">
+    <div class="flex1 ml-2  ">
+        <input type="checkbox" class="mr-1 " (change)="onCheckboxChange($event)" [checked]="isChecked$ | async" name="" id="">
+        <div class="circle">
+            {{ initial }}
+        </div>
+        <div class="ml-2">
+
+            <p class="font-size-13 mb-0 font-weight-500">{{user.name}}</p>
+            <p class="font-size-13  mb-0">{{user.email}}</p>
+        </div>
+    </div>
+    
+</div>

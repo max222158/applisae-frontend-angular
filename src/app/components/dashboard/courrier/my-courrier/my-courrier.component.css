@@ -3,3 +3,7 @@
     background-color: transparent;
 }
 
+.select-option-filter{
+    background: #deebff !important;
+    border: 2px solid blue  !important;
+}

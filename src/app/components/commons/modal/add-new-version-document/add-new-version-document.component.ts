@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { ApiService } from '../../../../services/api.service';
+import { AppState } from '../../../../state/app.state';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { getVersionByDocumentIdResponse } from '../../../../state/selectors/numerical-deposit/numerical-deposite.selectors';
+import { getAllVersionDocumentById, getAllVersionDocumentByIdSuccess } from '../../../../state/actions/numerical-deposit/numerical-deposite.actions';
 
 @Component({
   selector: 'app-add-new-version-document',
@@ -8,11 +13,17 @@ import { ApiService } from '../../../../services/api.service';
   styleUrl: './add-new-version-document.component.css'
 })
 export class AddNewVersionDocumentComponent {
-  constructor( private wordToPdfService: ApiService) { }
+  constructor( private wordToPdfService: ApiService, private store: Store<AppState>) {
+
+    
+    this.versionDocument$ = this.store.select(getVersionByDocumentIdResponse);
+   }
 
   @Input() isOpenModal:boolean = false
+  versionDocument$: Observable<any[]>;
   @Output() saveVersionEvent = new EventEmitter<{ selectedFile:  File | null , description: string }>();
   @Input() notifySuccessSaveVersion: string;
+  @Input() activeActionBtnIndex: number;
   pdfSrc: SafeResourceUrl | string | Uint8Array   = '';
   array_buffer_pdfsrc: ArrayBuffer
 
@@ -24,9 +35,19 @@ export class AddNewVersionDocumentComponent {
   isFileLoading:boolean = false
   isSpinnerLoading:boolean = false
   disabled:boolean = true
+  @Input() document_id:number
 
   @Output() closeModalEvent = new EventEmitter<void>();
 
+
+  ngOnInit(): void {
+
+    let formData = new FormData()
+    formData.append('document_id',this.document_id.toString())
+
+    this.store.dispatch(getAllVersionDocumentById({ formData }));
+
+  }
     closeModal() {
       this.closeModalEvent.emit();
     }
@@ -123,6 +144,12 @@ export class AddNewVersionDocumentComponent {
     this.isSpinnerLoading = false
     console.log('Parent function executed. Data received:', this.notifySuccessSaveVersion);
   }
+
+  
+  setActiveActionBtnIndex(index: number) {
+    this.activeActionBtnIndex = index
+  }
+  
   
   
 }

@@ -71,6 +71,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
 .justify-center{
     justify-content: center;
 }
+
+.heigth-100vh{
+    height:100vh
+}
+
 hr:not([size]) {
     height: 1px;
     color: #7d7d7d26;
@@ -97,3 +102,65 @@ body[data-sidebar=dark] .navbar-brand-box {
     background: #30a3ff !important;
     border-bottom: 0px solid #393938 !important;
   }
+
+
+  .border-0{
+
+    border:0px solid !important
+  }
+
+  
+  .border-1{
+
+    border:1px solid #bbb 
+  }
+
+
+  .border-radius-round{
+    border-radius: 50%;
+  }
+
+  .border-radius-10{
+    border-radius: 10px;
+  }
+
+
+  .border-radius-20{
+    border-radius: 20px;
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scaleOut {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
+  
+  .scale-in {
+    animation: scaleIn 0.1s forwards;
+  }
+  
+  .scale-out {
+    animation: scaleOut 0.3s forwards;
+  }
+  
+
+  .app-search .form-control {
+    border-radius: 6px;
+    width: 500px;
+}

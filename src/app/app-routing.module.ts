@@ -29,6 +29,8 @@ import { DetailsWorkflowComponent } from './components/dashboard/workflow/for-do
 import { MyTaskComponent } from './components/dashboard/workflow/for-document/tasks/my-task/my-task.component';
 import { DetailsTaskComponent } from './components/dashboard/workflow/for-document/tasks/details-task/details-task.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
+import { AutomatingComponent } from './components/dashboard/automating/automating.component';
+import { FolderPermissionsComponent } from './components/dashboard/permissions/folder-permissions/folder-permissions/folder-permissions.component';
 
 
 
@@ -81,7 +83,8 @@ const routes: Routes = [{
               
                     { path: '',  component: NumericalDepositComponent},
 
-                    { path: 'details-document/:id', component: DetailsFileComponent}
+                    { path: 'details-document/:id', component: DetailsFileComponent},
+                    {path: 'permissions/dossier/:folder', component: FolderPermissionsComponent,}
                 
             ]
         }
@@ -138,6 +141,9 @@ const routes: Routes = [{
             path: 'historique', component: HistoryComponent
         },
         {
+            path: 'automatisation', component: AutomatingComponent
+        },
+        {
             path: 'utilisateurs', component: UserComponent
         },
         {
@@ -183,7 +189,9 @@ const routes: Routes = [{
               
                     { path: '',  component: NumericalDepositComponent},
 
-                    { path: 'details-document/:id', component: DetailsFileComponent}
+                    { path: 'details-document/:id', component: DetailsFileComponent},
+
+                    {path: 'permissions/dossier/:folder', component: FolderPermissionsComponent,}
                 
             ]
         }
