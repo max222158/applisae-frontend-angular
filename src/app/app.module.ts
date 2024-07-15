@@ -110,6 +110,16 @@ import { getCustomersFields } from './state/reducers/customers-fields/customers-
 import { CustomersFieldsEffects } from './state/effects/customers-fields/customers-fields.effect';
 import { SingleCustomerFieldCardDisplayComponent } from './components/commons/single-customer-field-card-display/single-customer-field-card-display.component';
 import { InputTextComponent } from './components/commons/inputs/input-text/input-text.component';
+import { PlanClassificationGeneralComponent } from './components/dashboard/numerical-deposit/plan-classification-general/plan-classification-general.component';
+import { CreateFolderComponent } from './components/commons/create-folder/create-folder.component';
+import { ReaderDocumentComponent } from './components/commons/reader-document/reader-document.component';
+import { MyGroupsComponent } from './components/dashboard/my-groups/my-groups.component';
+import { DetailsMyGroupComponent } from './components/dashboard/my-groups/details-my-group/details-my-group.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { CommentsDetailsTabsComponent } from './components/commons/comments-details-tabs/comments-details-tabs.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { getCommentsReducer, saveCommentsReducer } from './state/reducers/comments/comments.reducers';
+import { CommentsEffects } from './state/effects/comments/comments.effect';
 @NgModule({
   declarations: [
 
@@ -126,7 +136,7 @@ import { InputTextComponent } from './components/commons/inputs/input-text/input
       AttachmentFilesComponent, MyTaskComponent, DetailsTaskComponent, ModalAlertComponent, 
       ModalViewDocumentComponent, CustomerFieldsComponent, ModelCourrierHtmlComponent, ModalAnnotationsComponent, HistoryComponent, CustomerFieldsModalComponent, AllDetailsComponent, EditMetadataComponent, DocumentInWorkflowComponent, AddNewVersionDocumentComponent, DocumentHistoryComponent, CircleNameComponentComponent, DocumentClassificationComponent, AppTreeNodeComponent, ContextMenuComponent, AllActionComponent, AutomatingComponent, MetaDataComponent, FolderPermissionsComponent, 
       SingleUserComponent, UsersDropdownSearchComponent, GroupDropdownSearchComponent, 
-      SingleGroupCardDisplayComponent, CustomerFieldsDropdownComponent, SingleCustomerFieldCardDisplayComponent, InputTextComponent
+      SingleGroupCardDisplayComponent, CustomerFieldsDropdownComponent, SingleCustomerFieldCardDisplayComponent, InputTextComponent, PlanClassificationGeneralComponent, CreateFolderComponent, ReaderDocumentComponent, MyGroupsComponent, DetailsMyGroupComponent,  CommentsDetailsTabsComponent
   ],
 
   imports: [StoreModule.forRoot({
@@ -139,18 +149,20 @@ import { InputTextComponent } from './components/commons/inputs/input-text/input
     get_users: getUsersReducer,
     get_groups: getGroupsReducer,
     get_group_user_permission_folder:getUserAndGroupPermissionByIdReducer,
-    get_customer_fields:getCustomersFields
+    get_customer_fields:getCustomersFields,
+    get_comment:getCommentsReducer,
+    save_comment: saveCommentsReducer,
     
   }),
-  EffectsModule.forRoot([FileFolderEffects,UsersEffects,CustomersFieldsEffects]),
+  EffectsModule.forRoot([FileFolderEffects,UsersEffects,CustomersFieldsEffects,CommentsEffects]),
     NgxEditorModule, MatTreeModule,MatMenuModule,
     BrowserModule,  NgxPaginationModule, MatSelectModule, MatFormFieldModule, MatCheckboxModule, MatExpansionModule
     , PdfViewerModule, ReactiveFormsModule, ToastrModule.forRoot(), NgxMatSelectSearchModule, MatProgressBarModule,
     AppRoutingModule, RouterOutlet, FormsModule, CdkDropList, CdkDrag,
     CommonModule, HttpClientModule, MatSlideToggleModule,
-    NgxDocViewerModule, MdbAccordionModule, NgxExtendedPdfViewerModule,
+    NgxDocViewerModule, MdbAccordionModule, NgxExtendedPdfViewerModule,CKEditorModule,
     RouterOutlet, RouterLink, RouterLinkActive, RouterModule, MatIconModule, MatTooltipModule, MatChipsModule,
-    BrowserAnimationsModule],
+    BrowserAnimationsModule,NgxSkeletonLoaderModule],
 
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }],
   bootstrap: [AppComponent]

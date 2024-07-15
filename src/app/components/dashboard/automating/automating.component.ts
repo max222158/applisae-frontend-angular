@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrl: './automating.component.css'
 })
 export class AutomatingComponent {
+  isSelected:number = -1
 
+
+  setSelected(value:number){
+
+    this.isSelected = value
+
+  }
 }

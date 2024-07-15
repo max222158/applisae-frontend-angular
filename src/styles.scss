@@ -124,6 +124,11 @@ body[data-sidebar=dark] .navbar-brand-box {
     border-radius: 10px;
   }
 
+  
+  .border-radius-5{
+    border-radius: 5px;
+  }
+
 
   .border-radius-20{
     border-radius: 20px;
@@ -163,4 +168,51 @@ body[data-sidebar=dark] .navbar-brand-box {
   .app-search .form-control {
     border-radius: 6px;
     width: 500px;
+}
+
+.empty-div{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+
+}
+
+.ml-1 {
+  margin-left: 1rem;
+}
+
+.ml-2 {
+  margin-left: 2rem;
+}
+.ml-3{
+  margin-left: 3rem;
+}
+
+.ml-4 {
+  margin-left: 4rem;
+}
+.ml-5 {
+  margin-left: 5rem;
+}
+
+
+
+.mr-1 {
+  margin-right: 1rem;
+}
+
+.mr-2 {
+  margin-right: 2rem;
+}
+.mr-3{
+  margin-right: 3rem;
+}
+
+.mr-4 {
+  margin-right: 4rem;
+}
+.mr-5 {
+  margin-right: 5rem;
 }

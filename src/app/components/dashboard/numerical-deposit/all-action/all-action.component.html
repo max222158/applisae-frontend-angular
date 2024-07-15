@@ -22,7 +22,7 @@
                                 <ng-container *ngFor="let child of node.children">
                                     <!-- Ce composant se trouve dans commons : classification -->
                                     <app-app-tree-node [node]="child" (toggle)="toggleNode($event)"
-                                        (selectNode)="selectNode($event)"
+                                        (selectNode)="selectNode($event, 1)"
                                         [selectedNodeId]="selectedNodeId"></app-app-tree-node>
                                 </ng-container>
                             </ul>
@@ -60,40 +60,36 @@
                             </p>
                         </div>
 
-                        <div *ngIf="(folders$ | async) as folders">
-                            <div *ngIf="(files$ | async) as documents">
+                        <div *ngIf="(folderAndFilesResponse$ | async) as foldersFiles">
+                          
 
                                 <div class="row">
 
-                                    <div *ngFor="let folder of folders" class="hover-effect flex1"
+                                    <div *ngFor="let folderFile of foldersFiles  | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems }; let i = index" class="hover-effect flex1"
                                         style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
-                                        <div style="width: 125px;">
+                                        <div *ngIf="folderFile.is_folder" style="width: 125px;">
                                             <input type="checkbox" class="absolute" style="position: absolute; 
-                                    width: 20px; height: 20px; margin-left: 5px;">
+                                             width: 20px; height: 20px; margin-left: 5px;">
 
-                                            <i class="fa-solid fa-folder" (click)="selectNode(folder)"
+                                            <i class="fa-solid fa-folder" (click)="selectNode(folderFile, 1)"
                                                 style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
-                                            <p>{{ folder.name }}</p>
+                                            <p>{{ folderFile.name }}</p>
                                         </div>
-                                    </div>
 
-                                    <div *ngFor="let document of documents" class="hover-effect flex1"
-                                        style="width: 250px; padding: 1rem; margin-right: 20px; margin-left: 20px; cursor: pointer;  justify-content: center;">
-                                        <div style="width: 125px;">
+                                        <div style="width: 125px;" *ngIf="!folderFile.is_folder" >
                                             <input type="checkbox" class="absolute"
                                                 style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
-                                            <i [class]="getIconName(document.extension)"
-                                                [ngStyle]="{ color: getColor(document.extension) }"
+                                            <i [class]="getIconName(folderFile.extension)"
+                                                [ngStyle]="{ color: getColor(folderFile.extension) }"
                                                 style="font-size: 100px;"></i>
-                                            <p>{{ document.title }}</p>
+                                            <p>{{ folderFile.title }}</p>
                                         </div>
-                                    </div>
-
+                                    
 
                                 </div>
 
 
-                                <div *ngIf="documents.length == 0 && folders.length == 0 && isRoot == false" style=" background: #eeeeee00; display: flex; 
+                                <div *ngIf="foldersFiles.length == 0  && isRoot == false" style=" background: #eeeeee00; display: flex; 
                                 align-items: center; height: calc(100vh - 100px);
                                 justify-content: center;">
                                     <div style="">
@@ -119,7 +115,17 @@
 
                             </div>
                         </div>
-                    </div>
+                        <div class="col-12 mt-4">
+                            <div class="row">
+                              <div class="col-5">
+                                  Total: {{totalItems}} Résultats
+                              </div>
+                              <div class="col-5">
+                                  <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                                      nextLabel="Suivant"></pagination-controls>
+                              </div>
+                          </div>
+                        </div>
                 </div>
 
             </div>

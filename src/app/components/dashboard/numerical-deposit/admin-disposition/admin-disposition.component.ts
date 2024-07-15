@@ -13,10 +13,11 @@ export class AdminDispositionComponent {
   @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
 
   @Input() disposition: string;
-  @Input() parsedId: number;
+  @Input() parsedId: number ;
   @Input() folders: any[];
+  @Input() foldersFiles: any[];
   @Input() documents: any[];
-  @Input() perPage: number = 20
+  @Input() perPage: number = 10
   @Input() totalItems: number = 0;
   @Input() isFilesLoading: boolean = true;
   @Input() page: number = 1
@@ -30,7 +31,6 @@ export class AdminDispositionComponent {
   @Output() totalItemsChange = new EventEmitter<number>();
 
   constructor(private utilsService: UtilsService,) { }
-
   isSelected(item: any): boolean {
     return this.selectedCheckItems.some((i: { id: any; }) => i.id === item.id);
   }
@@ -113,13 +113,19 @@ export class AdminDispositionComponent {
   }
 
   selectedRowIndex: number | null = null;
+  selectedRowType: string | null = null;
 
-  onRightClick(event: MouseEvent, index: number): void {
+  isSingleSelected(itemId: number, itemType: string): boolean {
+    return this.selectedRowIndex === itemId && this.selectedRowType === itemType;
+  }
+  
+  onRightClick(event: MouseEvent, itemId: number, itemType: string): void {
     event.preventDefault();  // Empêche le menu contextuel par défaut
-    this.selectedRowIndex = index;
-    this.parsedId = index
+    this.selectedRowIndex = itemId;
+    this.selectedRowType = itemType;
+    this.parsedId = itemId;
     this.contextMenu.onRightClick(event);
-    console.log(`Ligne sélectionnée : ${index}`);
+    console.log(`Ligne sélectionnée : ${itemId} de type ${itemType}`);
   }
 
 

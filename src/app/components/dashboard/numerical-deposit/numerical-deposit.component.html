@@ -9,11 +9,7 @@
 
 
 
-            <button [disabled]="selectedCheckItems.length <= 0" class="btn btn-secondary" mat-raised-button
-                matTooltip="Renommer">
-                <i class="fa-solid fa-clock-rotate-left"></i>
 
-            </button>
             <button (click)="openModalAction('Copier ', 'Copier ici')" [disabled]="selectedCheckItems.length <= 0"
                 class="btn btn-success" mat-raised-button matTooltip="Copier">
                 <i class="fa-solid fa-copy"></i>
@@ -30,11 +26,16 @@
 
             </button>
 
-            <button (click)="openModalAction('Plan de Classement général ', '')" class="btn btn-danger "
+            <button (click)="openModalClassification()" class="btn btn-danger "
                 mat-raised-button matTooltip="Plan de classement général" style="background: #7b0042;">
                 <i class="fa-solid fa-sitemap"></i>
 
             </button>
+            <button [disabled]="selectedCheckItems.length <= 0" class="btn btn-secondary" mat-raised-button
+            matTooltip="Partager les fichiers">
+            <i class="fa-solid fa-share"></i>
+
+        </button>
 
             <label style="position: absolute;" (click)="openUploadFileModal(true)" for="upload" mat-raised-button
                 matTooltip="Uploader des fichiers ici"
@@ -46,7 +47,7 @@
             </label>
         </div>
         <div>
-            <input style="float: right;" class="form-control" type="text" placeholder="Rechercher ici" />
+            <input style="float: right;" class="form-control" type="text" placeholder="Rechercher ici" [formControl]="searchControl"  />
         </div>
     </div>
     <div style="display: flex;margin-bottom: 10px;background: #efefef72;margin-top: 10px;">
@@ -56,7 +57,8 @@
             <!-- brumcost visible for user no admin -->
 
             <div style="display: flex;" *ngIf="isSimpleUser">
-                <p (click)="firstMenuNameClick(i,path.name)" *ngFor="let path of paths_user; let i=index" style="color: rgb(0, 71, 157);
+                <p (click)="firstMenuNameClick(i,path.name)" 
+                *ngFor="let path of paths_user; let i=index" style="color: rgb(0, 71, 157);
                 font-size: 15px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
                 padding-left: 10px;"><i class="fa-regular fa-folder-open"></i>
                     {{path.name}}
@@ -84,7 +86,7 @@
 
     <div class="row" style="" *ngIf="paths_user.length > 1 || paths.length > 0 ">
 
-        <div *ngIf="folder.length == 0 && documents.length == 0" style="border: 3px dotted #00e1ff40; width: 100%;height: 70vh;display: flex;
+        <div *ngIf="foldersFilesResponse.length == 0" style="border: 3px dotted #00e1ff40; width: 100%;height: 70vh;display: flex;
     background: #f4f4f441;align-items: center;justify-content: center">
 
             <div
@@ -124,9 +126,10 @@
 
     <div *ngIf="!isSimpleUser">
 
-        <app-admin-disposition [isFilesLoading]="isFilesAndFolderLoading" [disposition]="disposition" [folders]="folder"
-            [documents]="documents" [activeActionBtnIndex]="activeActionBtnIndex"
-            [selectedCheckItems]="selectedCheckItems" (folderSelected)="openFolderById($event.id, $event.name)"
+        <app-admin-disposition [isFilesLoading]="isFilesAndFolderLoading"
+         [disposition]="disposition" [foldersFiles]="foldersFilesResponse"
+           [activeActionBtnIndex]="activeActionBtnIndex"
+            [selectedCheckItems]="selectedCheckItems" (folderSelected)="openFolderById($event.id, $event.name,1)"
             (documentSelected)="gotoDetailsDocument($event)"
             (checkboxChange)="onCheckboxChange($event.event, $event.item)"
             (actionBtnIndexChanged)="setActiveActionBtnIndex($event)" [page]="page" [totalItems]="totalItems"
@@ -141,9 +144,9 @@
                 (folder)="openHomeUserFolder($event.id, $event.name)"></app-index-user>
         </div>
         <app-admin-disposition *ngIf="paths_user.length > 1" [isFilesLoading]="isFilesAndFolderLoading"
-            [disposition]="disposition" [folders]="folder" [documents]="documents"
+            [disposition]="disposition" [foldersFiles]="foldersFilesResponse" 
             [activeActionBtnIndex]="activeActionBtnIndex" [selectedCheckItems]="selectedCheckItems"
-            (folderSelected)="openFolderById($event.id, $event.name)" (documentSelected)="gotoDetailsDocument($event)"
+            (folderSelected)="openFolderById($event.id, $event.name,1)" (documentSelected)="gotoDetailsDocument($event)"
             (checkboxChange)="onCheckboxChange($event.event, $event.item)" [page]="page" [totalItems]="totalItems"
             (pageChange)="pageChanged($event)" (actionBtnIndexChanged)="setActiveActionBtnIndex($event)">
         </app-admin-disposition>
@@ -328,6 +331,10 @@
     [selectedFolders]="selectedCheckItems">
 
 </app-all-action>
+
+<app-plan-classification-general [isOpenModal]="isOpenModalClassification" (closeModalEvent)="closeModalClassification()" >
+
+</app-plan-classification-general>
 
 <app-modal-users [users]="users" [isOpenModalUser]="isOpenModalUser" (closeModalEvent)="openUserModal()"
     [(usersSelect)]="usersSelect" (usersSelectChange)="onUsersSelectChange($event)">

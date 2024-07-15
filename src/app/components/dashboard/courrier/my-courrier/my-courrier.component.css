@@ -7,3 +7,13 @@
     background: #deebff !important;
     border: 2px solid blue  !important;
 }
+
+.p-description{
+
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      
+    
+}

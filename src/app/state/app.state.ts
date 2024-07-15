@@ -9,6 +9,8 @@ export interface AppState {
     get_groups:any;
     get_group_user_permission_folder:any;
     get_customer_fields:any;
+    save_comment:any;
+    get_comment:any;
     
     // Autres propriétés de l'état global
   }

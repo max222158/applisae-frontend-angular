@@ -11,8 +11,8 @@ export class CourrierModeleService {
   private apiUrl: string = API_URL;
 
   constructor(private http: HttpClient) { }
-  getModeleCourrier(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/courriers/model-courriers/?format=json`,  { withCredentials: true });
+  getModeleCourrier(formData:any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.apiUrl}/courriers/model-courriers/?format=json`, formData ,  { withCredentials: true });
   }
 
 

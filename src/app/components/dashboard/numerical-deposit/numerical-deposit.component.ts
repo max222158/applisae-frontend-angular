@@ -1,13 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { FilemanagerService } from '../../../services/api/filemanager/filemanager.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { API_URL } from '../../../constants/constants';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../../services/core/utils/utils.service';
 import { UserService } from '../../../services/api/user/user.service';
-import { clearInput } from '../../../helpers/helper';
+import { clearInput, sortFoldersAndDocumentsByDate } from '../../../helpers/helper';
 import { identifierName } from '@angular/compiler';
 import { AuthService } from '../../../services/api/auth/auth.service';
 import { CustomfieldService } from '../../../services/api/customfield/customfield.service';
@@ -18,7 +18,7 @@ import { Observable, Subscription } from 'rxjs';
 import { isCopyFolderAndFilesSuccess, moveFolderAndFilesSuccess } from '../../../state/selectors/numerical-deposit/numerical-deposite.selectors';
 import { resetFolderAndFiles, resetIsSuccessCopyState, resetIsSuccessMoveState } from '../../../state/actions/numerical-deposit/numerical-deposite.actions';
 import { CustomerFieldsSelectionService } from '../../../services/shared/customer-fields/customer-fields.service';
-
+import {  debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-numerical-deposit',
@@ -30,11 +30,9 @@ export class NumericalDepositComponent {
 
   isOpenModalFolder:boolean = false
   isOpenModalUploadFile:boolean = false
-
+  searchControl = new FormControl();
   folderForm: FormGroup;
   isLoading:boolean = false
-  path = "/0"
-
   folder: any 
   folder_copy_move:any = []
   folder_id = 0
@@ -51,6 +49,7 @@ export class NumericalDepositComponent {
   private apiUrl: string = API_URL;
   nber_of_response = 0
   documents :any[] = []
+  foldersFilesResponse :any[] = []
   disposition: string = 'list'
   activeActionBtnIndex: number  = -1;
   startIndex = 12;
@@ -61,6 +60,7 @@ export class NumericalDepositComponent {
   isOpenModalDelete:boolean = false
   isOpenModalUser:boolean = false
   isOpenModalGroupUser:boolean = false
+  isOpenModalClassification:boolean = false
 
   searchFieldText:string = ''
   pageField:number = 1
@@ -77,9 +77,9 @@ export class NumericalDepositComponent {
   uploadStatus: string[] = []; 
   allUploadsSuccessful: boolean = false; 
   isFilesAndFolderLoading: boolean = true // Si les fichiers et les dossiers sont entrain de se charger
-  customerFieldsNewFolderWithValues$: Observable<any[]>
-  customerFieldsNewFolderWithValues: any[]; // Non observable
-
+  customerFieldsNewFolder$: Observable<any[]>
+  customerFieldsNewFolder: any[]; // Non observable
+  searchText:string = ''
 
   isCopySuccess$: Observable<boolean>; // Is copy elements success
   private subscriptions: Subscription = new Subscription();
@@ -95,7 +95,7 @@ export class NumericalDepositComponent {
       if(action == true){
 
         this.toastr.success('Sélection déplacée avec succès','',{positionClass:'toast-bottom-right'})
-        this.openFolderById(this.folder_id,this.current_folder_name)
+        this.openFolderById(this.folder_id,this.current_folder_name,1)
         this.store.dispatch(resetIsSuccessMoveState());
         this.store.dispatch(resetFolderAndFiles());
         this.closeModalAction()
@@ -107,22 +107,22 @@ export class NumericalDepositComponent {
     const subscription1 = this.isCopySuccess$.subscribe(action => {
       if(action == true){
         this.toastr.success('Sélection copiée avec succès','',{positionClass:'toast-bottom-right'})
-        this.openFolderById(this.folder_id,this.current_folder_name)
+        this.openFolderById(this.folder_id,this.current_folder_name,1)
         this.closeModalAction()
         this.store.dispatch(resetIsSuccessCopyState());
         this.store.dispatch(resetFolderAndFiles());
       }
     });
 
-    this.customerFieldsNewFolderWithValues$ =  this.customerFieldsSelectionService.selectedfieldsWithValuesEntries$
+    this.customerFieldsNewFolder$ =  this.customerFieldsSelectionService.selectedfields$
     
     // Pour recuperer les valeurs des champs personalisés du dossier a créé global state
     this.subscriptions.add(
-      this.customerFieldsNewFolderWithValues$.subscribe(fields => {
+      this.customerFieldsNewFolder$.subscribe(fields => {
         
-        this.customerFieldsNewFolderWithValues = fields
+        this.customerFieldsNewFolder = fields
         
-        console.log('fields with values ---- ', fields);
+        console.log('fields with values in screen NumericalDepositComponent--- ', fields);
       })
     );
     this.subscriptions.add(subscription1);
@@ -143,12 +143,10 @@ export class NumericalDepositComponent {
     this.folderForm.get('name')?.markAsTouched();
     this.folderForm.get('identifiant')?.markAsTouched();
   
-     this.fileManagerService.getFolderById(0,this.page).subscribe({
+     this.fileManagerService.getFolderById(0,this.page, this.searchText).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        this.folder = response.results.folders
-        this.folder_copy_move = response.results.folders
-        this.documents = response.results.files
+        this.foldersFilesResponse = response.results
         this.totalItems = response.count
         this.isFilesAndFolderLoading = false
 
@@ -169,6 +167,7 @@ export class NumericalDepositComponent {
 
     this.getGroup("");
     this.getCustomersFields()
+    this.onQueryTextChange()
 
   }
 
@@ -191,7 +190,24 @@ export class NumericalDepositComponent {
       this.isCopySuccess$ = this.store.select(isCopyFolderAndFilesSuccess);
      }
  
+     onQueryTextChange(): void {
 
+
+      this.searchControl.valueChanges.pipe(
+        debounceTime(500), // 300ms debounce time
+        distinctUntilChanged(),
+        switchMap(query => {
+          this.searchText = query
+          this.page = 1
+           this.searchInCurrentFolder()
+          // Dispatch the action to the store
+  
+        console.log(query)
+          // Return an observable that completes immediately since dispatch doesn't return an observable
+          return [];
+        })
+      ).subscribe();
+    }
   /**
    * Handles the creation of a new folder by validating form inputs, collecting user and group IDs,
    * and sending a request to the backend service. Provides feedback to the user based on the success or failure of the operation.
@@ -201,23 +217,34 @@ export class NumericalDepositComponent {
       this.toastr.warning('Le nom et l\'identifiant du dossier ne peuvent pas être vide!', 'Dossier');
       return;
     }
+    let customersFieldIds:any = []
 
+    this.customerFieldsNewFolder.forEach(item => {
+  
+        customersFieldIds.push({ field_id: item.id, folder_id: this.folder_id });
+    
+    });
+    customersFieldIds = this.customerFieldsNewFolder.map(item => item.id);
+    console.log("customersFieldIds ",customersFieldIds);
+    
     const idsUser = this.usersSelect.map(item => item.id);
     const idsGroupUser = this.groupSelect.map(item => item.id);
     this.is_create_folder = true;
     this.isLoading = true;
+ 
 
     const formData = {
       name: this.folderForm.value.name,
       identifiant: this.folderForm.value.identifiant,
       parent_folder: this.folder_id,
-      path: this.path,
       description: this.folderForm.value.description,
       group_ids: JSON.stringify(idsGroupUser),
       user_ids: JSON.stringify(idsUser),
-      customer_field: JSON.stringify(this.customerFieldsNewFolderWithValues),
+      customer_field: JSON.stringify(customersFieldIds),
       folder_visibility: this.isfoderVisibleAllChecked
     };
+
+
 
     this.fileManagerService.createFolder(formData).subscribe({
       next: (response: any) => {
@@ -255,35 +282,39 @@ export class NumericalDepositComponent {
   pageChanged(event: any) {
     this.page = event;
     console.log(event)
-    this.openFolderById(this.folder_id,this.current_folder_name)
+    if(this.searchText == ''){
+      this.openFolderById(this.folder_id,this.current_folder_name,event)
+    }else{
+
+      this.searchInCurrentFolder()
+    }
+
   }
   
   onGroupSelectChange(updatedUsersSelect: any[]) {
     this.groupSelect = updatedUsersSelect;
     console.log('Updated groupSelectChange:', this.groupSelect);
   }
-  openFolderById(id:number,name:string){
+  openFolderById(id:number,name:string,page:number){
     this.isFilesAndFolderLoading = true
     this.setActiveActionBtnIndex(-1)
     this.folder_id = id
+    this.searchText = ''
+    
 
     if(!this.is_create_folder){
       
       
-      this.path=this.path+'/'+id
-  
-      //alert(this.path)
     }
 
 
 
 
 
-    this.fileManagerService.getFolderById(id,this.page).subscribe({
+    this.fileManagerService.getFolderById(id, page,this.searchText).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        this.folder = response.results.folders
-        this.documents = response.results.files
+        this.foldersFilesResponse = response.results
         this.paths = response.path
         this.totalItems = response.count
         console.log('Réponse de l\'API:', response);
@@ -304,11 +335,40 @@ export class NumericalDepositComponent {
 
   }
 
-  openHomeUserFolder(id:number,categ:string){
+
+  searchInCurrentFolder(){
     this.isFilesAndFolderLoading = true
     this.setActiveActionBtnIndex(-1)
-    this.folder_id = id
+    
+    
 
+    this.fileManagerService.getFolderById(this.folder_id, this.page,this.searchText).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
+        this.foldersFilesResponse = response.results
+        this.paths = response.path
+        this.totalItems = response.count
+        console.log('Réponse de l\'API:', response)
+        this.isFilesAndFolderLoading = false
+
+        // Ajoutez ici la gestion de la réponse de l'API
+      },
+      error: (error: any) => {
+        this.isFilesAndFolderLoading = false
+        console.error('Erreur lors de la requête vers l\'API:', error);
+        // Ajoutez ici la gestion des erreurs
+      }
+    });
+
+    this.is_create_folder = false
+    this.selectedCheckItems = []
+
+  }
+  openHomeUserFolder(index:number,categ:string){
+    this.isFilesAndFolderLoading = true
+    this.setActiveActionBtnIndex(-1)
+    this.folder_id = index
+    alert("folder user home"+index)
 
       //this.path=this.path+'/'+id
   
@@ -316,28 +376,58 @@ export class NumericalDepositComponent {
 
       let formData = new FormData()
 
+
+    // si le dossier cliqué est dossiers que jai créé 
+    if(index == 1){
       formData.append('categ',categ)
+      formData.append('filter_folder','my_folders')
+
+      this.fileManagerService.getUserFolderByNameCategory(formData).subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          this.folder = response.results.folders
+          this.documents = response.results.files
 
 
-    this.fileManagerService.getUserFolderByNameCategory(formData).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.folder = response.results.folders
-        this.documents = response.results.files
+          console.log('Réponse de l\'API:', response);
+          this.paths_user.push({id:0,name:categ})
+          this.isFilesAndFolderLoading = false
+          // Ajoutez ici la gestion de la réponse de l'API
+        },
+        error: (error: any) => {
+          
+          console.error('Erreur lors de la requête vers l\'API:', error);
+          this.isFilesAndFolderLoading = false
+          // Ajoutez ici la gestion des erreurs
+        }
+      });
 
+    }
 
-        console.log('Réponse de l\'API:', response);
-        this.paths_user.push({id:0,name:categ})
-        this.isFilesAndFolderLoading = false
-        // Ajoutez ici la gestion de la réponse de l'API
-      },
-      error: (error: any) => {
-        
-        console.error('Erreur lors de la requête vers l\'API:', error);
-        this.isFilesAndFolderLoading = false
-        // Ajoutez ici la gestion des erreurs
-      }
-    });
+        // si le dossier cliqué est dossiers: Dossiers partagés avec moi
+        if(index == 2){
+
+          this.fileManagerService.getFolderAndFilesSharedById(formData).subscribe({
+            next: (response: any) => {
+              this.isLoading = false;
+              this.folder = response.results.folders
+              this.documents = response.results.files
+    
+    
+              console.log('Réponse de l\'API:', response);
+              this.paths_user.push({id:0,name:categ})
+              this.isFilesAndFolderLoading = false
+              // Ajoutez ici la gestion de la réponse de l'API
+            },
+            error: (error: any) => {
+              
+              console.error('Erreur lors de la requête vers l\'API:', error);
+              this.isFilesAndFolderLoading = false
+              // Ajoutez ici la gestion des erreurs
+            }
+          });
+    
+        }
 
     this.is_create_folder = false
     this.selectedCheckItems = []
@@ -347,13 +437,16 @@ export class NumericalDepositComponent {
     alert(index)
     if(index == 0){
       this.paths_user = [{id:0,name:"Accueil"}];
+
       this.paths = [];
       this.current_folder_name = ""
+      
 
     }
     if(index == 1){
       this.paths_user = [{id:0,name:"Accueil"},{id:1,name:name}];
       this.paths = [];
+      this.openHomeUserFolder(0, "Accueil")
       this.current_folder_name = ""
 
     }
@@ -363,18 +456,18 @@ export class NumericalDepositComponent {
   refreshCurrentFolder(id:number,name:string){
     this.setActiveActionBtnIndex(-1)
     this.folder_id = id
+    this.page=1
 
 
 
 
 
 
-
-    this.fileManagerService.getFolderById(id,this.page).subscribe({
+    this.fileManagerService.getFolderById(id,this.page,this.searchText).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        this.folder = response.results.folders
-        this.documents = response.results.files
+        this.foldersFilesResponse = response.results
+        this.totalItems = response.count
         console.log('Réponse de l\'API:', response);
 
         // Ajoutez ici la gestion de la réponse de l'API
@@ -389,6 +482,11 @@ export class NumericalDepositComponent {
     this.is_create_folder = false
     this.selectedCheckItems = []
 
+  }
+
+  getFolderAndFilesSharedById(){
+
+    
   }
   getGroup(query:string): void {
     this.userService.getGroupsSearch(1,query).subscribe({
@@ -407,20 +505,22 @@ export class NumericalDepositComponent {
     });
   }
   getFilesAndFoldersByPath(id:number,name:string){
+
+    this.page = 1
     this.folder_id = id
     this.isFilesAndFolderLoading = true
-    this.fileManagerService.getFolderById(id,this.page).subscribe({
+    this.fileManagerService.getFolderById(id,this.page,this.searchText).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        this.folder = response.results.folders
-        this.documents = response.results.files
+        this.foldersFilesResponse = response.results
         this.paths = response.path
+        this.totalItems = response.count
         console.log('Réponse de l\'API:', response);
         if(response.current_path == null){
-          this.path = '/0'
+          
         }else{
 
-          this.path = response.current_path+'/'+id
+         
 
         }
         this.current_folder_name = name
@@ -596,8 +696,16 @@ removeUserGroup(id: number) {
     this.isOpenModalAction = true;
   }
 
+  openModalClassification() {
+
+    this.isOpenModalClassification = true;
+  }
   closeModalAction() {
     this.isOpenModalAction = false;
+  }
+
+  closeModalClassification() {
+    this.isOpenModalClassification = false;
   }
 
 
@@ -657,7 +765,7 @@ removeUserGroup(id: number) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('idfolder', this.folder_id.toString());
-    formData.append('path', this.path);
+
 
    
 

@@ -1,0 +1,55 @@
+.spinner-loading-file{
+    font-size: 30px;
+    width: 85px;
+    height: 85px;
+    color: blue;
+}
+.textLayer{
+    border: 1px solid blue !important;
+}
+
+body .ngPdf .ng2-pdf-viewer-container {
+    background: rgb(42, 120, 189) !important;
+}
+
+.material-icons-outlined{
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
+    margin-left: 15px;
+    color: #6d6d6d;
+}
+
+.container-reader{
+    display: flex;
+}
+
+.container-reader-pdf{
+
+    width: 100%;height: calc(100vh - 70px);z-index: 2;background: #eeeeee; 
+    
+}
+.container-reduce{
+
+    width: calc(100% - 300px) ;height: calc(100vh - 70px);
+    
+}
+
+
+
+.container-reader{
+    
+}
+
+.container-reader1{
+    width: 100%;
+}
+
+.mat-icon:hover{
+    color: rgb(3, 145, 206);
+}
+
+
+.mat-icon{
+    cursor: pointer;
+}

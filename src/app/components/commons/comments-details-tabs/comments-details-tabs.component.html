@@ -1,0 +1,46 @@
+<div class="comment-container">
+    <form [formGroup]="commentForm" (ngSubmit)="saveComment()">
+    <div>
+
+        <div class="main-container">
+            <div class="editor-container editor-container_classic-editor" #editorContainerElement>
+                <div class="editor-container__editor">
+                    <div #editorElement>
+                        <ckeditor [editor]="Editor" formControlName="commentText" [config]="config" *ngIf="isLayoutReady" style="height: 300px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="btn btn-success m-2" [disabled]="disabled"> Commenter</button>
+    </form>
+
+    <div class="mt-2">
+        <div  *ngFor="let comment of comments  |
+        paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }">
+        <div style="display: flex; padding: 1rem; padding-bottom: 0px;">
+            <i class="fa-solid fa-circle-user" title="" style="font-size: 40px; color: rgb(0, 77, 144);"></i>
+            <div class="ml-1">
+                <p class="mb-0 font-weight-500">{{comment.user.name}}</p>
+                <p class="mb-0">{{comment.user.email}}</p>
+            </div>
+            {{comment.created_at | customDateFormat}}
+
+        </div>
+        <div class="comment">
+            <div  [innerHTML]="sanitizedComment[comment.id]"></div>
+
+        </div>
+    
+        </div>
+
+        <div class="col-12">
+            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                nextLabel="Suivant"></pagination-controls>
+
+        </div>
+    </div>
+</div>
+

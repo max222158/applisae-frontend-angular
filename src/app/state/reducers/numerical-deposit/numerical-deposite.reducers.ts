@@ -5,7 +5,8 @@ import { copyFolderAndFiles, copyFolderAndFilesFailure, copyFolderAndFilesSucces
 export const initialState:any = {
   response: null,
   loading: true,
-  error: null
+  error: null,
+  success:null
 };
 
 export const initialFolderFileState:any = {
@@ -38,8 +39,8 @@ export const initialUserAndGroupPermissionState:any = {
 
 const _sendFileFolderSelectReducer = createReducer(
   initialState,
-  on(sendFileFolderSelect, state => ({ ...state, loading: true })),
-  on(sendFileFolderSelectSuccess, (state, { response }) => ({ ...state, response, loading: false })),
+  on(sendFileFolderSelect, state => ({ ...state, loading: true,success:null })),
+  on(sendFileFolderSelectSuccess, (state, { response }) => ({ ...state, response, loading: false, success: true })),
   on(sendFileFolderSelectFailure, (state, { error }) => ({ ...state, error, loading: false })),
 
   

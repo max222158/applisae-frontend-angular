@@ -1,10 +1,9 @@
 <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
-    style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
-    <div class="modal-dialog  modal-dialog-scrollable modal-lg" role="document">
-        <div class="modal-content p-3">
+    style="padding-right: 0px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg scale-in" role="document">
+        <div class="modal-content p-3 heigth-100vh">
             <!-- src/app/treeview/treeview.component.html -->
             <!-- src/app/treeview/treeview.component.html -->
-
             <h3 class="mb-4">Classement de documents</h3>
 
 
@@ -15,11 +14,12 @@
                     <ul>
                         <li *ngFor="let node of treeData">
                             <span class="caret" (click)="toggleNode(node)">
-                                <i class="fas" [ngClass]="node.expanded ? 'fa-folder-open' : 'fa-folder'"></i> {{
-                                node.name }}
+                                <i class="fas" [ngClass]="node.expanded ? 'fa-folder-open' : 'fa-folder'"></i>
+                                {{ node.name }}
                             </span>
                             <ul class="nested" [class.active]="node.expanded">
                                 <ng-container *ngFor="let child of node.children">
+                                    <!-- Ce composant se trouve dans commons : classification -->
                                     <app-app-tree-node [node]="child" (toggle)="toggleNode($event)"
                                         (selectNode)="selectNode($event)"
                                         [selectedNodeId]="selectedNodeId"></app-app-tree-node>
@@ -33,78 +33,92 @@
                 <div class="col-md-9" style="overflow-y: scroll; height: calc(100vh - 135px);">
 
 
-                    <div *ngIf="isRoot"  class="flex1 align-items-center" style=" justify-content: center; height: calc(100vh - 200px);">
+                    <div *ngIf="isRoot" class="flex1 align-items-center"
+                        style=" justify-content: center; height: calc(100vh - 200px);">
                         <img src="assets/images/research-file-folder.png" style="width: 300px;" alt="">
                     </div>
+
+
+
 
                     <div *ngIf="(isFolderLoading$ | async) as isLoading" class="spinner-border text-success"
                         role="status">
                         <span class="sr-only"></span>
                     </div>
-                    <div >
-                    <div *ngIf="(folders$ | async) as folders">
-                        <div *ngIf="(files$ | async) as documents">
+                    <div>
 
-                            <div class="row">
 
-                                <div *ngFor="let folder of folders" class="hover-effect flex1"
-                                    style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
-                                    <div style="width: 125px;">
-                                        <input type="checkbox" class="absolute" style="position: absolute; 
+
+                        <div style="display: flex;" *ngIf="(paths$ | async) as paths">
+                            <p class="link-breadcrumb" *ngFor="let path of paths; let i=index" style="
+                                    font-size: 13px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
+                                    padding-left: 10px;"><i class="fa-regular fa-folder-open"
+                                    style="font-size: 16px;"></i>
+                                {{path.name}}
+                                <i class="fa-solid fa-chevron-right" style="font-size: 10px; margin-left: 10px;"></i>
+                            </p>
+                        </div>
+
+                        <div *ngIf="(folders$ | async) as folders">
+                            <div *ngIf="(files$ | async) as documents">
+
+                                <div class="row">
+
+                                    <div *ngFor="let folder of folders" class="hover-effect flex1"
+                                        style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
+                                        <div style="width: 125px;">
+                                            <input type="checkbox" class="absolute" style="position: absolute; 
                                     width: 20px; height: 20px; margin-left: 5px;">
-                                        <button class=""
-                                            style="display: none; position: absolute; right: 8px; border: 0px; background: white; font-size: 18px;">
-                                            <i class="fa-solid fa-ellipsis-vertical"
-                                                style="color: #000 !important;"></i>
-                                        </button>
-                                        <i class="fa-solid fa-folder"
-                                            style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
-                                        <p>{{ folder.name }}</p>
+
+                                            <i class="fa-solid fa-folder" (click)="selectNode(folder)"
+                                                style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+                                            <p>{{ folder.name }}</p>
+                                        </div>
                                     </div>
+
+                                    <div *ngFor="let document of documents" class="hover-effect flex1"
+                                        style="width: 250px; padding: 1rem; margin-right: 20px; margin-left: 20px; cursor: pointer;  justify-content: center;">
+                                        <div style="width: 125px;">
+                                            <input type="checkbox" class="absolute"
+                                                style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
+                                            <i [class]="getIconName(document.extension)"
+                                                [ngStyle]="{ color: getColor(document.extension) }"
+                                                style="font-size: 100px;"></i>
+                                            <p>{{ document.title }}</p>
+                                        </div>
+                                    </div>
+
+
                                 </div>
 
-                                <div *ngFor="let document of documents" class="hover-effect flex1"
-                                    style="width: 250px; padding: 1rem; margin-right: 20px; margin-left: 20px; cursor: pointer;  justify-content: center;">
-                                    <div style="width: 125px;">
-                                        <input type="checkbox" class="absolute"
-                                            style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
-                                        <i [class]="getIconName(document.extension)"
-                                            [ngStyle]="{ color: getColor(document.extension) }"
-                                            style="font-size: 100px;"></i>
-                                        <p>{{ document.title }}</p>
-                                    </div>
-                                </div>
 
-
-                            </div>
-
-
-                            <div *ngIf="documents.length == 0 && folders.length == 0 && isRoot == false"
-                                style=" background: #eeeeee00; display: flex; 
+                                <div *ngIf="documents.length == 0 && folders.length == 0 && isRoot == false" style=" background: #eeeeee00; display: flex; 
                                 align-items: center; height: calc(100vh - 100px);
-                                justify-content: center;" >
-                                <div style="">
+                                justify-content: center;">
+                                    <div style="">
 
 
 
 
 
 
-                                    <div class="" style="display: flex; justify-content: center; align-items: center;">
-                                        <img src="assets/images/boite-empty.png" style="width: 150px;" alt="">
+                                        <div class=""
+                                            style="display: flex; justify-content: center; align-items: center;">
+                                            <img src="assets/images/boite-empty.png" style="width: 150px;" alt="">
+                                        </div>
+                                        <h3 style="text-align: center;">Ce dossier est vide</h3>
+                                        <br><br>
+                                        <div class=""
+                                            style="display: flex; justify-content: center; align-items: center;">
+
+                                        </div>
+
                                     </div>
-                                    <h3 style="text-align: center;">Ce dossier est vide</h3>
-                                    <br><br>
-                                    <div class="" style="display: flex; justify-content: center; align-items: center;">
-
-                                    </div>
-
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
 
             </div>
@@ -117,10 +131,12 @@
 
 
 
-
-
-            <div class="modal-footer">
-                <button *ngIf="selectedNodeId !== null" class="btn btn-success" style="padding: 12px 51px;
+            <div class="modal-footer" style="
+            position: absolute;
+            right: 10px;
+            bottom: 21px;
+        ">
+                <button *ngIf="selectedNodeId !== null" [disabled]="disabledActionButton" class="btn btn-success" style="padding: 12px 51px;
                 background-color: rgb(66, 1, 88);
                 font-weight: 500;font-size: 16px; width: auto;" (click)="classifyDocument()">
                     
@@ -133,3 +149,4 @@
         </div>
     </div>
 </div>
+

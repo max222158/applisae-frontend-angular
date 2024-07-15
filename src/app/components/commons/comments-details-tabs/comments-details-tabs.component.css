@@ -1,0 +1,57 @@
+.comment-container{
+    width: 400px;
+    height: calc(100vh - 70px);
+    border: 2px solid #d4d4d4;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@media print {
+	body {
+		margin: 0 !important;
+	}
+}
+
+.main-container {
+	font-family: 'Lato';
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.ck-content {
+	font-family: 'Lato';
+	line-height: 1.6;
+	word-break: break-word;
+}
+
+.editor-container_classic-editor .editor-container__editor {
+width: 400px;
+}
+
+.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable, .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+
+    height: 144px !important;
+}
+
+.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+  
+    height: 144px !important;
+}
+
+
+
+:host ::ng-deep .ck-editor__editable_inline {
+    min-height: 150px !important;
+}
+
+.comment{
+	background: #d0edff69;
+	padding: 10px;
+	border-radius: 10px;
+
+	margin: 10px;
+
+	
+	
+}

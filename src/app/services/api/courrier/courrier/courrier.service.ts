@@ -15,8 +15,8 @@ export class CourrierService {
 
   constructor(private http: HttpClient) { }
 
-  getCourrierList(page:number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/list_courriers/?page=${page}&format=json`,{withCredentials:true});
+  getCourrierList(page:number,filter:string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/list_courriers/?page=${page}&filter=${filter}&format=json`,{withCredentials:true});
   }
   getUser(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/courriers/user/?format=json`,{withCredentials:true});

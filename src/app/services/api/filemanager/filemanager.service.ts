@@ -44,10 +44,11 @@ getFolderById1(id: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/file-manager/create-folder/`, data,{withCredentials:true});
   }
 
-  getFolderById(id: number,page:number): Observable<any> {
+  getFolderById(id: number,page:number, searchText:string): Observable<any> {
     const formData = new FormData();
     formData.append('id', id.toString());
     formData.append('page', page.toString());
+    formData.append('query', searchText);
     return this.http.post(`${this.apiUrl}/file-manager/list-folder-by-id/`, formData,{withCredentials:true });
   }
 
@@ -55,6 +56,22 @@ getFolderById1(id: number): Observable<any> {
   getFolderAndFlesById(formData:any): Observable<any> {
 
     return this.http.post(`${this.apiUrl}/file-manager/list-folder-by-id/`, formData,{withCredentials:true });
+  }
+
+  // Rechercher à l'interieur d'un dossier
+  searchFoldersAndFilesById(formData:any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/search-list-folder-by-id/`, formData,{withCredentials:true });
+  }
+
+  
+
+
+
+  // Naviguer dans les dossier partager avec moi dont je n'ai pas le droit
+  getFolderAndFilesSharedById(formData:any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/list-folders-shared-by-id/`, formData,{withCredentials:true });
   }
   getUserFolderByNameCategory(category: any): Observable<any> {
 
@@ -78,6 +95,13 @@ getFolderById1(id: number): Observable<any> {
     formData.append('id', id.toString());  // Envoyer l'ID du modèle de courrier
 
     return this.http.post(`${this.apiUrl}/file-manager/get-file-by-id/`, formData, { withCredentials: true });
+  }
+
+
+
+  getOnlyFolders(formData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/list-only-folders/`, formData, { withCredentials: true });
   }
 
 
