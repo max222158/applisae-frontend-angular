@@ -60,7 +60,7 @@ export function getFileIconSrc(extension: string): string {
     case '.pdf':
       return '/assets/images/logo-pdf.png'; // Chemin de l'icône PDF
     default:
-      return 'assets/icons/default-icon.png'; // Chemin de l'icône par défaut
+      return 'assets/images/default-icon.png'; // Chemin de l'icône par défaut
   }
 }
 

@@ -48,7 +48,7 @@ const routes: Routes = [{
             path: '', component: HomeUserComponent,
         },
         {
-            path: 'fonds-numerique', component: NumericalDepositComponent
+            path: 'fonds-numerique/dossier/:id', component: NumericalDepositComponent
         },
         {
             path: 'mes-taches', component: MyTaskComponent
@@ -100,7 +100,7 @@ const routes: Routes = [{
             path: 'fonds-numeriques', children: [
         
               
-                    { path: '',  component: NumericalDepositComponent},
+                    { path: 'index/:id',  component: NumericalDepositComponent},
 
                     { path: 'details-document/:id', component: DetailsFileComponent},
                     {path: 'permissions/dossier/:folder', component: FolderPermissionsComponent,}
@@ -117,11 +117,11 @@ const routes: Routes = [{
             path: '', component: HomeComponent,
         },
         {
-            path: 'fonds-numerique', component: NumericalDepositComponent
+            path: 'fonds-numerique/dossier/:id', component: NumericalDepositComponent
         },
         {
             path: 'recherche', component: SearchComponent
-        },
+        }, 
         {
             path: 'documents', component: DocumentComponent
         }
@@ -206,7 +206,7 @@ const routes: Routes = [{
             path: 'fonds-numeriques', children: [
         
               
-                    { path: '',  component: NumericalDepositComponent},
+                    { path: 'index/:id',  component: NumericalDepositComponent},
 
                     { path: 'details-document/:id', component: DetailsFileComponent},
 

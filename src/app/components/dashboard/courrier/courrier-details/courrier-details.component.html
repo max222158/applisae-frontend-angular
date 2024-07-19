@@ -192,8 +192,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div *ngFor="let attach of attachment_file">
-                        <a href=""><u><i class="fa-solid fa-paperclip"></i> {{attach.name}}</u></a>
+                    <div *ngFor="let attach of attachment_file" (click)="openModalReaderDocument(attach.extension, attach.name, attach.id)">
+                        <span><u><i class="fa-solid fa-paperclip"></i> {{attach.name}}</u></span>
                     </div>
                     <p *ngIf="attachment_file.length == 0">Pas de pièces jointes</p>
                 </div>
@@ -330,3 +330,6 @@
 (closeModalEvent)="closeModalDocumentClassification()" [documentId]="courrierId"
  [isOpenModal]="isModalDocumentClassificationOpen"
 ></app-document-classification>
+
+<app-reader-document [isOpenModal]="isModalReadSingle"  documentType="courrier" (closeModalEvent)="closeModalReaderDocument()"
+  [extension]="extensionAttachmentFileSelect" [fileName]="attachmentFileSelect" [documentId]="attachmentDocumentId"></app-reader-document>

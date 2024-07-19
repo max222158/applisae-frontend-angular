@@ -66,6 +66,13 @@ export class CourrierDetailsComponent {
   notifySuccessSaveNotification: any
   isNotifyPaginationAnnotation: any
   isModalDocumentClassificationOpen:boolean = false
+  attachmentFileSelect:string = ''
+  isModalReadSingle:boolean = false
+  extensionAttachmentFileSelect:string = ''
+  attachmentDocumentId:number;
+
+
+
   setNotifySuccessAnnotation() {
     this.notifySuccessAnnotation = 'This is an alert from the parent component!';
   }
@@ -373,6 +380,12 @@ export class CourrierDetailsComponent {
 
 }
 
+closeModalReaderDocument(){
+    
+  this.isModalReadSingle = false;
+
+}
+
 closeModalDocumentClassification(){
     
   this.isModalDocumentClassificationOpen = false;
@@ -385,6 +398,14 @@ closeModalDocumentClassification(){
     }else{
       this.isOpenModalHistoriqueVersion = false;
     }
+  }
+
+  
+  openModalReaderDocument(extension:string, nameDoc:string, idAttachmentFile:number) {
+    this.attachmentFileSelect = nameDoc
+    this.attachmentDocumentId = idAttachmentFile
+    this.extensionAttachmentFileSelect = extension
+    this.isModalReadSingle = true
   }
 
   openModalDocumentClassification(){

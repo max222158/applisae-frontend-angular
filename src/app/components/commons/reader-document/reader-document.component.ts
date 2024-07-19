@@ -23,6 +23,8 @@ export class ReaderDocumentComponent {
   isVideo: boolean = false
   @Input() zoom:number = 0.7 
   @Input() fileName:string = ''
+
+  @Input() documentType:string = ''
   
   @Input() isCommentOpen:boolean = false
   
@@ -71,15 +73,33 @@ export class ReaderDocumentComponent {
     this.pdfSrc = ''
     const formData = new FormData();
     formData.append('id', documentId.toString());
-    
-    this.fileManagerService.getDocumentFile(formData).subscribe({
-      next: (response: any) => {
-        this.pdfSrc =  handleDocumentFileResponse(response);
-      },
-      error: (error: any) => {
-        // Ajoutez ici la gestion des erreurs
-      }
-    });
+    if(this.documentType == '' || this.documentType == undefined){
+
+      this.fileManagerService.getDocumentFile(formData).subscribe({
+        next: (response: any) => {
+          this.pdfSrc =  handleDocumentFileResponse(response);
+        },
+        error: (error: any) => {
+          // Ajoutez ici la gestion des erreurs
+        }
+      });
+
+    }else{
+
+      // Si attachment document est courrier u un task
+      formData.append('type',this.documentType)
+      this.fileManagerService.displayAttachmentFileById(formData).subscribe({
+        next: (response: any) => {
+          this.pdfSrc =  handleDocumentFileResponse(response);
+        },
+        error: (error: any) => {
+          // Ajoutez ici la gestion des erreurs
+        }
+      });
+
+
+    }
+
   }
 
   getDocumentDetailsById(value:number){
