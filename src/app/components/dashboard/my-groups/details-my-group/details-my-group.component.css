@@ -1,0 +1,72 @@
+.mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+    border-color: rgb(200 200 200) !important;
+    background-color: transparent;
+}
+
+.select-option-filter{
+    background: #deebff !important;
+    border: 2px solid blue  !important;
+}
+.box-document{
+    position: relative;
+    width: 100%;
+    height: 210px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid #deebff;
+}
+.box-document img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.74);
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.info-view{
+
+    background: #6a009c;
+    border-radius: 10px;
+}
+
+.user-round{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #deebff;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.user-round img{
+    width: 100%;
+    height: 100%;
+}
+.message-info-user{
+    max-width: 800px;
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    padding: 15px;
+    margin-left: 15px;
+}
+
+.action-workflow{
+
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+
+.action-workflow:hover{
+
+  color: green;  
+}

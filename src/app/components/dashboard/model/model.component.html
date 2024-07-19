@@ -1,72 +1,17 @@
 <div class="container">
+<div class="mt-2 mb-2" style="display: flex; justify-content: space-between; ">
+    <input type="text" [formControl]="searchControl" class="form-control mt-2" placeholder="Recherche" style="width:200px">
+    <a routerLink="/tableau-de-bord/creer-modele-document" routerLinkActive="active"
+    class="btn btn-primary">Nouveau modèle</a>
+
+</div>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-body border-bottom">
-                <div class="d-flex align-items-center">
-                    <h5 class="mb-0 card-title flex-grow-1">Liste des modèles</h5>
-                    <div class="flex-shrink-0">
-                        <a routerLink="/tableau-de-bord/creer-modele-document" routerLinkActive="active"
-                            class="btn btn-primary">Nouveau modèle</a>
-                        <a href="#!" class="btn btn-light"><i class="mdi mdi-refresh"></i></a>
-                        <div class="dropdown d-inline-block">
 
-                            <button type="menu" class="btn btn-success" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false"><i
-                                    class="mdi mdi-dots-vertical"></i></button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body border-bottom">
-                <div class="row g-3">
-                    <div class="col-xxl-4 col-lg-6">
-                        <input type="search" class="form-control" id="searchTableList" placeholder="Search for ...">
-                    </div>
-                    <div class="col-xxl-2 col-lg-6">
-                        <select class="form-select" id="idStatus" aria-label="Default select example">
-                            <option value="all">Status</option>
-                            <option value="Active">Active</option>
-                            <option value="New">New</option>
-                            <option value="Close">Close</option>
-                        </select>
-                    </div>
-                    <div class="col-xxl-2 col-lg-4">
-                        <select class="form-select" id="idType" aria-label="Default select example">
-                            <option value="all">Select Type</option>
-                            <option value="Full Time">Full Time</option>
-                            <option value="Part Time">Part Time</option>
-                        </select>
-                    </div>
-                    <div class="col-xxl-2 col-lg-4">
-                        <div id="datepicker1">
-                            <input type="text" class="form-control" placeholder="Select date"
-                                data-date-format="dd M, yyyy" data-date-container="#datepicker1"
-                                data-date-autoclose="true" data-provide="datepicker">
-                        </div><!-- input-group -->
-                    </div>
-                    <div class="col-xxl-2 col-lg-4">
-                        <button type="button" class="btn btn-soft-secondary w-100" onclick="filterData();"><i
-                                class="mdi mdi-filter-outline align-middle"></i> Filter</button>
-                    </div>
-                </div>
-            </div>
             <div class="card-body">
                 <div class="">
                     <div id="job-list_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6"></div>
-                            <div class="col-sm-12 col-md-6">
-                                <div id="job-list_filter" class="dataTables_filter" style="display: none;">
-                                    <label>Recherche:<input type="search" class="form-control form-control-sm"
-                                            placeholder="" aria-controls="job-list"></label></div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-sm-12">
                                 <table
@@ -83,7 +28,7 @@
                                                 aria-label="Job Title: activate to sort column ascending">Nom du modèle</th>
                                             <th scope="col" class="sorting" tabindex="0" aria-controls="job-list"
                                                 rowspan="1" colspan="1" style="width: 159px;"
-                                                aria-label="Company Name: activate to sort column ascending">type courrier</th>
+                                                aria-label="Company Name: activate to sort column ascending">Type</th>
                         
                                             <th scope="col" class="sorting dtr-hidden" tabindex="0"
                                                 aria-controls="job-list" rowspan="1" colspan="1"
@@ -96,11 +41,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let modele of  modeles" data-id="1" style="cursor: pointer;">
+                                        <tr *ngFor="let modele of  modeles | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems }; let i = index" data-id="1" style="cursor: pointer;">
                                             <td data-field="id" style="width: 80px">{{modele.id}}</td>
                                             <td data-field="name">{{modele.name}}</td>
                                             <td data-field="name">{{modele.type}}</td>
-                                            <td data-field="name">{{modele.created_at}}</td>
+                                            <td data-field="name">{{modele.created_at | customDateFormat}}</td>
                                             <td style="width: 100px">
                                                 <a class="btn btn-outline-secondary btn-sm edit" title="Modifier">
                                                     <i class="fas fa-pencil-alt"></i>
@@ -112,35 +57,24 @@
                                             </td>
                                         </tr>
 
+
+                                        
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="job-list_info" role="status" aria-live="polite">Showing
-                                    1 to 10 of 11 entries</div>
-                            </div>
-                            <div class="col-sm-12 col-md-7">
-                                <div class="dataTables_paginate paging_simple_numbers pagination-rounded"
-                                    id="job-list_paginate">
-                                    <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="job-list_previous">
-                                            <a aria-controls="job-list" aria-disabled="true" role="link"
-                                                data-dt-idx="previous" tabindex="-1" class="page-link"><i
-                                                    class="mdi mdi-chevron-left"></i></a></li>
-                                        <li class="paginate_button page-item active"><a href="#"
-                                                aria-controls="job-list" role="link" aria-current="page" data-dt-idx="0"
-                                                tabindex="0" class="page-link">1</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="job-list"
-                                                role="link" data-dt-idx="1" tabindex="0" class="page-link">2</a></li>
-                                        <li class="paginate_button page-item next" id="job-list_next"><a href="#"
-                                                aria-controls="job-list" role="link" data-dt-idx="next" tabindex="0"
-                                                class="page-link"><i class="mdi mdi-chevron-right"></i></a></li>
-                                    </ul>
+                                <div class="col-12 mt-4">
+                                    <div class="row">
+                                      <div class="col-5">
+                                          Total: {{totalItems}} Résultats
+                                      </div>
+                                      <div class="col-5">
+                                          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                                              nextLabel="Suivant"></pagination-controls>
+                                      </div>
+                                  </div>
                                 </div>
                             </div>
                         </div>
+           
                     </div>
                     <!-- end table -->
                 </div>

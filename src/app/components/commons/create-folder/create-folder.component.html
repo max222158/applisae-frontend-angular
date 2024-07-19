@@ -1,0 +1,70 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+style="padding-right: 17px; background: #00000063;"
+[ngStyle]="{'display': isOpenModalFolder? 'block' : 'none' }">
+<div class="modal-dialog modal-lg modal-dialog-centered  modal-dialog-scrollable scale-in" role="document">
+    <div class="modal-content" style="height: 100vh;">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLiveLabel">Créer un dossier ici</h5>
+            <button type="button" (click)="closeModal()" class="close" data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <form [formGroup]="folderForm" (ngSubmit)="onCreateFolder()">
+
+            <div class="modal-body" style="height: 100vh;">
+                <div class="flex1">
+                    <button type="button" class="btn actve-tabs" (click)="onSelectedIndexActionFolder(1)"
+                        [ngClass]="{'actve-tabs': selectedIndexActionFolder === 1, 'no-actve-tabs': selectedIndexActionFolder !== 1}">Par
+                        Défaut</button>
+                </div>
+
+                <hr>
+                <div *ngIf="selectedIndexActionFolder == 1">
+
+                    <div class="form-group">
+                        <label for="identifiant">Identifiant</label>
+                        <input type="text" formControlName="identifiant" class="form-control is-invalid"
+                               id="identifiant" aria-describedby="emailHelp"
+                               placeholder="Identifiant du dossier"
+                               [ngClass]="{'is-invalid': folderForm.get('identifiant')?.invalid && (folderForm.get('identifiant')?.dirty || folderForm.get('identifiant')?.touched),
+                                           'is-valid': folderForm.get('identifiant')?.valid && (folderForm.get('identifiant')?.dirty || folderForm.get('identifiant')?.touched)}">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Nom du dossier</label>
+                        <input type="text" formControlName="name" class="form-control is-invalid" id="name"
+                               aria-describedby="emailHelp" placeholder="Nom du titre"
+                               [ngClass]="{'is-invalid': folderForm.get('name')?.invalid && (folderForm.get('name')?.dirty || folderForm.get('name')?.touched),
+                                           'is-valid': folderForm.get('name')?.valid && (folderForm.get('name')?.dirty || folderForm.get('name')?.touched)}">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" formControlName="description" id="description" cols="30" rows="5"></textarea>
+                    </div>
+                    <p class="font-weight-500 mt-4 font-size-15">Activer le mode visible à tous</p>
+                    <div class="flex1 mt-2" style="">
+                      
+                        <mat-slide-toggle class="text-warning" (click)="visibilityFolderChange()"></mat-slide-toggle>
+                        <p class="mb-0 ml-1" style=""> visible à tous le monde <span [ngClass]="isfoderVisibleAllChecked?'visi-all':'no-visible-all'"> {{isfoderVisibleAllChecked?'Activer':'Désactiver'}}</span></p>
+                    </div>
+
+         
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer" style="
+                position: absolute;
+                bottom: 0px;
+                width: 100%;">
+                <app-button-spinner backgroundColor="green" textColor="white" [disabled]="isLoading"
+                    [buttonText]="'Créer le dossier'">
+                </app-button-spinner>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()"
+                    data-dismiss="modal">Fermer</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

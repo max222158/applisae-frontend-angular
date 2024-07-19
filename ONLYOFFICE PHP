@@ -1,0 +1,58 @@
+<?php
+require 'vendor/autoload.php';
+use Firebase\JWT\JWT;
+
+$SECRET_KEY = "7bik6UTCAT4xbE8WnnRkgva7m2f4zr344f"; //
+/*  CLEF DANS      1  sudo apt update
+
+6  cd /etc  cd onlyoffice cd documentserver nano local.json */
+
+$document_key = hash('sha256', 'unique_doc_identifi1e1rssssszdd' . time());
+// Données du jeton
+$payload = [
+  "document" => [
+      "key" => "Khirz6zTPdfd7c",
+      "url" =>  "https://d2nlctn12v279m.cloudfront.net/assets/docs/samples/demo.docx"
+  ],
+  "editorConfig" => [
+      "callbackUrl" => "https://example.com/url-to-callback.ashx",
+      "mode" => "edit",
+      "user" => [
+          "id" => "78e1e8411",
+          "name" => "Smith"
+      ]
+  ]
+];
+
+// Génération du jeton JWT
+$jwt = JWT::encode($payload, $SECRET_KEY, 'HS256');
+
+// Génération d'une clé de document unique
+
+
+?>
+
+<html>
+<head>
+
+</head>
+<body>
+    <div id="placeholder"></div>
+
+    <script type="text/javascript" src="http://52.54.135.123//web-apps/apps/api/documents/api.js"></script>
+
+        <script type="text/javascript">
+            new DocsAPI.DocEditor("placeholder", {
+                "document": {
+                    "fileType": "docx",
+                    "key": "Khirz6zTPdfd7c",
+                    "title": "Example Document Title.docx",
+                    "url": "https://d2nlctn12v279m.cloudfront.net/assets/docs/samples/demo.docx"
+                },
+                "documentType": "word",
+                "token": "<?php echo $jwt; ?>"
+            });
+        </script>
+
+</body>
+</html>

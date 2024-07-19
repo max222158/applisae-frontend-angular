@@ -31,6 +31,8 @@ import { DetailsTaskComponent } from './components/dashboard/workflow/for-docume
 import { HistoryComponent } from './components/dashboard/history/history.component';
 import { AutomatingComponent } from './components/dashboard/automating/automating.component';
 import { FolderPermissionsComponent } from './components/dashboard/permissions/folder-permissions/folder-permissions/folder-permissions.component';
+import { MyGroupsComponent } from './components/dashboard/my-groups/my-groups.component';
+import { DetailsMyGroupComponent } from './components/dashboard/my-groups/details-my-group/details-my-group.component';
 
 
 
@@ -58,7 +60,14 @@ const routes: Routes = [{
             path: 'mes-taches/details/:id/tache/:task', component: DetailsTaskComponent
         },
         {
-            path: 'recherche', component: SearchComponent
+            path: 'recherche1', component: SearchComponent
+        },
+
+        {
+            path: 'mes-groupes', component: MyGroupsComponent
+        },
+        {
+            path: 'mes-groupes/groupe/:id', component: DetailsMyGroupComponent
         },
         {
             path: 'ajouter-un-courrier', component: CreateCourrierComponent
@@ -76,6 +85,16 @@ const routes: Routes = [{
                 },
             ]
         },
+
+
+        {
+            path: 'document/creer-un-workflow', component: CreateWorkflowDocumentComponent
+        }
+        ,
+        {
+            path: 'document/creer-un-workflow/details/:workflow', component: DetailsWorkflowComponent
+        }
+        ,
 
         {
             path: 'fonds-numeriques', children: [

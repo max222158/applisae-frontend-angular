@@ -59,7 +59,7 @@ export class CreateCourrierComponent {
   isSpinnerLoading:boolean = false
   disabled:boolean = true
   
-
+  modelTextSearch:string = ''
   htmlContent: string = ''
 
   newHtmlContent: string = ''
@@ -82,8 +82,17 @@ export class CreateCourrierComponent {
   @ViewChildren('inputRef') inputRefs!: QueryList<ElementRef>;
 
   ngOnInit() {
-    this.apiCourrierService.getModeleCourrier().subscribe(data => {
-      this.modeles = data;
+    let formData = new FormData()
+    formData.append('query',this.modelTextSearch)
+    this.apiCourrierService.getModeleCourrier(formData).subscribe({
+      next: (data:any)=>{
+
+        this.modeles = data.results;
+
+      },
+      error:(error)=>{
+
+      }
     });
     this.workflowService.getWorkFlow().subscribe(data => {
       this.workflowList = data;

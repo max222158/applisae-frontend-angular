@@ -9,7 +9,7 @@ export class ContextMenuComponent {
   x = 0;
   y = 0;
   display = 'none';
-  @Input() idParsed:number=0
+  @Input() idParsed:number 
 
   onRightClick(event: MouseEvent): void {
     event.preventDefault();

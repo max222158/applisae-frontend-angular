@@ -1,38 +1,55 @@
-  <!-- Disposition en mosaic -->
-  <div class="flex1 item-center justify-center" *ngIf="isFilesLoading" style="height: calc(100vh - 300px);">
-    <div class="spinner-border text-primary spinner-loading-file" role="status">
-      <span class="sr-only">Loading...</span>
+<!-- Disposition en mosaic -->
+<div class="flex1 item-center justify-center" *ngIf="isFilesLoading" style="height: calc(100vh - 300px);">
+  <div class="spinner-border text-primary spinner-loading-file" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<div class="" *ngIf="!isFilesLoading">
+  <div>
+    <div *ngIf="disposition == 'mosaic'" style="width: 100%;" class="row">
+      <div *ngFor="let folderFile of foldersFiles |
+     paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems };
+      let i = index" class="mt-3"  style="width: 150px;" >
+
+        <!-- Pour les dossiers -->
+
+        <div *ngIf="folderFile.is_folder" class="hover-effect"
+          style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;  height:180px"
+          [ngClass]="{'selected': isSelected({id: folderFile.id, type: 'folder'})}"
+          (contextmenu)="onRightClick($event, folderFile.id, 'folder')"
+          [class.selected]="isSingleSelected(folderFile.id, 'folder')">
+          <input type="checkbox" class="absolute"
+            style="position: absolute; width: 20px; height: 20px; margin-left: 5px"
+            (change)="onCheckboxChange($event, {id: folderFile.id, type: 'folder'})">
+
+          <i class="fa-solid fa-folder" (click)="openFolderById(folderFile.id, folderFile.name,page)"
+            style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+          <p>{{ folderFile.name }}</p>
+        </div>
+
+        <!-- Pour les documents -->
+
+        <div *ngIf="!folderFile.is_folder" class="hover-effect"
+            style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer; height:180px"
+            [ngClass]="{'selected': isSelected({id: folderFile.id, type: 'file'})}"
+            (contextmenu)="onRightClick($event, folderFile.id, 'document')"
+            [class.selected]="isSingleSelected(folderFile.id, 'document')">
+            <input type="checkbox" class="absolute"
+              style="position: absolute; width: 20px; height: 20px; margin-left: 5px; "
+              (change)="onCheckboxChange($event, {id: folderFile.id, type: 'file'})">
+            <i [class]="getIconName(folderFile.extension)" [ngStyle]="{ color: getColor(folderFile.extension) }"
+              (click)="gotoDetailsDocument(folderFile.id)" style="font-size: 100px;"></i>
+            <p class="document-name">{{ folderFile.title }}</p>
+        </div>
+
+
+      </div>
+
+
     </div>
   </div>
-  <div class="" *ngIf="!isFilesLoading">
-
-  <div *ngIf="disposition == 'mosaic'" style="width: 100%;" class="row">
-    <div *ngFor="let folder of folders" class="hover-effect"
-      style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;" 
-      [ngClass]="{'selected': isSelected({id: folder.id, type: 'folder'})}">
-      <input type="checkbox" class="absolute" style="position: absolute; width: 20px; height: 20px; margin-left: 5px;" 
-        (change)="onCheckboxChange($event, {id: folder.id, type: 'folder'})">
-      <button class="" style="display: none; position: absolute; right: 8px; border: 0px; background: white; font-size: 18px;">
-        <i class="fa-solid fa-ellipsis-vertical" style="color: #000 !important;"></i>
-      </button>
-      <i class="fa-solid fa-folder" (click)="openFolderById(folder.id, folder.name,page)"
-        style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
-      <p>{{ folder.name }}</p>
-    </div>
-  
-    <div *ngFor="let document of documents" class="hover-effect"
-      style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;" 
-      [ngClass]="{'selected': isSelected({id: document.id, type: 'file'})}">
-      <input type="checkbox" class="absolute" style="position: absolute; width: 20px; height: 20px; margin-left: 5px;" 
-        (change)="onCheckboxChange($event, {id: document.id, type: 'file'})">
-      <i [class]="getIconName(document.extension)" [ngStyle]="{ color: getColor(document.extension) }" 
-        (click)="gotoDetailsDocument(document.id)" style="font-size: 100px;"></i>
-      <p>{{ document.title }}</p>
-    </div>
-  </div>
-
   <!-- Disposition en liste -->
-  
+
   <div *ngIf="disposition == 'list'" style="width: 100%;" class="row">
     <table class="table table-hover" style="margin-bottom: 0px;">
       <thead>
@@ -46,42 +63,62 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let folder of folders |
-         paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  };
-          let i = index" style="cursor: pointer;" 
-          [ngClass]="{'selected': isSelected({id: folder.id, type: 'folder'})}"
-          
-          (contextmenu)="onRightClick($event, folder.id)"
-          [class.selected]="folder.id === selectedRowIndex"
-          >
-          <th scope="row" style="vertical-align: middle;">
-            <input type="checkbox" (change)="onCheckboxChange($event, {id: folder.id, type: 'folder'})"
+        <tr
+          *ngFor="let folderFile of foldersFiles | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems }; let i = index"
+          style="cursor: pointer;" [ngClass]="{'selected': isSelected({id: folderFile.id, type: 'folder'})}"
+          (contextmenu)="onRightClick($event, folderFile.id, 'folder')"
+          [class.selected]="isSingleSelected(folderFile.id, 'folder')">
+
+
+          <th scope="row" *ngIf="folderFile.is_folder" style="vertical-align: middle;">
+            <input type="checkbox" (change)="onCheckboxChange($event, {id: folderFile.id, type: 'folder'})"
               style="margin-right: 10px;">
-            <i class="fa-solid fa-folder" style="font-size: 25px; color: rgb(42, 140, 194) !important; padding-top: 5px;"></i>
+            <i class="fa-solid fa-folder"
+              style="font-size: 25px; color: rgb(42, 140, 194) !important; padding-top: 5px;"></i>
           </th>
-          <td style="word-break: break-word; font-size: 16px; vertical-align: middle;" 
-            (click)="openFolderById(folder.id, folder.name,page)">
-            <p>{{ folder.name }}</p>
+
+          <th *ngIf="!folderFile.is_folder" scope="row" style="vertical-align: middle;">
+            <input type="checkbox" style="margin-right: 10px;"
+              (change)="onCheckboxChange($event, {id: folderFile.id, type: 'file'})">
+            <i [class]="getIconName(folderFile.extension)" style="font-size: 25px;"
+              [ngStyle]="{ color: getColor(folderFile.extension) }"></i>
+          </th>
+
+          <td *ngIf="folderFile.is_folder" style="word-break: break-word; font-size: 16px; vertical-align: middle;"
+            (click)="openFolderById(folderFile.id, folderFile.name,page)">
+            <p>{{ folderFile.name }}</p>
           </td>
-          <td></td>
-          <td>{{ folder?.created_by?.name || '' }}</td>
-          <td>{{ folder.created_at | customDateFormat }}</td>
+
+          <td *ngIf="!folderFile.is_folder" style="word-break: break-word; font-size: 16px; vertical-align: middle;"
+            (click)="gotoDetailsDocument(folderFile.id)">
+            <p>{{ folderFile.title }}</p>
+          </td>
+          <td *ngIf="folderFile.is_folder"></td>
+          <td *ngIf="!folderFile.is_folder">{{folderFile.size | byteConverter }}</td>
+          <td *ngIf="folderFile.is_folder">{{ folderFile?.created_by?.name || '' }}</td>
+          <td *ngIf="!folderFile.is_folder">{{ folderFile?.author?.name }}</td>
+          <td>{{ folderFile.created_at | customDateFormat }}</td>
+
+
+
 
         </tr>
-  
-        <tr *ngFor="let document of documents; let i = index" style="cursor: pointer;" 
+
+        <tr *ngFor="let document of documents; let i = index" style="cursor: pointer;"
           [ngClass]="{'selected': isSelected({id: document.id, type: 'file'})}"
-          
-          
-          >
+          (contextmenu)="onRightClick($event, document.id, 'document')"
+          [class.selected]="isSingleSelected(document.id, 'document')">
           <th scope="row" style="vertical-align: middle;">
-            <input type="checkbox" style="margin-right: 10px;" (change)="onCheckboxChange($event, {id: document.id, type: 'file'})">
-            <i [class]="getIconName(document.extension)" style="font-size: 25px;" [ngStyle]="{ color: getColor(document.extension) }"></i>
+            <input type="checkbox" style="margin-right: 10px;"
+              (change)="onCheckboxChange($event, {id: document.id, type: 'file'})">
+            <i [class]="getIconName(document.extension)" style="font-size: 25px;"
+              [ngStyle]="{ color: getColor(document.extension) }"></i>
           </th>
-          <td style="word-break: break-word; font-size: 16px; vertical-align: middle;" (click)="gotoDetailsDocument(document.id)">
+          <td style="word-break: break-word; font-size: 16px; vertical-align: middle;"
+            (click)="gotoDetailsDocument(document.id)">
             <p>{{ document.title }}</p>
           </td>
-          <td>{{document.size  | byteConverter }}</td>
+          <td>{{document.size | byteConverter }}</td>
           <td>{{ document?.author?.name }}</td>
           <td>{{ document.created_at | customDateFormat }}</td>
 
@@ -89,9 +126,17 @@
       </tbody>
     </table>
   </div>
-  <div class="col-12">
+  <div class="col-12 mt-4">
+    <div class="row">
+      <div class="col-5">
+        Total: {{totalItems}} Résultats
+      </div>
+      <div class="col-5">
+        <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+          nextLabel="Suivant"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
 
-</div>
-</div>
-  
 <app-context-menu [idParsed]="parsedId"></app-context-menu>

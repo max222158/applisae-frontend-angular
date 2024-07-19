@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="flex1">
+      <p class="font-size-12 mr-2 breadcrumb-1"><i  class="fa-solid fa-users"></i> Groupes  /  </p>
+      <p class="font-size-12 breadcrumb-1">Mes groupes  /  </p>  <p></p>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 col-lg-4 mt-1" *ngFor="let group of myGroups">
+
+            <div class="div-group" (click)="gotoDetailsGroup(group.id)">
+                <img class="position-absolute top-0 start-0" src="/assets/images/gradient1.svg" alt="">
+                <div class="div-group-content " >
+                    <div style="position: absolute; background: rgb(21, 125, 245); right: 0px; top:0px;    border-bottom-left-radius: 15px;" >
+                        <p class="font-size-12 mb-0 text-white p-member">{{group.num_members}} membres</p></div>
+                    <div class="user-img">
+                        <i class="fa-solid fa-users font-size-20 text-white"></i>
+                    </div>
+                    <p class="font-size-16 mt-1 font-weight-500">{{group.name}}</p>
+
+                    <p class="font-size-14 mt-1 div-group-descrip">{{group.description}}</p>
+                    <hr>    
+                    <p class="font-size-12">Créer par: <span style="color: blueviolet;"><i>{{group.created_by?.name}}</i></span></p>
+
+                    
+                    
+                
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

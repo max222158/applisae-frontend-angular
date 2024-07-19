@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account Sign In</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Se connecter</title>
   <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet">
                 
 </head>
@@ -79,17 +78,31 @@ label {
             <h2 class="card-title text-center mb-5" style="font-family: 'poppins';font-weight: 600;font-family: 'poppins';letter-spacing: 0px;font-size: 2rem;background: #0047930f;color: #004793;padding: 7px;">Se Connecter</h2>
             <form (ngSubmit)="onSubmit()">
               <div class="form-group">
-                <label for="username">Email:</label>
-                <input type="text" class="form-control" [(ngModel)]="credentials.email" name="email" id="Email" placeholder="Email">
+                <label for="username" style="
+                margin-bottom: 8px;
+                margin-left: 3px;
+            ">Email:</label>
+                <input 
+                style="border: 1px solid #d3d3d3;
+                padding: 15px 18px;
+                border-radius: 8px;"
+                type="text" class="form-control" [(ngModel)]="credentials.email" name="email" id="Email" placeholder="Email">
               </div>
-              <div class="form-group">
-                <label for="password">Mot de passe:</label>
-                <input type="password" class="form-control" name="password" id="password" [(ngModel)]="credentials.password"  placeholder="**********">
+              <div class="form-group mt-4">
+                <label style="
+                margin-bottom: 8px;
+                margin-left: 3px;
+            " for="password">Mot de passe:</label>
+                <input 
+                style="border: 1px solid #d3d3d3;
+                padding: 15px 18px;
+                border-radius: 8px;"
+                type="password" class="form-control" name="password" id="password" [(ngModel)]="credentials.password"  placeholder="**********">
               
               </div>
-              <button type="submit" class="btn btn-primary btn-block mb-4"
+              <button type="submit" class="btn btn-primary btn-block mb-4 mt-4"
                style="font-weight: 700;font-size: 20px;padding:
-                8px;margin-top: 30px;border-radius: 65px;" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Se Connecter</button>
+                8px;margin-top: 30px;border-radius: 65px; width:100%" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Se Connecter</button>
             </form>
           </div>
         </div>
@@ -97,7 +110,5 @@ label {
 	  <p class="text-white text-center">AppliSAE Version 2.0.0</p>
     </div>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

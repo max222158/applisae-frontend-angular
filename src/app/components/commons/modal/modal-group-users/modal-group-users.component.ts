@@ -17,9 +17,9 @@ export class ModalGroupUsersComponent {
   @Output() selectId = new EventEmitter<number>();
   @Output() searchEvent = new EventEmitter<void>();
   @Output() getUsersEvent = new EventEmitter<void>();
-  @Output() setFolderId = new EventEmitter<{id: number, name: string}>();
+  @Output() setFolderId = new EventEmitter<{id: number, name: string, searchText: string}>();
   @Output() groupSelectChange = new EventEmitter<any[]>();
-  
+  searchText:string = ''
   private _groupSelect: any[] = [];
 
   @Input() set groupSelect(value: any[]) {
@@ -51,19 +51,19 @@ export class ModalGroupUsersComponent {
 
   }
 
-  getFolderById(id: number, name: string) {
+  getFolderById(id: number, name: string, searchText:string) {
     this.isSelectionFolder = -1;
-    this.setFolderId.emit({id, name});
+    this.setFolderId.emit({id, name, searchText});
   }
 
-  getFolderByPathId(id: number, name: string) {
+  getFolderByPathId(id: number, name: string,searchText:string) {
     this.isSelectionFolder = -1;
-    this.setFolderId.emit({id, name});
+    this.setFolderId.emit({id, name,searchText});
   }
 
-  getPathFolder(id: number, name: string) {
+  getPathFolder(id: number, name: string,searchText:string) {
     this.isSelectionFolder = -1;
-    this.setFolderId.emit({id, name});
+    this.setFolderId.emit({id, name, searchText});
   }
 
   toggleSelection(id: number, name: string) {

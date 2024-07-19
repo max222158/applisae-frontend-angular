@@ -4,7 +4,7 @@ import { FilemanagerService } from '../../../../services/api/filemanager/fileman
 import { UtilsService } from '../../../../services/core/utils/utils.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../state/app.state';
-import { copyFolderAndFilesResponse, getFilesSelector, getFolderAndFilesSuccess, getFoldersSelector, getPathSelector, isCopyFolderAndFilesSuccess, isLoadingCopyFolderAndFiles, isLoadingGetFolderAndFiles, isLoadingMoveFolderAndFiles, isLoadingSelectFile, moveFolderAndFilesResponse, moveFolderAndFilesSuccess } from '../../../../state/selectors/numerical-deposit/numerical-deposite.selectors';
+import { copyFolderAndFilesResponse, getFilesSelector, getFolderAndFilesResponse, getFolderAndFilesSuccess, getFoldersSelector, getPathSelector, isCopyFolderAndFilesSuccess, isLoadingCopyFolderAndFiles, isLoadingGetFolderAndFiles, isLoadingMoveFolderAndFiles, isLoadingSelectFile, moveFolderAndFilesResponse, moveFolderAndFilesSuccess, totalItemsFoldersFiles } from '../../../../state/selectors/numerical-deposit/numerical-deposite.selectors';
 import { copyFolderAndFiles, getFolderAndFiles, moveFolderAndFiles, resetFolderAndFiles, resetIsSuccessCopyState, resetIsSuccessMoveState, sendFileFolderSelect } from '../../../../state/actions/numerical-deposit/numerical-deposite.actions';
 
 @Component({
@@ -32,7 +32,10 @@ export class AllActionComponent {
   isMovefoldersFilesRequestLoading$: Observable<boolean>;
   isCopyfoldersFilesRequestLoading$: Observable<boolean>;
   getFileFolderSuccess$: Observable<boolean>;
+  folderAndFilesResponse$: Observable<any[]>;
   isRoot: boolean = true
+  perPage:number =  10
+  page:number = 1
   error$: Observable<any>;
   response$: Observable<any>;
   isFolderRightSelect: number | null = null;
@@ -40,7 +43,8 @@ export class AllActionComponent {
   folders$: Observable<any[]>;
   files$: Observable<any[]>;
   paths$: Observable<any[]>;
-
+  totalItems:number = 0
+  totalItems$: Observable<number>
   isLoadingFolderRight: boolean = false
   private subscriptions: Subscription = new Subscription();
   @Input() selectedFolders: any[] = [];
@@ -76,7 +80,7 @@ export class AllActionComponent {
 
     this.isCopyfoldersFilesRequestLoading$ = this.store.select(isLoadingCopyFolderAndFiles);
 
-
+    this.folderAndFilesResponse$ = this.store.select(getFolderAndFilesResponse);
     this.folders$ = this.store.select(getFoldersSelector);
     this.paths$ = this.store.select(getPathSelector);
     this.files$ = this.store.select(getFilesSelector);
@@ -85,6 +89,8 @@ export class AllActionComponent {
     
     this.isActionMoveSuccess$ = this.store.select(moveFolderAndFilesSuccess);
     this.isCopySuccess$ = this.store.select(isCopyFolderAndFilesSuccess);
+
+    this.totalItems$ = this.store.select(totalItemsFoldersFiles);
 
   }
 
@@ -144,12 +150,22 @@ export class AllActionComponent {
       }
 
     });
+
+
+    
+    const subscription7 = this.totalItems$.subscribe((response) => {
+
+      console.log("totalItemsFoldersFiles ", response )
+      this.totalItems = response
+
+    });
     this.subscriptions.add(subscription1);
     this.subscriptions.add(subscription2);
     this.subscriptions.add(subscription3);
     this.subscriptions.add(subscription4);
     this.subscriptions.add(subscription5);
     this.subscriptions.add(subscription6);
+    this.subscriptions.add(subscription7);
 
   }
 
@@ -159,12 +175,31 @@ export class AllActionComponent {
     this.store.dispatch(resetFolderAndFiles());
     // Reset the copy state when the component is destroyed
   }
+
+  // 1er click du dossier root 
+  //et pour disposer les sous dossiers du treeview
   toggleNode(node: { loaded: boolean; id: any; children: any; expanded: boolean; }): void {
 
-
     if (!node.loaded) {
-      this.fileManager.getFolderById(node.id, 1).subscribe(response => {
-        node.children = response.results.folders.map((folder: { id: any; name: any; }) => ({
+
+      this.getFolderTreeView(1,node)
+
+ 
+    } else {
+      node.expanded = !node.expanded; // Ouvrir/fermer le dossier si déjà chargé
+    }
+  }
+
+
+  getFolderTreeView(page:number,node:any){
+
+
+    let formData = new FormData()
+    formData.append('id', node.id.toString());
+    formData.append('page', page.toString());
+    this.fileManager.getOnlyFolders(formData).subscribe({
+      next:(response) => {
+        node.children = response.folders.map((folder: { id: any; name: any; }) => ({
           id: folder.id,
           name: folder.name,
           children: [],
@@ -172,16 +207,18 @@ export class AllActionComponent {
           expanded: false
         }));
         node.loaded = true;
-        node.expanded = !node.expanded; // Ouvrir le dossier après chargement
-      });
-    } else {
-      node.expanded = !node.expanded; // Ouvrir/fermer le dossier si déjà chargé
-    }
+        node.expanded = !node.expanded;
+
+      },
+      error:() => {
+
+      }
+    })
+
   }
 
-
   // Selectionner et disposer les fichiers sur la partie droite de l'interface
-  selectNode(node: any): void {
+  selectNode(node: any, page:number): void {
 
 
 
@@ -189,12 +226,12 @@ export class AllActionComponent {
 
     this.isLoadingFolderRight = true
     this.selectedNodeId = node.id;
-
+    this.page = 1
     if (this.selectedNodeId) {
 
       let formData = new FormData()
       formData.append('id', this.selectedNodeId.toString());
-      formData.append('page', '1');
+      formData.append('page', page.toString());
       this.store.dispatch(getFolderAndFiles({ formData }));
       // Souscris au sélecteur de succès
       this.getFileFolderSuccess$.subscribe((isSuccess) => {
@@ -204,6 +241,8 @@ export class AllActionComponent {
           }
         }
       });
+
+
 
 
     }
@@ -312,6 +351,18 @@ export class AllActionComponent {
         expanded: false // Indicateur pour vérifier si le dossier est ouvert
       }
     ];
+  }
+
+  pageChanged(event:any){
+    this.page = event
+    let formData = new FormData()
+    if(this.selectedNodeId){
+      formData.append('id', this.selectedNodeId.toString());
+      formData.append('page', event);
+    }
+
+    this.store.dispatch(getFolderAndFiles({ formData }));
+
   }
 
 }

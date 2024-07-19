@@ -1,0 +1,225 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+    style="padding-right: 0px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg scale-in" role="document">
+        <div class="modal-content p-3 heigth-100vh">
+            <!-- src/app/treeview/treeview.component.html -->
+            <!-- src/app/treeview/treeview.component.html -->
+            <div class="flex1" style="justify-content: space-between;">
+                <h3 class="mb-4">Plan de classement général</h3>
+
+
+
+                <div class="mr-4" style="display: flex; ">
+                    <div>
+                        <button (click)="openModalFolder()" class="btn btn-success action-btn">Nouveau dossier</button>
+
+
+
+                        <button class="btn btn-secondary  action-btn" mat-raised-button matTooltip="Renommer">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+
+                        </button>
+                        <button class="btn btn-success  action-btn" mat-raised-button matTooltip="Copier">
+                            <i class="fa-solid fa-copy"></i>
+
+                        </button>
+                        <button (click)="setIsActionMovingState(true)" class="btn btn-secondary  action-btn" mat-raised-button matTooltip="Déplacer" >
+                            <i class="fa-solid fa-right-to-bracket"></i>
+
+                        </button>
+                        <button (click)="openModalDelete()" class="btn btn-danger  action-btn" mat-raised-button matTooltip="Supprimer">
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                        <label style="position: absolute;" for="upload" mat-raised-button
+                            matTooltip="Uploader des fichiers ici"
+                            class="btn btn-success border bg-gray-50 flex flex-col items-center gap-2 cursor-pointer">
+                            <input type="file" id="upload" class="hidden" style="display: none;" multiple>
+                            <span class="text-gray-600 font-medium"><i class="fa-solid fa-upload"></i>
+                            </span>
+                        </label>
+                    </div>
+              
+                </div>
+            </div>
+            <!-- src/app/treeview/treeview.component.html -->
+            <!-- src/app/treeview/treeview.component.html -->
+            <div class="row" style=" height: calc(100vh - 135px);">
+                <div class="col-md-3" style="overflow-y: scroll; ; height: calc(100vh - 135px);">
+                    <ul>
+                        <li *ngFor="let node of treeData">
+                            <span class="caret" (click)="toggleNode(node)">
+                                <i class="fas" [ngClass]="node.expanded ? 'fa-folder-open' : 'fa-folder'"></i>
+                                {{ node.name }}
+                            </span>
+                            <ul class="nested" [class.active]="node.expanded">
+                                <ng-container *ngFor="let child of node.children">
+                                    <!-- Ce composant se trouve dans commons : classification -->
+                                    <app-app-tree-node [node]="child" (toggle)="toggleNode($event)"
+                                        (selectNode)="selectNode($event, 1)"
+                                        [selectedNodeId]="selectedNodeId"></app-app-tree-node>
+                                </ng-container>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="col-md-9" style="overflow-y: scroll; height: calc(100vh - 135px);">
+
+
+                    <div *ngIf="isRoot" class="flex1 align-items-center"
+                        style=" justify-content: center; height: calc(100vh - 200px);">
+                        <img src="assets/images/research-file-folder.png" style="width: 300px;" alt="">
+                    </div>
+
+
+
+
+                    <div *ngIf="(isFolderLoading$ | async) as isLoading" class="spinner-border text-success"
+                        role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                    <div>
+
+
+
+                        <div style="display: flex;" *ngIf="(paths$ | async) as paths">
+                            <p class="link-breadcrumb" *ngFor="let path of paths; let i=index" style="
+                                    font-size: 13px;cursor: pointer;margin-right: 15px;margin-bottom: 0px;
+                                    padding-left: 10px;"><i class="fa-regular fa-folder-open"
+                                    style="font-size: 16px;"></i>
+                                {{path.name}}
+                                <i class="fa-solid fa-chevron-right" style="font-size: 10px; margin-left: 10px;"></i>
+                            </p>
+                        </div>
+                        <div *ngIf="(folderAndFilesResponse$ | async) as foldersFiles">
+                          
+
+                                <div class="row">
+
+
+                                    <div *ngFor="let folderFile of foldersFiles | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems }; let i = index" class="hover-effect flex1"
+                                        style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
+                                        <div *ngIf="folderFile.is_folder" style="width: 125px;">
+                                            <input type="checkbox" 
+                                            (change)="onCheckboxChange($event, {id: folderFile.id, type: 'folder'})" 
+                                            class="absolute" style="position: absolute; 
+                                            width: 20px; height: 20px; margin-left: 5px;">
+
+                                            <i class="fa-solid fa-folder" (click)="selectNode(folderFile, 1)"
+                                                style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+                                            <p>{{ folderFile.name }}</p>
+                                        </div>
+
+
+                                        <div *ngIf="!folderFile.is_folder" style="width: 125px;">
+                                            <input type="checkbox" class="absolute"
+                                                (change)="onCheckboxChange($event, {id: folderFile.id, type: 'file'})"
+                                                style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
+                                            <i [class]="getIconName(folderFile.extension)" (click)="openModalReadSingle(folderFile.extension,folderFile.id, folderFile.title)"
+                                                [ngStyle]="{ color: getColor(folderFile.extension) }"
+                                                style="font-size: 100px;"></i>
+                                            <p>{{ folderFile.title }}</p>
+                                        </div>
+                                    </div>
+                         
+
+
+
+                                </div>
+
+
+                                <div *ngIf="foldersFiles.length == 0 && isRoot == false" style=" background: #eeeeee00; display: flex; 
+                                align-items: center; height: calc(100vh - 100px);
+                                justify-content: center;">
+                                    <div style="">
+
+
+
+
+
+
+                                        <div class=""
+                                            style="display: flex; justify-content: center; align-items: center;">
+                                            <img src="assets/images/boite-empty.png" style="width: 150px;" alt="">
+                                        </div>
+                                        <h3 style="text-align: center;">Ce dossier est vide</h3>
+                                        <br><br>
+                                        <div class=""
+                                            style="display: flex; justify-content: center; align-items: center;">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-4">
+                                    <div class="row">
+                                      <div class="col-5">
+                                          Total: {{totalItems}} Résultats
+                                      </div>
+                                      <div class="col-5">
+                                          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                                              nextLabel="Suivant"></pagination-controls>
+                                      </div>
+                                  </div>
+                                </div>
+
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- src/app/treeview/treeview.component.html -->
+
+
+
+
+
+
+
+            <div class="modal-footer" style="
+            position: absolute;
+            right: 10px;
+            bottom: 2px;
+            width: 100%;
+            z-index:22
+        ">
+                 <button *ngIf="selectedNodeId !== null && selectedCheckItems.length > 0 && isActionMoving" 
+                    [disabled]="disabledActionButton" class="btn btn-success" 
+                    style="padding: 12px 51px;
+                    background-color: rgb(66, 1, 88);
+                    font-weight: 500;font-size: 16px; width: auto;" (click)="moveAction()">
+
+
+                    Déplacer ici
+                </button>
+
+                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-create-folder 
+[isOpenModalFolder]="isOpenModalFolder"
+ (closeModalEvent)="closeModalFolder()"
+ [folder_id]="selectedNodeId"
+ [paths]="folderPaths"
+ ></app-create-folder>
+
+ <app-modal-delete [isOpenModalDelete]="isOpenModalDelete" (closeModalEvent)="closeModalDelete()"
+    (deleteFileEvent)="deleteFolderFile()" [number_of_elements]="selectedCheckItems.length">
+
+</app-modal-delete>
+
+<app-reader-document [isOpenModal]="isModalReadSingle"
+ (closeModalEvent)="closeModalReaderDocument()" 
+ [extension]="extension" 
+ [fileName]="fileName"
+ [documentId]="documentIdView"
+  ></app-reader-document>

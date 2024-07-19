@@ -1,0 +1,74 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+    style="padding-right: 0px; background: #00000000;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog modal-lg scale-in" role="document"
+        style="width: 100%;max-width: 100%;height: 100%;margin: 0px;">
+        <div class="modal-content p-0 heigth-100vh items-center">
+
+            <div style="width: 100%; height: 70px; justify-content: space-between; border:2px solid #dddddd"
+                class="flex1 border-1">
+                <div>
+                    <p class="font-size-12"></p>
+                </div>
+
+                <div class="flex1" style="justify-content: center; align-items: center;">
+                    <p class="font-size-14 font-weight-500 mb-0">{{fileName}}</p>
+                </div>
+                <div class="flex1" style="align-items: flex-end; justify-content: center; align-items: center;">
+                    <mat-icon role="img" aria-hidden="true"
+                        class="mat-icon notranslate material-icons-outlined mat-icon-no-color ng-star-inserted"
+                        data-mat-icon-type="font">get_app</mat-icon>
+                    <mat-icon role="img" aria-hidden="true"
+                        class="mat-icon notranslate material-icons-outlined mat-icon-no-color ng-star-inserted"
+                        data-mat-icon-type="font">print</mat-icon>
+                    <mat-icon (click)="setZoom('reduce')" role="img"
+                        class="mat-icon notranslate material-icons-outlined mat-icon-no-color" aria-hidden="true"
+                        data-mat-icon-type="font">zoom_out</mat-icon>
+                    <mat-icon (click)="setZoom('increase')" role="img"
+                        class="mat-icon notranslate material-icons-outlined mat-icon-no-color" aria-hidden="true"
+                        data-mat-icon-type="font">zoom_in</mat-icon>
+                    <mat-icon (click)="openComment()" role="img"
+                        class="mat-icon notranslate material-icons-outlined mat-icon-no-color"  aria-hidden="true"
+                        data-mat-icon-type="font">comment</mat-icon>
+
+                    <button class="btn" style="margin-right: 15px;color:#6d6d6d" (click)="closeModal()"><i
+                            class="fa-solid fa-xmark font-size-30"></i></button>
+                </div>
+            </div>
+            <div *ngIf="pdfSrc === '' && !isVideo" class="flex1 item-center justify-center"
+                style="height: calc(100vh);">
+                <div class="spinner-border text-primary spinner-loading-file" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+
+
+            <div class="container-reader">
+                <div class="container-reader1">
+                <pdf-viewer *ngIf="pdfSrc !== '' "  class="ngPdf container-reader-pdf " [src]="pdfSrc" [zoom]="zoom" [render-text]="true"
+                    [original-size]="false" >
+
+                </pdf-viewer>
+
+
+                <div *ngIf="isVideo" style="height: calc(100vh);width: 100%;">
+                    <video controls *ngIf="videoLink !== ''" style="width: 100%; height: 100%; ">
+                        <source [src]="videoLink" type="video/mp4">
+
+                    </video>
+                </div>
+                </div>
+
+
+                <app-comments-details-tabs *ngIf="isCommentOpen" [document_id]="_documentId">
+                
+                </app-comments-details-tabs>
+
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

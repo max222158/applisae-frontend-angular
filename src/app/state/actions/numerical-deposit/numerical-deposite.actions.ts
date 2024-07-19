@@ -1,19 +1,27 @@
 // file.actions.ts
 import { createAction, props } from '@ngrx/store';
 
+
+
 export const sendFileFolderSelect = createAction(
-    '[File] Copy Files',
-    props<{ formData: FormData }>()
-  );
+  '[File] Copy Files',
+  props<{ formData: FormData }>()
+);
 export const sendFileFolderSelectSuccess = createAction('[File] Copy File Success', props<{ response: any }>());
 export const sendFileFolderSelectFailure = createAction('[File] Copy File Failure', props<{ error: any }>());
 
 
 
+export const getOnlyFolders = createAction(
+  '[FoldersFiles] get folders',
+  props<{ formData: FormData }>()
+);
+
 export const getFolderAndFiles = createAction(
   '[FoldersFiles] get',
   props<{ formData: FormData }>()
 );
+
 export const getFolderAndFilesSuccess = createAction('[FoldersFiles] get  Success', props<{ response: any }>());
 export const getFolderAndFilesFailure = createAction('[FoldersFiles] get Failure', props<{ error: any }>());
 export const resetFolderAndFiles = createAction('[FoldersFiles]  reset');

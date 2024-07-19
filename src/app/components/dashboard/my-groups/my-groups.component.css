@@ -1,0 +1,49 @@
+.div-group{
+    border-radius: 3px;
+    color: inherit;
+    position: relative;
+    box-shadow: var(--ds-shadow-raised, 0 1px 1px rgba(9, 30, 66, 0.25), 0 0 1px 1px rgba(9, 30, 66, 0.13));
+    cursor: pointer;
+    transition: box-shadow 0.1s ease 0s;
+
+    padding: 0px;
+    height: 100%;
+    border: 1px solid #c6d5dc;
+}
+
+.div-group:hover {
+    box-shadow: var(--ds-shadow-overlay, 0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31));
+}
+.div-group-content{
+
+ 
+    padding: 10px;
+
+    
+
+}
+
+
+.user-img{
+
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-top: 0rem;
+    background: #278afa;
+}
+.div-group-descrip{
+    color: rgb(159, 159, 159);
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.p-member{
+    padding: 5px 15px;
+}

@@ -15,20 +15,43 @@
         </div>
     </div>
     <div class=" mb-3">
-
+   
         <div class="card border-0">
             <div class="btn-toolbar p-3" role="toolbar">
 
 
-                <button class="btn border-1 border-radius-20 mr-2 select-option-filter" style="background: #f6f8fa;">Tous les courriers</button>
+                <button (click)="onFilteredCourrierChange('',1)" 
+                class="btn border-1 border-radius-20 mr-1 " [ngClass]="selectFilterCourrier == 1 ? 'select-option-filter' : ''" 
+                style="background: #f6f8fa;">Tous les courriers</button>
                 
-                <button class="btn border-1 border-radius-20 mr-2" style="background: #f6f8fa;">Non lus</button>
+                <button (click)="onFilteredCourrierChange('unreads',2)"  class="btn border-1 border-radius-20 mr-1" style="background: #f6f8fa;"
+                [ngClass]="selectFilterCourrier == 2 ? 'select-option-filter' : ''"
+                >Non lus</button>
 
-                <button class="btn border-1 border-radius-20 mr-2" style="background: #f6f8fa;">Que j'ai initiés</button>
+                <button
+                (click)="onFilteredCourrierChange('i_initied',3)" 
+                class="btn border-1 border-radius-20 mr-1"
+                 style="background: #f6f8fa;"
+                 [ngClass]="selectFilterCourrier == 3 ? 'select-option-filter' : ''"
+                 >Que j'ai initiés</button>
                 
-                <button class="btn border-1 border-radius-20 mr-2" style="background: #f6f8fa;">Urgents</button>
+                <button (click)="onFilteredCourrierChange('urgents',4)" 
+                class="btn border-1 border-radius-20 mr-1"
+                 style="background: #f6f8fa;"
+                 [ngClass]="selectFilterCourrier == 4 ? 'select-option-filter' : ''"
+                 >Urgents</button>
             
             </div>
+
+
+            <ngx-skeleton-loader
+            appearance="line"
+            count="15"
+            [theme]="{ height: '50px' }"
+            *ngIf="isLoading"
+          >
+          </ngx-skeleton-loader>
+
             <div class="table-responsive">
                 <table class="table table-hover">
                     <tbody>
@@ -36,9 +59,9 @@
                         <tr *ngFor="let courrier of courriers |
                                      paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItems  }"
                             (click)="gotoDetailsCourrierPage(courrier.id, courrier.subject,courrier.last_annotation,courrier.user_sender_info.email,courrier.user_sender_info.name,courrier.created_at)"
-                            [ngStyle]="{'background': courrier.read ? '#d5dbff78' : ''}" style="cursor: pointer;">
-                            <td class="action" style="width: 40px;"><input type="checkbox" /></td>
-                            <td class="action" style="width: 40px;"><i class="fa-regular fa-star"></i></td>
+                            [ngStyle]="{'background': courrier.read ? '#f0f2ff78' : ''}" style="cursor: pointer;">
+                           <!--  <td class="action" style="width: 40px;"><input type="checkbox" /></td>
+                            <td class="action" style="width: 40px;"><i class="fa-regular fa-star"></i></td> -->
                             <td class="name" style="width: 50px;">
                                 <app-circle-name-component [name]="courrier.user_sender_info.name"></app-circle-name-component>
                             </td>
@@ -60,11 +83,11 @@
                                     courrier.priority == 3 ? 'Très Urgente' :
                                     courrier.priority
                                     }}</span><span
-                                    style="font-weight: 500;  font-size: 16px;">{{courrier.subject}} 
+                                    style="font-weight: 500;  font-size: 16px;" [ngStyle]="{'font-weight': courrier.read ? '400' : '500'}">{{courrier.subject}} 
                                     <span *ngIf="courrier.position_in_workflow > 0" class="font-size-10 ml-2" style="color:#9e0086; margin-top:-5px; position:absolute">Workflow</span>
                                  </span>
 
-                                <p class="mb-0">{{courrier.last_annotation | safeHtml |  slice:0:120 }}...</p>
+                                <p class="mb-0 p-description">{{courrier.last_annotation | safeHtml  }}</p>
                             </td>
 
                             <td class="time" style="width: 100px;">{{courrier.updated_at | customDateFormat}}</td>

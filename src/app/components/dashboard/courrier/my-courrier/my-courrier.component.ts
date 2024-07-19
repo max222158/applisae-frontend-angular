@@ -15,19 +15,28 @@ export class MyCourrierComponent {
   perPage: number = 10
   totalItems: any = 0
   page: number = 1
-
+  filterCourrier:string = ''
+  selectFilterCourrier:number = 1
 
   selectedFile: File | null = null;
   document: Document | null = null;
-
+  isLoading: boolean = true
   constructor(private courrierService: CourrierService, private router: Router) { }
   // Utilisation d'un tableau générique pour stocker les données
 
   fetchCourrier() {
-    this.courrierService.getCourrierList(this.page).subscribe((data: any) => { // Spécifiez le type 'any' pour les données
-      console.log(data);
-      this.courriers = data.results;
-      this.totalItems = data.count
+    this.isLoading = true
+    this.courrierService.getCourrierList(this.page, this.filterCourrier)
+    .subscribe({
+      next:(data:any)=>{
+        this.isLoading = false
+        console.log(data);
+        this.courriers = data.results;
+        this.totalItems = data.count
+      },
+      error:()=>{
+        this.isLoading = false
+      }
     });
   }
   ngOnInit(): void {
@@ -36,7 +45,50 @@ export class MyCourrierComponent {
   pageChanged(event: any) {
     this.page = event;
     console.log(event)
-    this.fetchCourrier();
+    this.onPaginationCourrierChange(this.filterCourrier)
+  }
+
+
+  onFilteredCourrierChange(value:string,selectedIndex:number){
+    this.isLoading = true
+    this.selectFilterCourrier = selectedIndex
+    this.filterCourrier = value
+    this.page = 1
+
+    this.courrierService.getCourrierList(this.page, value).subscribe({next:(data:any)=>{
+      console.log(data);
+      this.courriers = data.results;
+      this.totalItems = data.count
+      this.isLoading = false
+    },
+    error: (error: any) => {
+
+      this.isLoading = false
+
+    }
+  
+  })
+  }
+
+  onPaginationCourrierChange(value:string){
+
+    this.filterCourrier = value
+    this.isLoading = true
+
+    this.courrierService.getCourrierList(this.page, value).subscribe(
+      {
+        next:(data:any)=>{
+      console.log(data);
+      this.courriers = data.results;
+      this.totalItems = data.count
+      this.isLoading = false
+    },
+    error: (error: any) => {
+
+      this.isLoading = false
+    }
+  
+  })
   }
   gotoDetailsCourrierPage(courrierId: number, subject: string, annotation: string, email: string, name: string,date:string) {
 

@@ -1,31 +1,93 @@
-
 <div class="container">
     <div class="header">
-        <div class="header-icon"><img
-         style="width: 100px;"    src="assets/images/automatsation.png" alt=""></div>
+        <div class="header-icon"><img style="width: 100px;" src="assets/images/automatsation.png" alt=""></div>
         <div class="header-text">
             <h2>Continuez à organiser le contenu et à aller de l'avant.</h2>
             <p>Les règles d'automatisation peuvent aider à archiver des documents,
-                 à modifier l'état d'un document ou à rappeler à vos collègues de terminer une tâche.</p>
+                à modifier l'état d'un document ou à rappeler à vos collègues de terminer une tâche.</p>
         </div>
     </div>
 
     <h2 class="mb-4 mt-4">Règles d'automatisations</h2>
 
     <div class="grid">
-        <div class="card">
+        <div class="card" [ngClass]="{ 'selected': isSelected == 1 }" (click)="setSelected(1)">
             <div class="card-icons">🏷️ <i class="fa-solid fa-right-long"></i> 📝</div>
             <p>Archiver automatiquement les documents de courriers dans un dossier spécifique en fonction du modèle</p>
 
         </div>
-        <div class="card">
+        <div class="card" [ngClass]="{ 'selected': isSelected == 2 }" (click)="setSelected(2)">
             <div class="card-icons">📁 <i class="fa-solid fa-right-long"></i> 🗄️</div>
             <p>Archiver les documents après la fin d'un workflow</p>
         </div>
-        <div class="card">
+        <div class="card" [ngClass]="{ 'selected': isSelected == 3}" (click)="setSelected(3)">
             <div class="card-icons">📅 <i class="fa-solid fa-right-long"></i> 📧</div>
             <p>Notifier par e-mail lorsqu'il y a des tâches à en retard</p>
         </div>
 
+    </div>
+    <div class="border-1 p-3 border-radius-10" style="background: #c5ffac33;" *ngIf="isSelected !== -1">
+        <div class="flex1 " *ngIf="isSelected == 1">
+            <div>
+                <div class="flex1 mt-2 ml-4" style="">
+
+                    <mat-slide-toggle class="text-warning"></mat-slide-toggle>
+                    <p class="mb-0 ml-1" style=""> </p>
+                </div>
+            </div>
+            <div>
+                <div   class="container-info">
+
+                    <div class="card-icons">🏷️ <i class="fa-solid fa-right-long"></i> 📝</div>
+
+                    <p class="font-size-15 ml-2">
+                        Archiver automatiquement les documents de courriers
+                        dans un dossier spécifique en fonction du modèle
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="flex1 " *ngIf="isSelected == 2">
+            <div>
+                <div class="flex1 mt-2  ml-4" style="">
+
+                    <mat-slide-toggle class="text-warning"></mat-slide-toggle>
+                    <p class="mb-0 ml-1" style=""> </p>
+                </div>
+            </div>
+            <div>
+                <div class="container-info">
+
+                    <div class="card-icons">📁 <i class="fa-solid fa-right-long"></i> 🗄️</div>
+                    <p>Archiver les documents après la fin d'un workflow</p>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="flex1 " *ngIf="isSelected == 3">
+            <div>
+                <div class="flex1 mt-2  ml-4" style="">
+
+                    <mat-slide-toggle class="text-warning"></mat-slide-toggle>
+                    <p class="mb-0 ml-1" style=""> </p>
+                </div>
+            </div>
+            <div>
+                <div class="container-info">
+
+                    <div class="card-icons">📅 <i class="fa-solid fa-right-long"></i> 📧</div>
+                    <p>Notifier par e-mail lorsqu'il y a des tâches à en retard</p>
+                </div>
+
+
+            </div>
+        </div>
+        <button class="btn btn-success mt-4"> Enregistrer</button>
     </div>
 </div>

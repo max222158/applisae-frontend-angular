@@ -1,0 +1,124 @@
+<div class="container">
+  <div class="flex1">
+    <p class="font-size-12 mr-2 breadcrumb-1"><i class="fa-solid fa-users"></i> Groupes / </p>
+    <p class="font-size-12 breadcrumb-1">Mes groupes / </p>
+    <p> {{group.name}} </p>
+  </div>
+
+  <h3 class="mb-2">{{group.name}} <span class="bg badge badge-warning bg-warning"> {{group.num_members}} membres</span>
+  </h3>
+  <div class="flex1" style="justify-content: space-between; margin-top:31px">
+    <div>
+      <input type="search" placeholder="Rechercher ici" class="form-control" name="" id="">
+    </div>
+
+
+    <div class="btn-toolbar p-0" role="toolbar">
+
+
+      <button (click)="onMenuChange(1)" class="btn border-1 border-radius-20 mr-2 "
+        [ngClass]="selectMenu == 1 ? 'select-option-filter' : ''" style="background: #f6f8fa;">Tous les documents
+      </button>
+
+      <button (click)="onMenuChange(2)" class="btn border-1 border-radius-20 mr-2" style="background: #f6f8fa;"
+        [ngClass]="selectMenu == 2 ? 'select-option-filter' : ''">
+        Workflows</button>
+
+
+    </div>
+
+
+  </div>
+
+  <div *ngIf="selectMenu == 1">
+    <div class="mt-4">
+      <ngx-skeleton-loader appearance="line" count="5" [theme]="{ height: '40px' }" *ngIf="isLoading">
+      </ngx-skeleton-loader>
+    </div>
+    <div class="empty-div" *ngIf="documents.length == 0 && isLoading == false">
+
+      <p class="font-size-15">Aucun document n'est encore partagé dans ce groupe</p>
+
+    </div>
+    <div class="flex1 mt-4" *ngFor="let document of documents">
+      <div class="user-round">
+        <img src="http://localhost/media{{document.sharedBy?.image}}" alt="">
+      </div>
+
+      <div class="message-info-user">
+        <div class="flex1" style="justify-content: space-between;">
+          <p class=" "><span class="font-weight-500 font-size-15">{{document.sharedBy?.name}}</span>
+            <span style="color: rgb(155, 155, 155);font-size: 12px;"> {{document.sharedBy?.email}}</span>
+          </p>
+          <div class="flex1" style="justify-content: end;">
+            <div class="flex1" style="position: absolute;">
+              <p class="mb-0 text-white mb-0 info-view pl-2 pr-2">51 <i class="fa-regular fa-eye"></i> 251 <i
+                  class="fa-regular fa-comment-dots"></i> </p>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div (click)="openModalReadSingle(document.document.extension,document.document.id, document.document.title)"
+          style="cursor: pointer;">
+          <img [src]="getFileIconSrc(document.document.extension)" width="40px" alt="">
+          <p style="text-decoration: underline; color:rgb(9, 146, 205)">{{document.document.title}}</p>
+        </div>
+        <p>{{document.document.description}}</p>
+
+        <p (click)="createWorkflow(document.document.id)" class="action-workflow">
+          <i class="fa-solid fa-users" style="margin-bottom: 1rem;"></i> Démarrer un workflow
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="selectMenu == 2">
+    <div class="mt-4">
+      <ngx-skeleton-loader appearance="line" count="5" [theme]="{ height: '40px' }" *ngIf="isLoadingWorkflow">
+      </ngx-skeleton-loader>
+    </div>
+    <hr>
+    <div *ngIf="!isLoadingWorkflow" >
+    <div  *ngFor="let workflow of workflows">
+
+    
+        <p class="ont-size-12 font-weigth-500 mb-0">{{workflow.initiatedBy.name}}</p>
+        <span [ngClass]="{
+            'bg-warning': workflow.priority == 2,
+            'bg-success': workflow.priority == 1,
+            'bg-danger': workflow.priority == 3,
+            'badge': true,
+            'me-2': true
+          }" >
+            {{
+            workflow.priority == 1 ? 'Normale' :
+            workflow.priority == 2 ? 'Urgente' :
+            workflow.priority == 3 ? 'Très Urgente' :
+            workflow.priority
+            }}</span><span style="font-weight: 400;  font-size: 16px;">
+
+            {{
+            workflow.type == 1 ? '' :
+            workflow.type == 2 ? 'Réviser et approuver en groupe' :
+            workflow.type == 3 ? 'Réviser et approuver en groupe Lecture uniquement' :
+            workflow.type == 4 ? '' :
+            workflow.type == 5 ? 'Réviser et approuver par plusieurs utilisateurs' :
+
+            workflow.type
+            }}</span>
+
+        <p class="mb-0">{{workflow.description | slice:0:120 }}...</p>
+        <p class="mb-0" style="color: rgb(255, 145, 0); font-style: italic;">{{workflow.created_at | customDateFormat}}</p>
+        <hr>
+
+    </div>
+  </div>
+
+  </div>
+
+</div>
+<app-reader-document [isOpenModal]="isModalReadSingle" (closeModalEvent)="closeModalReaderDocument()"
+  [extension]="extension" [fileName]="fileName" [documentId]="documentId"></app-reader-document>

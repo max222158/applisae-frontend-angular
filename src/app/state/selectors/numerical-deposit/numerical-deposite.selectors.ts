@@ -25,10 +25,19 @@ export const selectFileError = createSelector(
 
 
 
+export const sendFileFolderSelectSuccess = createSelector(
+  selectFolderFileState,
+  (state) => state.success
+);
+
 
 export const getFolderAndFilesResponse = createSelector(
   getFolderAndFilesState,
-  (state) => state.response
+  (state) => state.response ? state.response.results : []
+);
+export const totalItemsFoldersFiles = createSelector(
+  getFolderAndFilesState,
+  (state) => state.response ? state.response.count : 0
 );
 export const getFoldersSelector = createSelector(
   getFolderAndFilesState,
