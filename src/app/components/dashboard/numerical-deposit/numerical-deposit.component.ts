@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { API_URL } from '../../../constants/constants';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UtilsService } from '../../../services/core/utils/utils.service';
 import { UserService } from '../../../services/api/user/user.service';
 import { clearInput, sortFoldersAndDocumentsByDate } from '../../../helpers/helper';
@@ -143,21 +143,21 @@ export class NumericalDepositComponent {
     this.folderForm.get('name')?.markAsTouched();
     this.folderForm.get('identifiant')?.markAsTouched();
   
-     this.fileManagerService.getFolderById(0,this.page, this.searchText).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.foldersFilesResponse = response.results
-        this.totalItems = response.count
-        this.isFilesAndFolderLoading = false
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      console.log('ID récupéré de l\'URL :', idParam);
+      
+      if (idParam !== null ) {
+        const id = +idParam;
+        // Si ce composant est appeler depuis la recherche globale la barre de recherche principale
+        if(id !== 0){
+          this.openFolderById(id, '', 1)
+        }else{
+          // Si ce composant est appeler directement. Affiche les dossiers du folderid=0 root
+          this.getRootFolders();
+        }
+        console.log('ID récupéré de l\'URL :', id);
 
-        console.log('Réponse de l\'API:', response);
-
-        // Ajoutez ici la gestion de la réponse de l'API
-      },
-      error: (error: any) => {
-        
-        console.error('Erreur lors de la requête vers l\'API:', error);
-        // Ajoutez ici la gestion des erreurs
       }
     });
 
@@ -181,6 +181,7 @@ export class NumericalDepositComponent {
   }
  
   constructor(private http: HttpClient,private router:Router,private customfieldService: CustomfieldService,
+    private route: ActivatedRoute,
      private toastr: ToastrService,private fb: FormBuilder,private userService: UserService, 
      private fileManagerService: FilemanagerService, private store: Store<AppState>,private customerFieldsSelectionService: CustomerFieldsSelectionService,
      private utilsService: UtilsService, private authService:AuthService) { 
@@ -189,7 +190,26 @@ export class NumericalDepositComponent {
       this.isActionMoveSuccess$ = this.store.select(moveFolderAndFilesSuccess);
       this.isCopySuccess$ = this.store.select(isCopyFolderAndFilesSuccess);
      }
- 
+
+     getRootFolders(){
+      this.fileManagerService.getFolderById(0,this.page, this.searchText).subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          this.foldersFilesResponse = response.results
+          this.totalItems = response.count
+          this.isFilesAndFolderLoading = false
+  
+          console.log('Réponse de l\'API:', response);
+  
+          // Ajoutez ici la gestion de la réponse de l'API
+        },
+        error: (error: any) => {
+          
+          console.error('Erreur lors de la requête vers l\'API:', error);
+          // Ajoutez ici la gestion des erreurs
+        }
+      });
+     }
      onQueryTextChange(): void {
 
 
@@ -812,6 +832,10 @@ removeUserGroup(id: number) {
     // For example:
     // this.updateVisibility(checkbox.checked);
   }
+
+  
+
+
 }
 
 

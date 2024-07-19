@@ -184,4 +184,19 @@ getFolderById1(id: number): Observable<any> {
 
     return this.http.post(`${this.apiUrl}/file-manager/get-single-details-folder/`, formData,  { withCredentials: true });
   }
+
+
+
+
+  // Prend le fichier et le dispose sur le lecteur de fichier(word pdf image ect.)
+  displayAttachmentFileById(formData:any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/get-attachment-file-by-id/`, formData, { withCredentials: true });
+  }
+
+  // Recherche un mot clé dans la recherche principale 
+  searchGlobal(formData:any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/search/`, formData, { withCredentials: true });
+  }
 }

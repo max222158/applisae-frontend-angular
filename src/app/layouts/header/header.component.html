@@ -1,102 +1,197 @@
 <header id="page-topbar">
-  <div class="navbar-header">
-      <div class="d-flex">
-          <!-- LOGO -->
-          <div class="navbar-brand-box">
-              <a href="" class="logo logo-dark">
-                  <span class="logo-sm">
-                      <img src="assets/theme/logo.svg" alt="" height="22">
-                  </span>
-                  <span class="logo-lg">
-                      <img src="assets/theme/logo-dark.png" alt="" height="17">
-                  </span>
-              </a>
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a href="" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/theme/logo.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/theme/logo-dark.png" alt="" height="17">
+                    </span>
+                </a>
 
-              <a href="" class="logo logo-light">
-                  <span class="logo-sm">
-                      <img src="" alt="" height="22">
-                  </span>
-                  <span class="logo-lg">
-                      <img src="assets/theme/logo-light.png" alt="" height="19">
-                  </span>
-              </a>
-          </div>
+                <a href="" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/theme/logo-light.png" alt="" height="19">
+                    </span>
+                </a>
+            </div>
 
-          <button   (click)="toggleSidebar()" type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
-              <i class="fa fa-fw fa-bars" style="color: white;"></i>
-          </button>
+            <button (click)="toggleSidebar()" type="button"
+                class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
+                <i class="fa fa-fw fa-bars" style="color: white;"></i>
+            </button>
 
-          <!-- App Search-->
-          <form class="app-search d-none d-lg-block ">
-              <div class="position-relative">
-                <i class="fa-solid fa-magnifying-glass" style="position: absolute;font-size: 20px;top: 10px;left: 10px;color: #686868bd;"></i>
-               
-                  <input type="text" class="form-control search-bar" placeholder="Rechercher ici...">
-                 
-              </div>
-          </form>
+            <!-- App Search-->
+            <form class="app-search d-none d-lg-block ">
+                <div class="position-relative">
+                    <i class="fa-solid fa-magnifying-glass"
+                        style="position: absolute;font-size: 20px;top: 10px;left: 10px;color: #686868bd;"></i>
 
-      </div>
+                    <input type="text" (focus)="setIsSearchSectionVisible(true)" [formControl]="searchControl"
+                        class="form-control search-bar" placeholder="Rechercher ici...">
 
-      <div class="d-flex">
+                </div>
 
-          <div class="dropdown d-inline-block d-lg-none ms-2">
-              <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="mdi mdi-magnify"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+                <div *ngIf="isSearchSectionVisible" class="result-search-header-bar">
+                    <div class="category-search">
 
-                  <form class="p-3">
-                      <div class="form-group m-0">
-                          <div class="input-group">
-                              <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-                              <div class="input-group-append">
-                                  <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-                              </div>
-                          </div>
-                      </div>
-                  </form>
-              </div>
-          </div>
+                        <button (click)="onFilteredChange('all',1)" class="btn border-1 border-radius-20 mr-1 "
+                            [ngClass]="selectedOption == 1 ? 'select-option-filter' : ''"
+                            style="background: #f6f8fa;">Tous</button>
 
+                        <button (click)="onFilteredChange('folder',2)" class="btn border-1 border-radius-20 mr-1"
+                            style="background: #f6f8fa;"
+                            [ngClass]="selectedOption == 2 ? 'select-option-filter' : ''">Dossiers</button>
 
+                        <button (click)="onFilteredChange('document',3)" class="btn border-1 border-radius-20 mr-1"
+                            style="background: #f6f8fa;"
+                            [ngClass]="selectedOption == 3 ? 'select-option-filter' : ''">Documents</button>
 
+                        <button (click)="onFilteredChange('courrier', 4)" class="btn border-1 border-radius-20 mr-1"
+                            style="background: #f6f8fa;"
+                            [ngClass]="selectedOption == 4 ? 'select-option-filter' : ''">Courriers</button>
+                    </div>
 
+                    <div class="search-recent" *ngIf="searchText === ''">
 
-          <div class="dropdown d-none d-lg-inline-block ms-1">
-              <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
-                  <i class="bx bx-fullscreen"></i>
-              </button>
-          </div>
+                        <h5>Récemment recherchés</h5>
 
 
-          <div class="dropdown d-inline-block">
-            <mat-slide-toggle class="text-warning" (click)="toggleDarkMode()"><p class="p-toggle-theme" style="margin-top: 20px; color: #ffffff;">Thème Sombre</p></mat-slide-toggle>
-              <button type="button" class="btn header-item waves-effect"
-              (click)="setShowParameter()"
-               id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img class="rounded-circle header-profile-user" [src]="media_url_public + userDetails.image" alt="Header Avatar">
-                  <span class="d-none d-xl-inline-block ms-1" style="color: white;" key="t-henry">{{userDetails.name}}</span>
-                  <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end" [ngClass]="show == true?'show':'' " style="position: absolute;">
-                  <!-- item-->
-                  <a class="dropdown-item" ><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profile</span></a>
 
-                  <div class="dropdown-divider"></div>
-                  <button (click)="logout()"
-                   class="dropdown-item text-danger" >
-                   <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
-                    <span key="t-logout">Se déconnecter</span></button>
-              </div>
-          </div>
 
-          <div class="dropdown d-inline-block">
-              <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
-                  <i class="bx bx-cog bx-spin"></i>
-              </button>
-          </div>
 
-      </div>
-  </div>
+                    </div>
+
+
+
+                    <div class="search-result " *ngIf="!isFilesAndFolderLoading">
+                        <div class="flex1 mt-2 p-2" style="border-bottom: 1px solid #e3e3e3;"
+                            *ngFor="let result of foldersFilesResponse | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems }; let i = index">
+                            
+                             <!-- icone dossier ou document si le resultat est un des deux  -->
+                            <div *ngIf="result.is_folder == true || result.is_folder == false">
+                                <i *ngIf="result.is_folder" class="fa-solid fa-folder mr-1" 
+                                style="font-size: 25px; color: rgb(130, 216, 0)
+                                !important; padding-top: 5px;"></i>
+
+                                <img *ngIf="!result.is_folder" class="mr-1" [src]="fileIconSrc(result.extension)" alt=""
+                                    width="30px" height="30px">
+                            </div>
+
+                            <!-- icone courrier -->
+                            <i *ngIf="result.subject" class="fa-regular fa-envelope mr-1" style="font-size: 25px;
+                              padding-top: 5px;"></i>
+                            <div *ngIf="result.is_folder == true || result.is_folder == false">
+
+                                 <!-- p folder -->
+                                <p (click)="openFolderById(result.id, result.name ,1)"
+                                    class="font-size-13 mb-0 mt-1 cursor-pointer" *ngIf="result.is_folder">
+                                    {{result.name}}</p>
+
+                                <!-- p document -->
+                                <p class="font-size-13 mb-0 mt-1 cursor-pointer"
+                                    (click)="gotoDetailsDocument(result.id)" *ngIf="!result.is_folder">{{result.title}}
+                                </p>
+                            </div>
+                            <!-- p courrier -->
+                            <p class="font-size-13 mb-0 mt-1 cursor-pointer" *ngIf="result.subject">{{result.subject}}
+                            </p>
+
+
+                        </div>
+
+
+
+                    </div>
+                    <ngx-skeleton-loader appearance="line" count="5" [theme]="{ height: '20px' }"
+                        *ngIf="isFilesAndFolderLoading">
+                    </ngx-skeleton-loader>
+
+                    <p class="text-center font-size-14 cursor-pointer mt-1" *ngIf="!isFilesAndFolderLoading"><u>Voir
+                            plus de résultats</u></p>
+
+
+                </div>
+            </form>
+
+        </div>
+
+        <div class="d-flex">
+
+            <div class="dropdown d-inline-block d-lg-none ms-2">
+                <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="mdi mdi-magnify"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                    aria-labelledby="page-header-search-dropdown">
+
+                    <form class="p-3">
+                        <div class="form-group m-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search ..."
+                                    aria-label="Recipient's username">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit"><i
+                                            class="mdi mdi-magnify"></i></button>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="dropdown d-none d-lg-inline-block ms-1">
+                <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
+                    <i class="bx bx-fullscreen"></i>
+                </button>
+            </div>
+
+
+            <div class="dropdown d-inline-block">
+                <mat-slide-toggle class="text-warning" (click)="toggleDarkMode()">
+                    <p class="p-toggle-theme" style="margin-top: 20px; color: #ffffff;">Thème Sombre</p>
+                </mat-slide-toggle>
+                <button type="button" class="btn header-item waves-effect" (click)="setShowParameter()"
+                    id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="rounded-circle header-profile-user" [src]="media_url_public + userDetails.image"
+                        alt="Avatar">
+                    <span class="d-none d-xl-inline-block ms-1" style="color: white;"
+                        key="t-henry">{{userDetails.name}}</span>
+                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" [ngClass]="show == true?'show':'' "
+                    style="position: absolute;">
+                    <!-- item-->
+                    <a class="dropdown-item"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span
+                            key="t-profile">Profile</span></a>
+
+                    <div class="dropdown-divider"></div>
+                    <button (click)="logout()" class="dropdown-item text-danger">
+                        <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+                        <span key="t-logout">Se déconnecter</span></button>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
+                    <i class="bx bx-cog bx-spin"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
 </header>

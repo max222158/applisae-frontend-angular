@@ -10,10 +10,10 @@
 
         detailstask.type
         }}      
-        <span class="badge badge-success" *ngIf="(detailstask.is_finish  || isWorkfowCloture) && isWorkfowApprouved">
+        <span class="badge badge-success bg bg-success" *ngIf="(detailstask.is_finish  || isWorkfowCloture) && isWorkfowApprouved">
             Approuvé avec {{ utilsService.calculateValidationPercentage(detailstask.user_in_workflow) }} %
         </span>
-        <span class="badge badge-danger" *ngIf="(detailstask.is_finish  || isWorkfowCloture) && !isWorkfowApprouved">
+        <span class="badge badge-danger bg bg-danger" *ngIf="(detailstask.is_finish  || isWorkfowCloture) && !isWorkfowApprouved">
             Non approuvé
         </span>
         
@@ -21,13 +21,9 @@
     </h2>
 
 
-    <p class="font-size-20">Initié par: <span class="badge badge-success">{{detailstask.initiatedBy.name}}</span></p>
+    <p class="font-size-20">Initié par: <span class="badge badge-success bg bg-success">{{detailstask.initiatedBy?.name}}</span></p>
 
-    <p class="font-size-14 mb-0" class="p-description">{{detailstask.description}} Campagne ouverte jusqu'au 18 Novembre 2023
-        Pour participer, vous devez avoir complété la vérification d’identité de votre compte. Cliquez ici pour compléter la vérification si ce n’est pas le cas.
-         Les récompenses seront distribuées aux premiers (03/jours) à rejoindre Binance Afrique sur Twitter, Facebook et Instagram.
-        Les récompenses seront distribuées 2 semaines après la fin de la campagne.
-        Binance se réserve le droit d'annuler ou de modifier toute activité ou règle d'activité à sa seule discrétion.</p>
+    <p class="font-size-14 mb-0" class="p-description">{{detailstask.description}}</p>
 
     <div class="flex1">
         <div style="width: 400px; height: 600px; ">
@@ -123,9 +119,9 @@
                 <h4 class="m-0 mb-3">Pièces jointes</h4>
                 <p *ngIf="detailstask.attachment_file.length == 0">Pas de pièces jointes</p>
                 <ol>
-                    <li *ngFor="let file of detailstask.attachment_file">
+                    <li *ngFor="let file of detailstask.attachment_file" class="mt-2" style="cursor: pointer; ">
                      
-                      <span style="color: rgb(76, 135, 255);"><u>{{ file.document.title }}</u></span>
+                      <span style="color: rgb(76, 135, 255);" (click)="openModalReaderDocument(file.extension, file.name, file.id)"><u>{{ file.name }}</u></span>
                     </li>
                 </ol>
 
@@ -181,3 +177,7 @@
   >
 
  </app-modal-view-document>
+
+
+ <app-reader-document [isOpenModal]="isModalReadSingle" (closeModalEvent)="closeModalReaderDocument()"
+  [extension]="extension" [fileName]="fileName" [documentId]="attachmentDocumentId"  documentType="task"></app-reader-document>

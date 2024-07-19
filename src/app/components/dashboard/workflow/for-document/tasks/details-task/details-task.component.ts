@@ -35,6 +35,11 @@ export class DetailsTaskComponent {
   isWorkfowApprouved: boolean
   isWorkfowCloture: boolean
   isWorkfowExpired: boolean
+  fileName:string = ''
+  extension:string = ''
+  isModalReadSingle:boolean = false
+  attachmentDocumentId:number;
+  documentType:string = ''
   ngOnInit() {
     this.getInfoTaskById()
 
@@ -192,6 +197,20 @@ export class DetailsTaskComponent {
   closeModal() {
     this.isModalApproveRejectOpen = false
   }
+
+  closeModalReaderDocument() {
+    this.isModalReadSingle = false
+  }
+
+
+  openModalReaderDocument(extension:string, nameDoc:string, idAttachmentFile:number) {
+    this.fileName = nameDoc
+    this.attachmentDocumentId = idAttachmentFile
+    this.documentType = "task"
+    this.extension = extension
+    this.isModalReadSingle = true
+  }
+
 
   approuveReject() {
 

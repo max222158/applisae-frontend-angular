@@ -26,7 +26,7 @@ import { CourrierComponent } from './components/dashboard/courrier/courrier.comp
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier/my-courrier.component';
+
 import { UserComponent } from './components/dashboard/user/user/user.component';
 import { RoleComponent } from './components/dashboard/user/role/role.component';
 import { CreateUserComponent } from './components/dashboard/user/create-user/create-user.component';
@@ -120,6 +120,7 @@ import { CommentsDetailsTabsComponent } from './components/commons/comments-deta
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { getCommentsReducer, saveCommentsReducer } from './state/reducers/comments/comments.reducers';
 import { CommentsEffects } from './state/effects/comments/comments.effect';
+import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier/my-courrier.component';
 @NgModule({
   declarations: [
 
