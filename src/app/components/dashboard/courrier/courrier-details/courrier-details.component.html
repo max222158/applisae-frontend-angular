@@ -67,7 +67,7 @@
             <div>
 
                 <div class="action-btn" style="">
-                    <button class="btn btn-success" (click)="openDialog()" mat-raised-button
+                    <button class="btn btn-success" (click)="openDialogDetails()" mat-raised-button
                         matTooltip="Tous les détails">
                         <i class="fa-solid fa-circle-info"></i>
 
@@ -325,6 +325,9 @@
         [icon]="iconModal"></app-modal-alert>
 
         
+<app-modal-information-details-courrier [isOpenModal]="isModalInformationDetailsCourrierOpen" [courrier]="detailsCourrier" >
+
+</app-modal-information-details-courrier>        
         
 <app-document-classification
 (closeModalEvent)="closeModalDocumentClassification()" [documentId]="courrierId"

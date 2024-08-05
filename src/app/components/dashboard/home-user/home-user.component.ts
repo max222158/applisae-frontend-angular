@@ -17,6 +17,8 @@ export class HomeUserComponent {
   userDetails: any = {};
   dashboardData: any[] = []
   taskInProgress: any[] = []
+
+  consultation: any[] = []
   numberOfTaskInProgress: number = 0
   courrierUrgent: any[] = []
   numberOfCourrierUrgent: number = 0;
@@ -49,6 +51,7 @@ export class HomeUserComponent {
         this.userInitiatedWorkflow = data.user_initiated_workflows
         this.numberOfTaskInProgress = data.ongoing_task_count
         this.isLoading = false
+        this.consultation = data.consultations
         // Ajoutez ici la gestion de la réponse de l'API
       },
       error: (error) => {

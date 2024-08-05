@@ -100,13 +100,15 @@ export class CreateCourrierComponent {
 
 
     this.courrierForm = this.fb.group({
+      identifiant: [''],
       type: [''],
       modele: [''],
       subject: [''],
       priority: [''],
       date: [''],
       annotation: [''],
-      closure_date: [null],
+      date_of_arrival: [null],
+      deadline_date: [null],
       recipient: [null],
       sender: [null],
       user: [1],
@@ -119,7 +121,7 @@ export class CreateCourrierComponent {
       // Réinitialiser les champs lorsque 'type' change
       console.log(newTypeValue)
       if (newTypeValue) {
-        this.courrierForm.get('closure_date')?.setValue(null);
+        this.courrierForm.get('date_of_arrival')?.setValue(null);
         this.courrierForm.get('recipient')?.setValue(null);
         this.courrierForm.get('sender')?.setValue(null);
       }
@@ -212,14 +214,15 @@ export class CreateCourrierComponent {
       formData.append('files', this.selectedAttachmentFiles[i]);
     }
     formData.append('type', type);
+    formData.append('identifiant', this.courrierForm.value.identifiant);
     formData.append('subject', this.courrierForm.value.subject);
     formData.append('priority', this.courrierForm.value.priority);
     formData.append('date', this.courrierForm.value.date);
-    if(this.courrierForm.value.closure_date !== null){
-      formData.append('closure_date', this.courrierForm.value.closure_date);
+    if(this.courrierForm.value.date_of_arrival !== null){
+      formData.append('date_of_arrival', this.courrierForm.value.date_of_arrival);
 
     }
-
+    formData.append('deadline_date', this.courrierForm.value.deadline_date);
     formData.append('recipient', this.courrierForm.value.recipient);
     formData.append('sender', this.courrierForm.value.sender);
     formData.append('annotation', this.courrierForm.value.annotation);

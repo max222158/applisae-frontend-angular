@@ -17,7 +17,7 @@ export class AdminDispositionComponent {
   @Input() folders: any[];
   @Input() foldersFiles: any[];
   @Input() documents: any[];
-  @Input() perPage: number = 10
+  @Input() perPage: number = 20
   @Input() totalItems: number = 0;
   @Input() isFilesLoading: boolean = true;
   @Input() page: number = 1

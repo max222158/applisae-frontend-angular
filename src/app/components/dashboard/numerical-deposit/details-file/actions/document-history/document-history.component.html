@@ -1,22 +1,25 @@
 <div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
      style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
-    <div class="modal-dialog  modal-dialog-scrollable modal-lg scale-in" role="document">
+     <h5 class="modal-title mb-4" id="exampleModalLiveLabel">Historique du documents</h5>
+     <div class="modal-dialog  modal-dialog-scrollable modal-lg scale-in" role="document">
         <div class="modal-content ">
 
             <div class="modal-body p-4">
-                <h5 class="modal-title mb-4" id="exampleModalLiveLabel">Historique du documents</h5>
+
                 
 
                     <div *ngFor="let history of histories |
-                    paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItemsHistory  }" class="pl-1"
+                    paginate: { itemsPerPage: perPage, currentPage: page,totalItems: totalItemsHistory, id : 'history-document'  }" class="pl-1"
                             style="padding-left: 1rem;">
 
-                            <p style="display: flex;"><span style="width: 130px; color: rgb(148, 0, 114);">{{history.created_at | customDateFormat}} </span> <span style="font-weight:500 ;" class="mr-1"> {{history.user.name}} </span> {{history.text}} </p>
+                            <p style="display: flex;">
+                                <span style="width: 130px; color: rgb(148, 0, 114);">{{history.consultationDate | customDateFormat}} </span>
+                                 <span style="font-weight:500 ;" class="mr-1">  {{history.userId}}  </span> {{history.action}} </p>
                             <hr style="color:#bbb">
                         </div>
             
                         <div class="col-12">
-                            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                            <pagination-controls (pageChange)="pageChanged($event)" id ="history-document" previousLabel="Précédent"
                                 nextLabel="Suivant"></pagination-controls>
             
                         </div>

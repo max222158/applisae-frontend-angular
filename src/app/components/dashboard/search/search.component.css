@@ -13,14 +13,61 @@
     margin-top: 10px;
     margin-right: 10px;
     padding: 8px;
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 400;
+    
 }
 
 .div-search-ad{
     padding-right: 15px;
 }
-.accordion-body {
-    padding: var(--bs-accordion-body-padding-y) var(--bs-accordion-body-padding-x);
-    border: 2px solid #bbbbbbfc;
+
+.form-check{
+    margin-top:1.2rem ;
+
+}
+
+.form-check-input{
+
+    width: 20px;
+    height: 20px;
+    border: 1px solid #bbb;
+    margin-right: 0.5rem;
+
+}
+
+.form-check, .form-check-input, .form-check-label {
+    cursor: pointer;
+    margin-bottom: 0;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.accordion-button:not(.collapsed) {
+
+    background-color: rgba(255, 255, 255, 0) !important;
+    padding: 13px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 1.5px !important;
+
+}
+
+.accordion-button {
+
+    background-color: rgba(255, 255, 255, 0) !important;
+    padding: 13px;
+
+    font-weight: 600;
+    letter-spacing: 1.5px;
+
+}
+
+p{
+    margin-bottom: 0px !important;
+}
+
+.type-resultat{
+    font-size: 10px;
+    margin-bottom: 0px;
 }

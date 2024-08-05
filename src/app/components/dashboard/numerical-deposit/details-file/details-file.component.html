@@ -20,8 +20,12 @@
         <div class="ml-2">
             <h4>{{detailsDocument.title}} 
                 <span class="span bg-success badge me-2">{{versionDocument}}.0</span>
-                 <span *ngIf="detailsDocument.document_type == 2" class="span bg-warning badge me-2" style="background: #f14c4c !important;">Issue d'un courrier</span>  <span *ngIf="detailsDocument.is_copy == true"  class="span bg-success badge me-2" style="background: #002dff !important;">Fichier copié</span>
-                </h4>
+                 <span *ngIf="detailsDocument.document_type == 2" class="span bg-warning badge me-2" style="background: #f14c4c !important;">Issue d'un courrier</span> 
+                <span *ngIf="detailsDocument.is_copy == true"  class="span bg-success badge me-2" style="background: #002dff !important;">Fichier copié</span>
+                <span   class="span bg-success badge me-2" 
+                style="font-size: 12px ">{{detailsDocument.view}} consultations</span>
+                    
+            </h4>
                                  <div style="display: flex;">
                 <span class="font-weight-600" >Auteur: </span> <span class="mr-4"> {{detailsDocument.author.name}}</span>
                 <span class="font-weight-600">Ajouté le: </span> <span class="mr-4">{{detailsDocument.created_at | customDateFormat}}</span>
@@ -56,14 +60,12 @@
             <div *ngIf="pdfSrc !== ''" style="height: calc(100vh - 100px);background: #f8f8f8;
             display: flex;padding: 0px; overflow: hidden;">
 
-                <div style="display: flex;position: absolute; right: 10px; z-index: 4;">
-                    <button class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
-                        style="background: #1be700;"><i class="fa-solid fa-volume-high"></i></button>
+            <div style="display: flex;position: absolute; right: 10px; z-index: 4;">
 
                     <button class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
-                        style="background: #730066;"><i class="fa-solid fa-minus"></i></button>
+                        style="background: #000000b3;"><i class="fa-solid fa-minus"></i></button>
 
-                    <button class="btn btn-success  mt-1 ml-0" (click)="setZoom('add')" style="background: #730066;"><i
+                    <button class="btn btn-success  mt-1 ml-0" (click)="setZoom('add')" style="background: #000000b3;"><i
                             class="fa-solid fa-plus"></i></button>
 
                     <button (click)="setIsModalFullcreenDocumentOpen()" class="btn btn-success  mt-1 ml-1" style="background: #007336;"><i
@@ -90,6 +92,7 @@
             <p class="action-button" style="" (click)="openAnnotationModal()" ><i class="fa-regular fa-pen-to-square"></i> Annoter</p>
             <p class="action-button" style=""><i class="fa-regular fa-copy"></i> Copier vers</p>
             <p class="action-button" style=""><i class="fa-solid fa-circle-arrow-right"></i> Déplacer vers</p>
+            <p class="action-button" style="" (click)="setIsModalShareDocumentOpen()"><i class="fa-solid fa-share"></i> Partager</p>
             <p class="action-button" style=""><i class="fa-solid fa-trash-can "></i> Supprimer</p>
             <a routerLink="/tableau-de-bord/document/creer-un-workflow" routerLinkActive="active"
                 class="action-button mb-1">
@@ -103,10 +106,7 @@
                 (click)="setModalNewVersionDocumentOpen()"
             ><i class="fa-solid fa-code-branch"></i>  Versions du
                 document</p>
-            <p class="action-button" style=""><i class="fa-solid fa-download"></i> Télécharger</p>
-
-
-
+            <p class="action-button" style="" (click)="downloadDocument()"><i class="fa-solid fa-download"></i> Télécharger</p>
         </div>
     </div>
 </div>
@@ -117,6 +117,14 @@
   >
 
  </app-modal-view-document>
+
+
+ <app-share 
+[isOpenModal] = "isModalShareOpen"
+(closeModalEvent)="setIsModalShareDocumentOpen()"
+  >
+
+ </app-share>
 
  <app-all-details [isOpenModal]="isModalAllDetailsOpen"  (closeModalEvent)="closeModalAllDetailsOpen()" [details]="detailsDocument"></app-all-details>
  <app-edit-metadata [isOpenModal]="isModalEditMetadataOpen"

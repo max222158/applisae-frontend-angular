@@ -199,4 +199,11 @@ getFolderById1(id: number): Observable<any> {
 
     return this.http.post(`${this.apiUrl}/file-manager/search/`, formData, { withCredentials: true });
   }
+
+
+    // Recherche un mot clé dans la page recherche
+    searchInPageSearch(formData:any): Observable<any> {
+
+      return this.http.post(`${this.apiUrl}/file-manager/search-in-page-search/`, formData, { withCredentials: true });
+    }
 }
