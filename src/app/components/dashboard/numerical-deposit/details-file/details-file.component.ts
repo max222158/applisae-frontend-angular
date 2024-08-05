@@ -9,6 +9,7 @@ import { WorkflowService } from '../../../../services/api/workflow/workflow.serv
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { AnnotationService } from '../../../../services/api/annotation/annotation.service';
 import { HistoryService } from '../../../../services/api/history/history.service';
+import { RecentlyConsultService } from '../../../../services/api/recently-consult/recently-consult.service';
 
 @Component({
   selector: 'app-details-file',
@@ -37,6 +38,7 @@ export class DetailsFileComponent {
   isModalDocumentInWorkflowOpen: boolean = false
   isModalHistoryOpen: boolean = false
   isModalNewVersionDocumentOpen: boolean = false
+  isModalShareOpen: boolean = false
   annotations: any = []
   workflows: any = []
   annotationPerPage: number = 20;
@@ -47,6 +49,7 @@ export class DetailsFileComponent {
   currentPaginationHistoryPage: number = 1
   document_id: number
   isVote: boolean
+  
   /* 
     Notifie si le une variable change dans le composant enfant notifySuccessAnnotation
      */
@@ -80,7 +83,7 @@ export class DetailsFileComponent {
   /*   ----------------------------------fin-----------------------
    */
   constructor(private fileManagerService: FilemanagerService, private route: ActivatedRoute, private toastr: ToastrService
-    , private userService: UserService, private historyService: HistoryService, private annotationService: AnnotationService, private globalStateService: GlobalStateService, private workflowService: WorkflowService) {
+    ,private recentlyConsultService:RecentlyConsultService, private userService: UserService, private historyService: HistoryService, private annotationService: AnnotationService, private globalStateService: GlobalStateService, private workflowService: WorkflowService) {
 
   }
   ngOnInit(): void {
@@ -90,7 +93,7 @@ export class DetailsFileComponent {
         const id = +idParam;
         this.document_id = id;
         console.log('ID récupéré de l\'URL :', id);
-
+        this.saveConsultation()
         this.fileManagerService.getDetailsDocumentById(id).subscribe({
           next: (response: any) => {
             this.handleDocumentDetailsResponse(response);
@@ -102,8 +105,36 @@ export class DetailsFileComponent {
         });
       }
     });
+
   }
 
+
+  //Increment view document
+  saveConsultation(){
+    const formData = new FormData();
+    formData.append('document_id', this.document_id.toString());
+    this.recentlyConsultService.saveRecentlyConsultDocument(formData).subscribe({
+      next: (response: any) => {
+
+        //this.totalItemsHistory = data.count;
+      },
+      error: (error: any) => {
+        
+      }
+    })
+
+    // Save in mongoDB
+    this.recentlyConsultService.insertRecentlyConsultDocumentMicroservice(
+     this.document_id, " a consulté ").subscribe({ 
+       next: (response: any) => { 
+        console.log(response)
+        this.histories = response;
+       },
+       error: (error: any) => {
+         
+       }
+     })
+  }
 
   getDocumentDetailsById(){
     this.fileManagerService.getDetailsDocumentById(this.document_id).subscribe({
@@ -126,7 +157,6 @@ export class DetailsFileComponent {
     this.setIdDocument(response.details.id);
     this.totalItemsAnnotation = response.count;
     this.versionDocument = response.version
-    this.getHistoryDocument()
     console.log('Réponse de l\'API:', response);
 
     if (this.isVideoExtension(response.details.extension)) {
@@ -239,6 +269,11 @@ export class DetailsFileComponent {
     } else {
       this.isModalAllDetailsOpen = true
     }
+  }
+
+
+  setIsModalShareDocumentOpen() {
+    this.isModalShareOpen = !this.isModalShareOpen 
   }
 
   closeModalAllDetailsOpen() {
@@ -461,11 +496,48 @@ export class DetailsFileComponent {
         this.handleSaveAnnotationSuccess('La version a été ajouté avec succès');
         this.setNotifySuccessNewVersionSave()
         this.getDocumentDetailsById()
+
+        this.recentlyConsultService.insertRecentlyConsultDocumentMicroservice(
+          this.document_id, " a ajouté une nouvelle version ").subscribe({ 
+            next: (response: any) => { 
+
+
+     
+            },
+            error: (error: any) => {
+              
+            }
+          })
       },
       error: (error) => {
         this.handleSaveAnnotationError();
       }
     });
+
+
+
+
+
+
+  }
+
+
+  downloadDocument() {
+
+
+    this.recentlyConsultService.insertRecentlyConsultDocumentMicroservice(
+      this.document_id, " a téléchargé ").subscribe({ 
+        next: (response: any) => { 
+
+
+ 
+        },
+        error: (error: any) => {
+          
+        }
+      })
+
+
 
 
 

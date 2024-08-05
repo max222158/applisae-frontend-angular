@@ -121,6 +121,10 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { getCommentsReducer, saveCommentsReducer } from './state/reducers/comments/comments.reducers';
 import { CommentsEffects } from './state/effects/comments/comments.effect';
 import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier/my-courrier.component';
+import { ModalInformationDetailsCourrierComponent } from './components/commons/modal/modal-information-details-courrier/modal-information-details-courrier.component';
+import { StatisticComponent } from './components/dashboard/statistic/statistic.component';
+import { ShareComponent } from './components/dashboard/numerical-deposit/details-file/actions/share/share.component';
+
 @NgModule({
   declarations: [
 
@@ -137,7 +141,7 @@ import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier
       AttachmentFilesComponent, MyTaskComponent, DetailsTaskComponent, ModalAlertComponent, 
       ModalViewDocumentComponent, CustomerFieldsComponent, ModelCourrierHtmlComponent, ModalAnnotationsComponent, HistoryComponent, CustomerFieldsModalComponent, AllDetailsComponent, EditMetadataComponent, DocumentInWorkflowComponent, AddNewVersionDocumentComponent, DocumentHistoryComponent, CircleNameComponentComponent, DocumentClassificationComponent, AppTreeNodeComponent, ContextMenuComponent, AllActionComponent, AutomatingComponent, MetaDataComponent, FolderPermissionsComponent, 
       SingleUserComponent, UsersDropdownSearchComponent, GroupDropdownSearchComponent, 
-      SingleGroupCardDisplayComponent, CustomerFieldsDropdownComponent, SingleCustomerFieldCardDisplayComponent, InputTextComponent, PlanClassificationGeneralComponent, CreateFolderComponent, ReaderDocumentComponent, MyGroupsComponent, DetailsMyGroupComponent,  CommentsDetailsTabsComponent
+      SingleGroupCardDisplayComponent, CustomerFieldsDropdownComponent, SingleCustomerFieldCardDisplayComponent, InputTextComponent, PlanClassificationGeneralComponent, CreateFolderComponent, ReaderDocumentComponent, MyGroupsComponent, DetailsMyGroupComponent,  CommentsDetailsTabsComponent, ModalInformationDetailsCourrierComponent, StatisticComponent, ShareComponent
   ],
 
   imports: [StoreModule.forRoot({

@@ -70,7 +70,8 @@ export class CourrierDetailsComponent {
   isModalReadSingle:boolean = false
   extensionAttachmentFileSelect:string = ''
   attachmentDocumentId:number;
-
+  isModalInformationDetailsCourrierOpen:boolean = false
+  detailsCourrier:any = {}
 
 
   setNotifySuccessAnnotation() {
@@ -117,6 +118,7 @@ export class CourrierDetailsComponent {
           console.log(data)
 
           this.courrier = data.results
+          this.detailsCourrier = data.results
           this.position_in_workflow = data.results.position_in_workflow
   
           if(data.results.hasOwnProperty('vote')){
@@ -347,14 +349,10 @@ export class CourrierDetailsComponent {
 
 
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogContentDetailsDialog, {
-      data: { detailsCourrier: this.courrier }, // Passez usersSelect au dialogue
-    });
+  openDialogDetails(): void {
 
-    dialogRef.afterClosed().subscribe(result => {
-
-    });
+    this.isModalInformationDetailsCourrierOpen = true
+   
   }
 
 
@@ -513,41 +511,3 @@ approuveReject() {
 }
 
 
-@Component({
-  selector: 'dialog-content-details-dialog',
-  templateUrl: './modal-details.component.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule, CommonModule],
-
-})
-
-
-export class DialogContentDetailsDialog {
-
-  workflowList: any[];
-  workflowUser: any[];
-  selectedIndex = -1;
-  selectedId: number = 0;
-  selectedName: string = ''
-  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogContentDetailsDialog>) { }
-  ngOnInit() {
-
-
-  }
-  selectWorkflow(index: number, id: number, name: string) {
-    this.selectedIndex = index; // Met à jour l'index sélectionné
-    this.selectedId = id;
-    this.selectedName = name;
-    // Autres actions liées à la sélection du workflow par index
-  }
-
-  closeDialog(): void {
-    this.dialogRef.close({ 'id': this.selectedId, 'name': this.selectedName }); // Ferme le dialogue et transmet l'ID à CourrierComponent
-  }
-  openDialog(): void {
-  }
-
-
-
-
-}

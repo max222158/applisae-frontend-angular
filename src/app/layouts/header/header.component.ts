@@ -25,7 +25,7 @@ export class HeaderComponent {
   searchControl = new FormControl();
   searchText:string = ''
   page:number = 1
-  perPage:number = 20 
+  perPage:number = 50
   totalItems:number;
   documentId:number
   fileName:string = ''
@@ -42,7 +42,9 @@ export class HeaderComponent {
   }
 
   onFilteredChange(filter:string,index:number){
-
+    setTimeout(() => {
+      this.setIsSearchSectionVisible(true);
+    }, 0);
     this.filterBy = filter
     this.selectedOption = index
 

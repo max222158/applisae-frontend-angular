@@ -33,8 +33,9 @@
                     <i class="fa-solid fa-magnifying-glass"
                         style="position: absolute;font-size: 20px;top: 10px;left: 10px;color: #686868bd;"></i>
 
-                    <input type="text" (focus)="setIsSearchSectionVisible(true)" [formControl]="searchControl"
-                        class="form-control search-bar" placeholder="Rechercher ici...">
+                    <input type="text" (blur)="setIsSearchSectionVisible(false)" (focus)="setIsSearchSectionVisible(true)"
+                     [formControl]="searchControl"
+                        class="form-control " id="search-bar" placeholder="Rechercher ici...">
 
                 </div>
 
@@ -83,9 +84,9 @@
                                 <img *ngIf="!result.is_folder" class="mr-1" [src]="fileIconSrc(result.extension)" alt=""
                                     width="30px" height="30px">
                             </div>
-
+                           
                             <!-- icone courrier -->
-                            <i *ngIf="result.subject" class="fa-regular fa-envelope mr-1" style="font-size: 25px;
+                            <i *ngIf="result.subject" class="fa-solid fa-envelope mr-1" style="font-size: 25px;
                               padding-top: 5px;"></i>
                             <div *ngIf="result.is_folder == true || result.is_folder == false">
 

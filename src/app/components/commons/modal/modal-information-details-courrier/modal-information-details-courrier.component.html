@@ -1,0 +1,46 @@
+<div id="exampleModalLive" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel"
+    style="padding-right: 17px; background: #00000063;" [ngStyle]="{'display': isOpenModal ? 'block' : 'none'}">
+    <div class="modal-dialog  modal-dialog-scrollable" role="document">
+        <div class="modal-content ">
+            <div class="modal-header" style="background: #014306;">
+                <h5 class="modal-title text-white" id="exampleModalLiveLabel">Informations sur le courrier </h5>
+
+            </div>
+            <div class="modal-body p-4">
+                <h5>Identifiant:</h5>
+                <p>{{courrier?.identifiant}}</p>
+
+                <h5>Type:</h5>
+                <p>{{courrier?.type}}</p>
+                <div *ngIf="courrier?.recipient  !== 'null' || courrier?.recipient  !== null ">
+                    <h5>Destinataire:</h5>
+                    <p>{{courrier?.recipient}}</p>
+                </div>
+                <div *ngIf="courrier?.sender !== 'null' || courrier?.sender !== null">
+                    <h5>Expediteur:</h5>
+                    <p>{{courrier?.sender}}</p>
+                </div>
+
+                <h5>Classement:</h5>
+                <p *ngIf="courrier.is_classed">Classé</p>
+                <p *ngIf="courrier.is_classed == false">Non Classé</p>
+
+                <h5>Extension du fichier:</h5>
+                <p >{{courrier.file_extension}}</p>
+
+                <h5>Date de cloture:</h5>
+                <p >{{courrier.deadline_date | customDateFormat}}</p>
+
+                <h5>Modèle du courrier:</h5>
+                <p *ngIf="courrier.is_courrier_use_model == false">Pas de modèle utilisé</p>
+                
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" (click)="closeModal()"
+                    data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>

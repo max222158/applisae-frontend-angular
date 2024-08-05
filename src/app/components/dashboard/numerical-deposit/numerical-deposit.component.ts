@@ -19,6 +19,7 @@ import { isCopyFolderAndFilesSuccess, moveFolderAndFilesSuccess } from '../../..
 import { resetFolderAndFiles, resetIsSuccessCopyState, resetIsSuccessMoveState } from '../../../state/actions/numerical-deposit/numerical-deposite.actions';
 import { CustomerFieldsSelectionService } from '../../../services/shared/customer-fields/customer-fields.service';
 import {  debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { RecentlyConsultService } from '../../../services/api/recently-consult/recently-consult.service';
 
 @Component({
   selector: 'app-numerical-deposit',
@@ -184,7 +185,7 @@ export class NumericalDepositComponent {
     private route: ActivatedRoute,
      private toastr: ToastrService,private fb: FormBuilder,private userService: UserService, 
      private fileManagerService: FilemanagerService, private store: Store<AppState>,private customerFieldsSelectionService: CustomerFieldsSelectionService,
-     private utilsService: UtilsService, private authService:AuthService) { 
+     private utilsService: UtilsService, private authService:AuthService,  private recentlyConsultService:RecentlyConsultService ) { 
 
 
       this.isActionMoveSuccess$ = this.store.select(moveFolderAndFilesSuccess);
@@ -799,8 +800,23 @@ removeUserGroup(id: number) {
           this.progress[index] = Math.round(100 * (event.loaded / event.total));
         }
       } else if (event instanceof HttpResponse) {
-        console.log('File uploaded successfully!');
+        console.log(event.body.document);
+
+        this.recentlyConsultService.insertRecentlyConsultDocumentMicroservice(
+          event.body.document, " a ajouté ce document ").subscribe({ 
+            next: (response: any) => { 
+
+
+     
+            },
+            error: (error: any) => {
+              
+            }
+          })
         this.uploadStatus[index] = 'success'; 
+
+
+        
         this.checkAllUploadsStatus(); 
       }
     }, error => {

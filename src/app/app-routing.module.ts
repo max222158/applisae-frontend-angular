@@ -33,6 +33,7 @@ import { AutomatingComponent } from './components/dashboard/automating/automatin
 import { FolderPermissionsComponent } from './components/dashboard/permissions/folder-permissions/folder-permissions/folder-permissions.component';
 import { MyGroupsComponent } from './components/dashboard/my-groups/my-groups.component';
 import { DetailsMyGroupComponent } from './components/dashboard/my-groups/details-my-group/details-my-group.component';
+import { StatisticComponent } from './components/dashboard/statistic/statistic.component';
 
 
 
@@ -120,7 +121,7 @@ const routes: Routes = [{
             path: 'fonds-numerique/dossier/:id', component: NumericalDepositComponent
         },
         {
-            path: 'recherche', component: SearchComponent
+            path: 'recherche/mot-cle/:key', component: SearchComponent
         }, 
         {
             path: 'documents', component: DocumentComponent
@@ -160,7 +161,15 @@ const routes: Routes = [{
             path: 'historique', component: HistoryComponent
         },
         {
+            path: 'mes-groupes', component: MyGroupsComponent
+        }
+        ,
+        {
             path: 'automatisation', component: AutomatingComponent
+        },
+
+        {
+            path: 'statistiques', component: StatisticComponent
         },
         {
             path: 'utilisateurs', component: UserComponent

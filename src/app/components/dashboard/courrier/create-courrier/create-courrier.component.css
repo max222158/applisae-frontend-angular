@@ -34,3 +34,10 @@ input.mat-mdc-chip-input {
 
     border: 2px solid #627cff;
 }
+
+.optionnal{
+
+    color: orange;
+    font-size: 12px;
+    margin-top: -8px;
+}
