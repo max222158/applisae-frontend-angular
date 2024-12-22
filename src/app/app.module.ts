@@ -106,7 +106,7 @@ import { GroupDropdownSearchComponent } from './components/commons/group-dropdow
 import { SingleGroupCardDisplayComponent } from './components/commons/single-group-card-display/single-group-card-display.component';
 import { SingleUserComponent } from './components/commons/single-user-card-display/single-user.component';
 import { CustomerFieldsDropdownComponent } from './components/commons/customer-fields-dropdown/customer-fields-dropdown.component';
-import { getCustomersFields } from './state/reducers/customers-fields/customers-fields.reducers';
+import { getCustomersFields, getFieldsByModele } from './state/reducers/customers-fields/customers-fields.reducers';
 import { CustomersFieldsEffects } from './state/effects/customers-fields/customers-fields.effect';
 import { SingleCustomerFieldCardDisplayComponent } from './components/commons/single-customer-field-card-display/single-customer-field-card-display.component';
 import { InputTextComponent } from './components/commons/inputs/input-text/input-text.component';
@@ -124,13 +124,20 @@ import { MyCourrierComponent } from './components/dashboard/courrier/my-courrier
 import { ModalInformationDetailsCourrierComponent } from './components/commons/modal/modal-information-details-courrier/modal-information-details-courrier.component';
 import { StatisticComponent } from './components/dashboard/statistic/statistic.component';
 import { ShareComponent } from './components/dashboard/numerical-deposit/details-file/actions/share/share.component';
+import { ListComponent } from './components/dashboard/model/model-document/list/list.component';
+import { CreateModelDocumentComponent } from './components/dashboard/model/model-document/create/create.component';
+import { DropdownModelDocumentSearchComponent } from './components/commons/dropdown-model-document-search/dropdown-model-document-search';
+import { ModelDocumentEffects } from './state/effects/numerical-deposit/modelDocument.effect';
+import { modelDocumentActionReducer } from './state/reducers/numerical-deposit/model-document.reducers';
+import { RenameFolderComponent } from './components/dashboard/numerical-deposit/all-action/rename-folder/rename-folder.component';
+
 
 @NgModule({
   declarations: [
 
     AppComponent, SafeHtmlPipe,
-    DashbordComponent, ByteConverterPipe,
-    LoginComponent, DashboardComponent, SearchComponent,
+    DashbordComponent, ByteConverterPipe,DropdownModelDocumentSearchComponent,
+    LoginComponent, DashboardComponent, SearchComponent,CreateModelDocumentComponent,
     PdfPreviewComponent, NumericalDepositComponent, HomeComponent,
     DocumentComponent, HeaderComponent, FooterComponent, SidebarComponent
     , ModelComponent, ButtonSpinnerComponent, CreateComponent, CreateGroupComponent,
@@ -141,7 +148,7 @@ import { ShareComponent } from './components/dashboard/numerical-deposit/details
       AttachmentFilesComponent, MyTaskComponent, DetailsTaskComponent, ModalAlertComponent, 
       ModalViewDocumentComponent, CustomerFieldsComponent, ModelCourrierHtmlComponent, ModalAnnotationsComponent, HistoryComponent, CustomerFieldsModalComponent, AllDetailsComponent, EditMetadataComponent, DocumentInWorkflowComponent, AddNewVersionDocumentComponent, DocumentHistoryComponent, CircleNameComponentComponent, DocumentClassificationComponent, AppTreeNodeComponent, ContextMenuComponent, AllActionComponent, AutomatingComponent, MetaDataComponent, FolderPermissionsComponent, 
       SingleUserComponent, UsersDropdownSearchComponent, GroupDropdownSearchComponent, 
-      SingleGroupCardDisplayComponent, CustomerFieldsDropdownComponent, SingleCustomerFieldCardDisplayComponent, InputTextComponent, PlanClassificationGeneralComponent, CreateFolderComponent, ReaderDocumentComponent, MyGroupsComponent, DetailsMyGroupComponent,  CommentsDetailsTabsComponent, ModalInformationDetailsCourrierComponent, StatisticComponent, ShareComponent
+      SingleGroupCardDisplayComponent, CustomerFieldsDropdownComponent, SingleCustomerFieldCardDisplayComponent, InputTextComponent, PlanClassificationGeneralComponent, CreateFolderComponent, ReaderDocumentComponent, MyGroupsComponent, DetailsMyGroupComponent,  CommentsDetailsTabsComponent, ModalInformationDetailsCourrierComponent, StatisticComponent, ShareComponent, ListComponent, RenameFolderComponent
   ],
 
   imports: [StoreModule.forRoot({
@@ -157,9 +164,11 @@ import { ShareComponent } from './components/dashboard/numerical-deposit/details
     get_customer_fields:getCustomersFields,
     get_comment:getCommentsReducer,
     save_comment: saveCommentsReducer,
+    get_model_document:modelDocumentActionReducer,
+    get_customer_fields_by_id:getFieldsByModele
     
   }),
-  EffectsModule.forRoot([FileFolderEffects,UsersEffects,CustomersFieldsEffects,CommentsEffects]),
+  EffectsModule.forRoot([FileFolderEffects,UsersEffects,CustomersFieldsEffects,CommentsEffects,ModelDocumentEffects ]),
     NgxEditorModule, MatTreeModule,MatMenuModule,
     BrowserModule,  NgxPaginationModule, MatSelectModule, MatFormFieldModule, MatCheckboxModule, MatExpansionModule
     , PdfViewerModule, ReactiveFormsModule, ToastrModule.forRoot(), NgxMatSelectSearchModule, MatProgressBarModule,

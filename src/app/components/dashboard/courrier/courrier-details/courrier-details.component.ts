@@ -73,7 +73,7 @@ export class CourrierDetailsComponent {
   isModalInformationDetailsCourrierOpen:boolean = false
   detailsCourrier:any = {}
 
-
+  courrierIdNumber:number
   setNotifySuccessAnnotation() {
     this.notifySuccessAnnotation = 'This is an alert from the parent component!';
   }
@@ -114,6 +114,7 @@ export class CourrierDetailsComponent {
 
       console.log(this.courrierId)
       if (this.courrierId) {
+        this.courrierIdNumber = parseInt(this.courrierId)
         this.courrierService.getDetailsCourrierById(parseInt(this.courrierId), this.page).subscribe((data: any) => {
           console.log(data)
 

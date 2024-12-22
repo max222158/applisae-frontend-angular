@@ -1,0 +1,45 @@
+
+<div class="user-search-dropdown">
+    <div class="input-group mb-3 search-input-group">
+        <input type="text"
+        [formControl]="searchControl"
+         class="input-search form-control border-0"
+          placeholder="Rechercher un modèle" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </div>
+      </div>
+
+      <div class="users-container" *ngIf="(totalItems$ | async) as totalItems">
+        <div *ngIf="(modelDocument$ | async) as models">
+        <div *ngFor="let model of models |
+        paginate: { itemsPerPage: itemsPerPage, currentPage: page,totalItems: totalItems, id : 'modelDocument' } ; let i = index"
+        >
+        <div class="flex-user" (click)="selectedModel(i,model.id,model.name, model.description)" [ngStyle]="{'background-color': i === selectedModelIndex ? '#dfffba' : ''}">
+          <div class="flex1 ml-2  ">
+              
+              <div class="circle">
+                  <i class="fa-solid fa-file"></i>
+              </div>
+              <div class="ml-2">
+      
+                  <p class="font-size-13 mb-0 font-weight-500">{{model.name}}</p>
+                  <p class="font-size-13  mb-0"></p>
+              </div>
+          </div>
+          
+      </div>
+      </div>
+        <br>
+        <div class="col-12" >
+         
+                <pagination-controls (pageChange)="pageChanged($event)" id="modelDocument" previousLabel=""
+                    nextLabel=""></pagination-controls>
+
+        </div>
+
+      </div>
+    </div>
+
+
+</div>

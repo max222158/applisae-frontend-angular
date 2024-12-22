@@ -52,7 +52,7 @@
                     <label class="col-md-12 col-form-label">Service</label>
                     <div class="col-md-12">
                         <select class="form-select" formControlName="service">
-                            <option>-- Selection --</option>
+                            <option value="">-- Selection --</option>
                             <option value="Informatique">Informatique</option>
                             <option value="Comptabilité">Comptabilité</option>
                             <option value="Direction">Direction</option>
@@ -67,7 +67,7 @@
                     <label class="col-md-12 col-form-label">Grade dans le service</label>
                     <div class="col-md-12">
                         <select class="form-select" formControlName="grade">
-                            <option>-- Selection --</option>
+                            <option value="">-- Selection --</option>
                             <option value="Directeur générale">Directeur générale</option>
                             <option value="Directeur Adjoint">Directeur Adjoint</option>
                             <option value="Directeur RH">Directeur RH</option>
@@ -79,6 +79,19 @@
                 </div>
 
                 <div class="mb-3 row">
+                    <label class="col-md-12 col-form-label">Type d'utilisateur</label>
+                    <div class="col-md-12">
+                        <select class="form-select" formControlName="userType">
+                            <option value="">-- Selection --</option>
+                            <option value="Lecteur">Lecteur</option>
+                            <option value="Editeur">Editeur</option>
+                            <option value="Contributeur">Contributeur</option>
+                            <option value="Administrateur">Administrateur</option>
+                        </select>
+                    </div>
+                </div>
+
+<!--                 <div class="mb-3 row">
                     <label class="col-md-12 col-form-label" style="font-size: 20px; color: rgb(14, 74, 0);">Permissions à associer à cet utilisateur</label>
                     <hr/>
                     <div class="col-md-12">
@@ -88,6 +101,31 @@
                         </div>
                         
                     </div>
+                </div> -->
+
+                <div class="mb-3 row border-1 p-4 block-info" *ngIf="userForm.get('userType')?.value == 'Lecteur'">
+                    <ol>
+                        <li> Peut que consulter les documents uniquement </li>
+                        <li> Peut consulter ses courriers </li>
+                        <li> Peut effectuer des tâches </li>
+                    </ol>
+                </div>
+
+                <div class="mb-3 row border-1 p-4 block-info" *ngIf="userForm.get('userType')?.value == 'Editeur'">
+                    <ol>
+                        <li> Peut que consulter, ajouter, modifier et supprimer des documents et dossiers</li>
+                        <li> Peut consulter et ajouter des courriers </li>
+                        <li> Peut effectuer des tâches </li>
+                    </ol>
+                </div>
+
+                <div class="mb-3 row border-1 p-4 block-info" *ngIf="userForm.get('userType')?.value == 'Contributeur'">
+                    <ol>
+                        <li> Peut que consulter, ajouter des documents et dossiers</li>
+                        <li> Peut consulter et ajouter des courriers </li>
+                        <li> Peut effectuer des tâches </li>
+
+                    </ol>
                 </div>
 
                 <app-button-spinner

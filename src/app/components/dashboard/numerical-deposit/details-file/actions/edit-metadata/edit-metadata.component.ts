@@ -2,6 +2,11 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, Output, SimpleChanges, inject } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
+import { AppState } from '../../../../../../state/app.state';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { getCustomersFieldsByModelResponse } from '../../../../../../state/selectors/customers-fields/customers-fields.selectors';
+import { getFieldsByModeleAction } from '../../../../../../state/actions/customers-fields/customers-fields.actions';
 
 @Component({
   selector: 'app-edit-metadata',
@@ -10,12 +15,18 @@ import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 })
 export class EditMetadataComponent {
 
+  constructor(private store: Store<AppState>,){
+
+    this.customerFields$ = this.store.select(getCustomersFieldsByModelResponse);
+  }
+
   @Input() isOpenModal: boolean = false;
   @Input() details:any
   @Output() editEvent = new EventEmitter<{ title: string, description: string }>();
   @Output() closeModalEvent = new EventEmitter<void>();
   isTextAnnotationEmpty:boolean = true
-
+  customerFields$: Observable<any[]> ;
+  customerFields: any[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   selectable = true;
   removable = true;
@@ -31,6 +42,18 @@ export class EditMetadataComponent {
       this.closeModalEvent.emit();
     }
   
+
+    ngOnInit(): void {
+    
+      this.customerFields$.subscribe((customerFields) => {
+        console.log('customerFields ---- ', customerFields); 
+        this.customerFields = customerFields
+
+  
+      });
+
+      this.store.dispatch(getFieldsByModeleAction({ modeleId: 1 }));
+    }
 
 
 

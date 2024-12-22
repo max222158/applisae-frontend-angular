@@ -69,10 +69,10 @@
                 <div class="col-md-9" style="overflow-y: scroll; height: calc(100vh - 135px);">
 
 
-                    <div *ngIf="isRoot" class="flex1 align-items-center"
+        <!--             <div *ngIf="isRoot" class="flex1 align-items-center"
                         style=" justify-content: center; height: calc(100vh - 200px);">
                         <img src="assets/images/research-file-folder.png" style="width: 300px;" alt="">
-                    </div>
+                    </div> -->
 
 
 
@@ -100,7 +100,7 @@
                                 <div class="row">
 
 
-                                    <div *ngFor="let folderFile of foldersFiles | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems }; let i = index" class="hover-effect flex1"
+                                    <div *ngFor="let folderFile of foldersFiles | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems , id : 'classification_general' }; let i = index" class="hover-effect flex1"
                                         style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
                                         <div *ngIf="folderFile.is_folder" style="width: 125px;">
                                             <input type="checkbox" 
@@ -161,7 +161,7 @@
                                           Total: {{totalItems}} Résultats
                                       </div>
                                       <div class="col-5">
-                                          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
+                                          <pagination-controls (pageChange)="pageChanged($event)" id ="classification_general" previousLabel="Précédent"
                                               nextLabel="Suivant"></pagination-controls>
                                       </div>
                                   </div>

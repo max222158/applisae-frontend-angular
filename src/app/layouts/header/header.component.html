@@ -33,13 +33,17 @@
                     <i class="fa-solid fa-magnifying-glass"
                         style="position: absolute;font-size: 20px;top: 10px;left: 10px;color: #686868bd;"></i>
 
-                    <input type="text" (blur)="setIsSearchSectionVisible(false)" (focus)="setIsSearchSectionVisible(true)"
+                    <input type="text"  (focus)="setIsSearchSectionVisible(true)"
                      [formControl]="searchControl"
                         class="form-control " id="search-bar" placeholder="Rechercher ici...">
 
                 </div>
 
                 <div *ngIf="isSearchSectionVisible" class="result-search-header-bar">
+                    <button class="btn  border-0 border-radius-50"
+                    style="position: absolute; right: 10px; top: 10px; "
+                    (click)="setIsSearchSectionVisible(false)">
+                        <i class="fa-solid fa-circle-xmark" style="color: red; font-size: 20px;"></i></button>
                     <div class="category-search">
 
                         <button (click)="onFilteredChange('all',1)" class="btn border-1 border-radius-20 mr-1 "

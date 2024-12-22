@@ -19,7 +19,7 @@ export const getOnlyFolders = createAction(
 
 export const getFolderAndFiles = createAction(
   '[FoldersFiles] get',
-  props<{ formData: FormData }>()
+  props<{ id: number, page: number, searchText: string }>()
 );
 
 export const getFolderAndFilesSuccess = createAction('[FoldersFiles] get  Success', props<{ response: any }>());

@@ -14,6 +14,7 @@ export class AdminDispositionComponent {
 
   @Input() disposition: string;
   @Input() parsedId: number ;
+  @Input() folderName: string;
   @Input() folders: any[];
   @Input() foldersFiles: any[];
   @Input() documents: any[];
@@ -24,12 +25,13 @@ export class AdminDispositionComponent {
   @Input() activeActionBtnIndex: number;
   @Input() selectedCheckItems: any[] = []; // Ajout de la propriété selectedCheckItems
   @Output() folderSelected = new EventEmitter<{ id: number, name: string, page:number }>();
+  @Output() renameModalEvent = new EventEmitter<{id:number, folderName:string}>();
   @Output() documentSelected = new EventEmitter<number>();
   @Output() checkboxChange = new EventEmitter<{ event: any, item: any }>();
   @Output() pageChange = new EventEmitter<any>();
   @Output() actionBtnIndexChanged = new EventEmitter<number>();
   @Output() totalItemsChange = new EventEmitter<number>();
-
+  isOpenModalRenameFolder:boolean = false
   constructor(private utilsService: UtilsService,) { }
   isSelected(item: any): boolean {
     return this.selectedCheckItems.some((i: { id: any; }) => i.id === item.id);
@@ -119,14 +121,29 @@ export class AdminDispositionComponent {
     return this.selectedRowIndex === itemId && this.selectedRowType === itemType;
   }
   
-  onRightClick(event: MouseEvent, itemId: number, itemType: string): void {
+  onRightClick(event: MouseEvent, itemId: number, folderName: string, itemType: string): void {
     event.preventDefault();  // Empêche le menu contextuel par défaut
     this.selectedRowIndex = itemId;
     this.selectedRowType = itemType;
+    this.folderName = folderName
     this.parsedId = itemId;
     this.contextMenu.onRightClick(event);
     console.log(`Ligne sélectionnée : ${itemId} de type ${itemType}`);
   }
 
+  renameModal(id:number, folderName:string) {
+    this.renameModalEvent.emit({id, folderName});
+    this.setOpenRenameModal()
+  }
 
+
+  setOpenRenameModal(){
+    this.isOpenModalRenameFolder = !this.isOpenModalRenameFolder
+  
+}
+
+closeModalRenameFolder(){
+  this.isOpenModalRenameFolder = false
+
+}
 }

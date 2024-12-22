@@ -38,6 +38,8 @@ ul {
   .nested {
     display: none;
     margin-left: 1em;
+      
+    border-left: 1px solid #bbb !important;
   }
   
   .active {

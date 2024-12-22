@@ -11,6 +11,8 @@ export interface AppState {
     get_customer_fields:any;
     save_comment:any;
     get_comment:any;
+    get_model_document:any;
+    get_customer_fields_by_id:any;
     
     // Autres propriétés de l'état global
   }

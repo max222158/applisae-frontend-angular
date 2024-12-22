@@ -34,7 +34,7 @@ export class AllActionComponent {
   getFileFolderSuccess$: Observable<boolean>;
   folderAndFilesResponse$: Observable<any[]>;
   isRoot: boolean = true
-  perPage:number =  10
+  perPage:number =  20
   page:number = 1
   error$: Observable<any>;
   response$: Observable<any>;
@@ -46,6 +46,7 @@ export class AllActionComponent {
   totalItems:number = 0
   totalItems$: Observable<number>
   isLoadingFolderRight: boolean = false
+  searchText:string = ''
   private subscriptions: Subscription = new Subscription();
   @Input() selectedFolders: any[] = [];
   @Input() paths: any[] = [];
@@ -93,6 +94,13 @@ export class AllActionComponent {
     this.totalItems$ = this.store.select(totalItemsFoldersFiles);
 
   }
+
+  fetchFolderAndFiles(): void {
+    if (this.selectedNodeId) {
+      this.store.dispatch(getFolderAndFiles({ id: this.selectedNodeId, page: this.page, searchText: this.searchText }));
+    }
+  }
+  
 
   ngOnInit(): void {
 
@@ -229,10 +237,8 @@ export class AllActionComponent {
     this.page = 1
     if (this.selectedNodeId) {
 
-      let formData = new FormData()
-      formData.append('id', this.selectedNodeId.toString());
-      formData.append('page', page.toString());
-      this.store.dispatch(getFolderAndFiles({ formData }));
+      //recuperer les dossiers et documents par le store
+      this.fetchFolderAndFiles()
       // Souscris au sélecteur de succès
       this.getFileFolderSuccess$.subscribe((isSuccess) => {
         if (isSuccess) {
@@ -356,12 +362,9 @@ export class AllActionComponent {
   pageChanged(event:any){
     this.page = event
     let formData = new FormData()
-    if(this.selectedNodeId){
-      formData.append('id', this.selectedNodeId.toString());
-      formData.append('page', event);
-    }
 
-    this.store.dispatch(getFolderAndFiles({ formData }));
+          //recuperer les dossiers et documents par le store
+          this.fetchFolderAndFiles()
 
   }
 

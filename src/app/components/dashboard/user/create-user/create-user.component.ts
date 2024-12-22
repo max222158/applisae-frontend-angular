@@ -28,7 +28,8 @@ export class CreateUserComponent {
       email: [''],
       gender: [''],
       service: [''],
-      grade: ['']
+      grade: [''],
+      userType: ['']
       
        // Add other form controls as needed
      });

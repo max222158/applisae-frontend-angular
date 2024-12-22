@@ -6,7 +6,7 @@ import { FilemanagerService } from '../../../services/api/filemanager/filemanage
 import { UserService } from '../../../services/api/user/user.service';
 import {  getGroups, getGroupsFailure, getGroupsSuccess, getUsers, getUsersFailure, getUsersSuccess } from '../../actions/users/users.actions';
 
-import { customersFieldsActionFailure, customersFieldsActionSuccess, getCustomersFieldsAction } from '../../actions/customers-fields/customers-fields.actions';
+import { customersFieldsActionFailure, customersFieldsActionSuccess, getCustomersFieldsAction, getFieldsByModeleAction, getFieldsByModeleActionFailure, getFieldsByModeleActionSuccess } from '../../actions/customers-fields/customers-fields.actions';
 import { CustomfieldService } from '../../../services/api/customfield/customfield.service';
 import { getCustomersFields } from '../../reducers/customers-fields/customers-fields.reducers';
 
@@ -37,6 +37,17 @@ this.actions$.pipe(
 )
 );
 
+getFieldsByModele$ = createEffect(() =>
+this.actions$.pipe(
+  ofType(getFieldsByModeleAction),
+  mergeMap(action =>
+    this.customfieldService.getDocumentFieldsByModele(action.modeleId).pipe(
+      map(response => getFieldsByModeleActionSuccess({ response })),
+      catchError(error => of(getFieldsByModeleActionFailure({ error })))
+    )
+  )
+)
+);
 
 
 
