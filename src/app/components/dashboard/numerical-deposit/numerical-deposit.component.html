@@ -133,7 +133,9 @@
             (documentSelected)="gotoDetailsDocument($event)"
             (checkboxChange)="onCheckboxChange($event.event, $event.item)"
             (actionBtnIndexChanged)="setActiveActionBtnIndex($event)" [page]="page" [totalItems]="totalItems"
-            (pageChange)="pageChanged($event)">
+            (pageChange)="pageChanged($event)"
+            
+            >
         </app-admin-disposition>
     </div>
 
@@ -175,8 +177,7 @@
                                 [ngClass]="{'actve-tabs': selectedIndexActionFolder === 2,
                                  'no-actve-tabs': selectedIndexActionFolder !== 2}">Permissions</button>
                             <button type="button" class="btn no-actve-tabs" (click)="onSelectedIndexActionFolder(3)"
-                                [ngClass]="{'actve-tabs': selectedIndexActionFolder === 3, 'no-actve-tabs': selectedIndexActionFolder !== 3}">Champs
-                                personnalisés</button>
+                                [ngClass]="{'actve-tabs': selectedIndexActionFolder === 3, 'no-actve-tabs': selectedIndexActionFolder !== 3}">Personnaliser</button>
                         </div>
 
                         <hr>
@@ -256,11 +257,34 @@
                             </div>
 
                         </div>
-                        <div *ngIf="selectedIndexActionFolder ==3">
-                            <h5>Ajouter des champs personnalisés pour de dossier</h5>
-                            <div style="">
 
-                                <app-customer-fields-dropdown></app-customer-fields-dropdown>
+                        <!-- Personnaliser le dossier  -->
+                        <div *ngIf="selectedIndexActionFolder ==3">
+                            <h5>Personnaliser</h5>
+                            <div style="">
+                                <button type="button" class="btn btn-success" (click)="setModalSelectModelDocumentVisible()">Selectionner un modèle </button>
+                                <button type="button" class="btn btn-danger" (click)="setModalSelectFieldVisible()">Selectionner des champs personnalisés </button>
+                                <div *ngIf="modalSelectFieldVisible">
+                                    <app-customer-fields-dropdown></app-customer-fields-dropdown>
+                                </div>
+
+                                <div *ngIf="modalModelDocumentVisible">
+                                    <app-dropdown-model-document-search></app-dropdown-model-document-search>
+                                
+                                    <div class="flex1 mt-2 " style="float: right;">
+                                        <div style="padding: 10px;" class="">
+                                            <h3>Le modèle d'enregistrement: </h3>
+                                          
+                                            <div style=" " class="btn-modal-name" >
+                                                    <p class="mb-0" style="color: #fff; ">{{modelDocumentSelected.name}}</p>
+                                                    <p class="mb-0 close-btn" style="" (click)="removeModelDocument()" >X</p>
+                                                </div>
+
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -325,6 +349,8 @@
     [number_of_elements]="selectedCheckItems.length">
 
 </app-modal-copy> -->
+
+
 
 <app-all-action [isOpenModal]="isOpenModalAction" (closeModalEvent)="closeModalAction()" [modalTitle]="modalActionTitle"
     [modalButtonAction]="modalButtonAction" [number_of_elements]="selectedCheckItems.length"

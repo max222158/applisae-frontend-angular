@@ -34,6 +34,7 @@ import { FolderPermissionsComponent } from './components/dashboard/permissions/f
 import { MyGroupsComponent } from './components/dashboard/my-groups/my-groups.component';
 import { DetailsMyGroupComponent } from './components/dashboard/my-groups/details-my-group/details-my-group.component';
 import { StatisticComponent } from './components/dashboard/statistic/statistic.component';
+import { CreateModelDocumentComponent } from './components/dashboard/model/model-document/create/create.component';
 
 
 
@@ -133,6 +134,10 @@ const routes: Routes = [{
         ,
         {
             path: 'modele-documents', component: ModelComponent
+        }
+        ,
+        {
+            path: 'modele/creer-modele', component: CreateModelDocumentComponent
         }
         ,
         {

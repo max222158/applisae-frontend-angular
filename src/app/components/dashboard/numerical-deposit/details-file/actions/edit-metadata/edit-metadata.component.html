@@ -45,6 +45,10 @@
                     </div>
                 </div>
 
+                <app-customer-fields [customer_fields]="customerFields"
+                    selectedModele=5></app-customer-fields>
+
+
                 <button (click)="edit()"  [disabled]="isTextAnnotationEmpty" class="btn btn-primary
                 font-weight-700
                 mt-2 font-size-15">

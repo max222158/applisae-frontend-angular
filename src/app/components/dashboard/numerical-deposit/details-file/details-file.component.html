@@ -13,22 +13,25 @@
 
     </div>
 
-        <!-- fin breadcrumb  -->
+    <!-- fin breadcrumb  -->
 
     <div style="display: flex;  margin-bottom: 20px; background: #ffffff00;">
         <i class="fa-regular fa-file-lines" style="font-size: 60px;"></i>
         <div class="ml-2">
-            <h4>{{detailsDocument.title}} 
+            <h4>{{detailsDocument.title}}
                 <span class="span bg-success badge me-2">{{versionDocument}}.0</span>
-                 <span *ngIf="detailsDocument.document_type == 2" class="span bg-warning badge me-2" style="background: #f14c4c !important;">Issue d'un courrier</span> 
-                <span *ngIf="detailsDocument.is_copy == true"  class="span bg-success badge me-2" style="background: #002dff !important;">Fichier copié</span>
-                <span   class="span bg-success badge me-2" 
-                style="font-size: 12px ">{{detailsDocument.view}} consultations</span>
-                    
+                <span *ngIf="detailsDocument.document_type == 2" class="span bg-warning badge me-2"
+                    style="background: #f14c4c !important;">Issue d'un courrier</span>
+                <span *ngIf="detailsDocument.is_copy == true" class="span bg-success badge me-2"
+                    style="background: #002dff !important;">Fichier copié</span>
+                <span class="span bg-success badge me-2" style="font-size: 12px ">{{detailsDocument.view}}
+                    consultations</span>
+
             </h4>
-                                 <div style="display: flex;">
-                <span class="font-weight-600" >Auteur: </span> <span class="mr-4"> {{detailsDocument.author.name}}</span>
-                <span class="font-weight-600">Ajouté le: </span> <span class="mr-4">{{detailsDocument.created_at | customDateFormat}}</span>
+            <div style="display: flex;">
+                <span class="font-weight-600">Auteur: </span> <span class="mr-4"> {{detailsDocument.author.name}}</span>
+                <span class="font-weight-600">Ajouté le: </span> <span class="mr-4">{{detailsDocument.created_at |
+                    customDateFormat}}</span>
 
             </div>
 
@@ -60,20 +63,21 @@
             <div *ngIf="pdfSrc !== ''" style="height: calc(100vh - 100px);background: #f8f8f8;
             display: flex;padding: 0px; overflow: hidden;">
 
-            <div style="display: flex;position: absolute; right: 10px; z-index: 4;">
+                <div style="display: flex;position: absolute; right: 10px; z-index: 4;">
 
                     <button class="btn btn-success  mt-1 ml-1" (click)="setZoom('reduce')"
                         style="background: #000000b3;"><i class="fa-solid fa-minus"></i></button>
 
-                    <button class="btn btn-success  mt-1 ml-0" (click)="setZoom('add')" style="background: #000000b3;"><i
-                            class="fa-solid fa-plus"></i></button>
+                    <button class="btn btn-success  mt-1 ml-0" (click)="setZoom('add')"
+                        style="background: #000000b3;"><i class="fa-solid fa-plus"></i></button>
 
-                    <button (click)="setIsModalFullcreenDocumentOpen()" class="btn btn-success  mt-1 ml-1" style="background: #007336;"><i
-                            class="fa-solid fa-expand"></i></button>
+                    <button (click)="setIsModalFullcreenDocumentOpen()" class="btn btn-success  mt-1 ml-1"
+                        style="background: #007336;"><i class="fa-solid fa-expand"></i></button>
                 </div>
                 <!-- Votre contenu à afficher si l'extension est une extension d'image -->
-                <pdf-viewer *ngIf="pdfSrc !== '' && !isVideoExtension(detailsDocument.extension)" [src]="pdfSrc" [zoom]="zoom" [render-text]="true"
-                    [original-size]="false" style="width: 100%;height: 100vh;z-index: 2;background: #f8f8f8;">
+                <pdf-viewer *ngIf="pdfSrc !== '' && !isVideoExtension(detailsDocument.extension)" [src]="pdfSrc"
+                    [zoom]="zoom" [render-text]="true" id="printableDiv" [original-size]="false"
+                    style="width: 100%;height: 100vh;z-index: 2;background: #f8f8f8;">
 
                 </pdf-viewer>
             </div>
@@ -81,18 +85,29 @@
         </div>
         <div class="col-md-4 p-2">
             <h4 style="background: #4caf5012;padding: 7px;">Action sur le document</h4>
-            <p class="action-button" style=""><i class="fa-solid fa-sitemap"></i> Classer le document</p>
-            <p 
-                class="action-button"
-                (click)="openHistoryModal()"
-                style=""><i class="fa-solid fa-clock-rotate-left"></i> Historique dans le document</p>
+            <p class="action-button" style="" (click)="printDocument('printableDiv')">
+                <i class="fa-solid fa-print"></i> Imprimer le document
+            </p>
 
-            <p class="action-button" style="" (click)="setIsModalAllDetailsOpen()"><i class="fa-solid fa-circle-info"></i> Tous les propriétés</p>
-            <p class="action-button" style="" (click)="setIsModalEditMetadataOpen()"><i class="fa-regular fa-pen-to-square"></i> Modifier le métadonnées</p>
-            <p class="action-button" style="" (click)="openAnnotationModal()" ><i class="fa-regular fa-pen-to-square"></i> Annoter</p>
+            <p class="action-button" style="" (click)="downloadDocument()">
+                <i class="fa-solid fa-download"></i> Télécharger
+            </p>
+            <p class="action-button" style="" (click)="openModalDocumentClassification()"><i
+                    class="fa-solid fa-sitemap"></i> Classer le document</p>
+
+            <p class="action-button" (click)="openHistoryModal()" style=""><i class="fa-solid fa-clock-rotate-left"></i>
+                Historique dans le document</p>
+
+            <p class="action-button" style="" (click)="setIsModalAllDetailsOpen()"><i
+                    class="fa-solid fa-circle-info"></i> Tous les propriétés</p>
+            <p class="action-button" style="" (click)="setIsModalEditMetadataOpen()"><i
+                    class="fa-regular fa-pen-to-square"></i> Modifier le métadonnées</p>
+            <p class="action-button" style="" (click)="openAnnotationModal()"><i
+                    class="fa-regular fa-pen-to-square"></i> Annoter</p>
             <p class="action-button" style=""><i class="fa-regular fa-copy"></i> Copier vers</p>
             <p class="action-button" style=""><i class="fa-solid fa-circle-arrow-right"></i> Déplacer vers</p>
-            <p class="action-button" style="" (click)="setIsModalShareDocumentOpen()"><i class="fa-solid fa-share"></i> Partager</p>
+            <p class="action-button" style="" (click)="setIsModalShareDocumentOpen()"><i class="fa-solid fa-share"></i>
+                Partager</p>
             <p class="action-button" style=""><i class="fa-solid fa-trash-can "></i> Supprimer</p>
             <a routerLink="/tableau-de-bord/document/creer-un-workflow" routerLinkActive="active"
                 class="action-button mb-1">
@@ -101,70 +116,50 @@
             <p class="action-button" (click)="setIsModalDocumentInWorkflowOpen()" style="">
                 <i class="fa-solid fa-users"></i> Dans les workflows
             </p>
-            <p class="action-button" style=""><i class="fa-solid fa-lock"></i> Gérer les permissions</p>
-            <p class="action-button" style="" 
-                (click)="setModalNewVersionDocumentOpen()"
-            ><i class="fa-solid fa-code-branch"></i>  Versions du
+            <p class="action-button" style=""><i class="fa-solid fa-lock"></i> Gérer les accès</p>
+            <p class="action-button" style="" (click)="setModalNewVersionDocumentOpen()"><i
+                    class="fa-solid fa-code-branch"></i> Versions du
                 document</p>
-            <p class="action-button" style="" (click)="downloadDocument()"><i class="fa-solid fa-download"></i> Télécharger</p>
+
         </div>
     </div>
 </div>
-<app-modal-view-document 
-[isOpenModal] = "isModalFullcreenDocumentOpen"
-(closeModalEvent)="setIsModalFullcreenDocumentOpen()"
-[pdfSrc]="pdfSrc"
-  >
+<app-modal-view-document [isOpenModal]="isModalFullcreenDocumentOpen"
+    (closeModalEvent)="setIsModalFullcreenDocumentOpen()" [pdfSrc]="pdfSrc">
 
- </app-modal-view-document>
+</app-modal-view-document>
 
 
- <app-share 
-[isOpenModal] = "isModalShareOpen"
-(closeModalEvent)="setIsModalShareDocumentOpen()"
-  >
+<app-share [isOpenModal]="isModalShareOpen" (closeModalEvent)="setIsModalShareDocumentOpen()">
 
- </app-share>
+</app-share>
 
- <app-all-details [isOpenModal]="isModalAllDetailsOpen"  (closeModalEvent)="closeModalAllDetailsOpen()" [details]="detailsDocument"></app-all-details>
- <app-edit-metadata [isOpenModal]="isModalEditMetadataOpen"
-  (closeModalEvent)="closeModalEditMetadataOpen()" [details]="detailsDocument"
-   (editEvent)="onEditMetadata($event)" [notifySuccessEdit]="notifySuccessEditMetaData"></app-edit-metadata>
+<app-all-details [isOpenModal]="isModalAllDetailsOpen" (closeModalEvent)="closeModalAllDetailsOpen()"
+    [details]="detailsDocument"></app-all-details>
+<app-edit-metadata [isOpenModal]="isModalEditMetadataOpen" (closeModalEvent)="closeModalEditMetadataOpen()"
+    [details]="detailsDocument" (editEvent)="onEditMetadata($event)"
+    [notifySuccessEdit]="notifySuccessEditMetaData"></app-edit-metadata>
 
 
 <app-modal-annotations [isOpenModalAnnotation]="isOpenModalAnnotation" [annotations]="annotations"
-   [perPage]="annotationPerPage" [page]="currentAnnotationPage" (closeModalEvent)="closeAnnotationModal()" 
-   (saveAnnotationEvent)="saveAnnotation($event)"
-   (pageChangedEvent)="currentAnnotationPageChanged($event)" [totalItems]="totalItemsAnnotation"
-   [notifySuccessSaveNotification]="notifySuccessSaveNotification"
-   [isNotifyPaginationAnnotation]="isNotifyPaginationAnnotation"
-
-   >
+    [perPage]="annotationPerPage" [page]="currentAnnotationPage" (closeModalEvent)="closeAnnotationModal()"
+    (saveAnnotationEvent)="saveAnnotation($event)" (pageChangedEvent)="currentAnnotationPageChanged($event)"
+    [totalItems]="totalItemsAnnotation" [notifySuccessSaveNotification]="notifySuccessSaveNotification"
+    [isNotifyPaginationAnnotation]="isNotifyPaginationAnnotation">
 </app-modal-annotations>
 
-<app-document-in-workflow 
-[workflows]="workflows"
-[isOpenModal]="isModalDocumentInWorkflowOpen"
- (closeModalEvent)="closeModalDocumentInWorkflowOpen()">
+<app-document-in-workflow [workflows]="workflows" [isOpenModal]="isModalDocumentInWorkflowOpen"
+    (closeModalEvent)="closeModalDocumentInWorkflowOpen()">
 
 </app-document-in-workflow>
 
-<app-add-new-version-document 
-[isOpenModal]="isModalNewVersionDocumentOpen"
-(closeModalEvent)="closeModalNewVersion()"
-(saveVersionEvent)="saveNewVersion($event)"
-[notifySuccessSaveVersion]="notifySuccessSaveNewVersion"
-[versionNumber]="versionDocument"
-[document_id]="document_id"
-></app-add-new-version-document>
+<app-add-new-version-document [isOpenModal]="isModalNewVersionDocumentOpen" (closeModalEvent)="closeModalNewVersion()"
+    (saveVersionEvent)="saveNewVersion($event)" [notifySuccessSaveVersion]="notifySuccessSaveNewVersion"
+    [versionNumber]="versionDocument" [document_id]="document_id"></app-add-new-version-document>
 
-<app-document-history
-[isOpenModal]="isModalHistoryOpen"
-[histories]="histories"
-[page]="currentPaginationHistoryPage"
-(closeModalEvent)="closeHistoryModal()"
-(pageChangedEvent)="currentHistoryPageChanged($event)"
-[totalItemsHistory]="totalItemsHistory"
-[perPage]="annotationPerPage"
-></app-document-history>
+<app-document-history [isOpenModal]="isModalHistoryOpen" [histories]="histories" [page]="currentPaginationHistoryPage"
+    (closeModalEvent)="closeHistoryModal()" (pageChangedEvent)="currentHistoryPageChanged($event)"
+    [totalItemsHistory]="totalItemsHistory" [perPage]="annotationPerPage"></app-document-history>
 
+<app-document-classification (closeModalEvent)="closeModalDocumentClassification()" [documentId]="document_id"
+    [isOpenModal]="isModalDocumentClassificationOpen"></app-document-classification>

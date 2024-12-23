@@ -4,6 +4,7 @@
         <div class="modal-content p-3 heigth-100vh">
             <!-- src/app/treeview/treeview.component.html -->
             <!-- src/app/treeview/treeview.component.html -->
+
             <h3 class="mb-4">Classement de documents</h3>
 
 
@@ -21,7 +22,7 @@
                                 <ng-container *ngFor="let child of node.children">
                                     <!-- Ce composant se trouve dans commons : classification -->
                                     <app-app-tree-node [node]="child" (toggle)="toggleNode($event)"
-                                        (selectNode)="selectNode($event)"
+                                        (selectNode)="selectNode($event, 1)"
                                         [selectedNodeId]="selectedNodeId"></app-app-tree-node>
                                 </ng-container>
                             </ul>
@@ -59,40 +60,37 @@
                             </p>
                         </div>
 
-                        <div *ngIf="(folders$ | async) as folders">
-                            <div *ngIf="(files$ | async) as documents">
+                        <div *ngIf="(folderAndFilesResponse$ | async) as foldersFiles">
 
-                                <div class="row">
 
-                                    <div *ngFor="let folder of folders" class="hover-effect flex1"
-                                        style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
-                                        <div style="width: 125px;">
-                                            <input type="checkbox" class="absolute" style="position: absolute; 
-                                    width: 20px; height: 20px; margin-left: 5px;">
+                            <div class="row">
 
-                                            <i class="fa-solid fa-folder" (click)="selectNode(folder)"
-                                                style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
-                                            <p>{{ folder.name }}</p>
-                                        </div>
+                                <div *ngFor="let folderFile of foldersFiles  | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems, id : 'action_all' }; let i = index"
+                                    class="hover-effect flex1"
+                                    style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
+                                    <div *ngIf="folderFile.is_folder" style="width: 125px;">
+                                        <input type="checkbox" class="absolute" style="position: absolute; 
+                                             width: 20px; height: 20px; margin-left: 5px;">
+
+                                        <i class="fa-solid fa-folder" (click)="selectNode(folderFile, 1)"
+                                            style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+                                        <p>{{ folderFile.name }}</p>
                                     </div>
 
-                                    <div *ngFor="let document of documents" class="hover-effect flex1"
-                                        style="width: 250px; padding: 1rem; margin-right: 20px; margin-left: 20px; cursor: pointer;  justify-content: center;">
-                                        <div style="width: 125px;">
-                                            <input type="checkbox" class="absolute"
-                                                style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
-                                            <i [class]="getIconName(document.extension)"
-                                                [ngStyle]="{ color: getColor(document.extension) }"
-                                                style="font-size: 100px;"></i>
-                                            <p>{{ document.title }}</p>
-                                        </div>
+                                    <div style="width: 125px;" *ngIf="!folderFile.is_folder">
+                                        <input type="checkbox" class="absolute"
+                                            style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
+                                        <i [class]="getIconName(folderFile.extension)"
+                                            [ngStyle]="{ color: getColor(folderFile.extension) }"
+                                            style="font-size: 100px;"></i>
+                                        <p>{{ folderFile.title }}</p>
                                     </div>
 
 
                                 </div>
 
 
-                                <div *ngIf="documents.length == 0 && folders.length == 0 && isRoot == false" style=" background: #eeeeee00; display: flex; 
+                                <div *ngIf="foldersFiles.length == 0  && isRoot == false" style=" background: #eeeeee00; display: flex; 
                                 align-items: center; height: calc(100vh - 100px);
                                 justify-content: center;">
                                     <div style="">
@@ -118,12 +116,22 @@
 
                             </div>
                         </div>
+                        <div class="col-12 mt-4">
+                            <div class="row">
+                                <div class="col-5">
+                                    Total: {{totalItems}} Résultats
+                                </div>
+                                <div class="col-5">
+                                    <pagination-controls (pageChange)="pageChanged($event)" id="action_all" previousLabel="Précédent"
+                                        nextLabel="Suivant"></pagination-controls>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
-
-            <!-- src/app/treeview/treeview.component.html -->
+                <!-- src/app/treeview/treeview.component.html -->
 
 
 
@@ -131,22 +139,37 @@
 
 
 
-            <div class="modal-footer" style="
+
+
+                <div class="modal-footer" style="
             position: absolute;
             right: 10px;
             bottom: 21px;
         ">
-                <button *ngIf="selectedNodeId !== null" [disabled]="disabledActionButton" class="btn btn-success" style="padding: 12px 51px;
+                    <button *ngIf="selectedNodeId !== null && modalButtonAction == 'Déplacer ici'"
+                        class="btn btn-success" [disabled]="disabledActionButton" style="padding: 8px 51px;
                 background-color: rgb(66, 1, 88);
-                font-weight: 500;font-size: 16px; width: auto;" (click)="classifyDocument()">
-                    
-                    
-                    Classer le document ici
-                </button>
+                font-weight: 500;font-size: 15px; width: auto;" (click)="classifyDocument()">
+                        <div *ngIf="(isMovefoldersFilesRequestLoading$ | async) as isLoading  "
+                            style="width: 1.2rem; height: 1.2rem;" class="spinner-border text-success" role="status">
+                            <span class="sr-only"></span>
+                        </div>
 
-                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+
+
+                        {{modalButtonAction}}
+                    </button>
+
+                    <button *ngIf="selectedNodeId !== null" [disabled]="disabledActionButton" class="btn btn-success" style="padding: 12px 51px;
+                    background-color: rgb(66, 1, 88);
+                    font-weight: 500;font-size: 16px; width: auto;" (click)="classifyDocument()">
+                        
+                        
+                        Classer le document ici
+                    </button>
+
+                    <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-

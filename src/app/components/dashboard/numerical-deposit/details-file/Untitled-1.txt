@@ -1,0 +1,7 @@
+Courrier: Références = Identifiants
+
+Entités traintantes = Acteurs
+
+Créateurs : Producteurs
+
+Extensions: Format

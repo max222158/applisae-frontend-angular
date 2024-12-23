@@ -24,4 +24,11 @@ export class CustomfieldService {
     return this.http.post(`${this.apiUrl}/add-fiels/`, data);
   }
 
+  getDocumentFieldsByModele(modeleId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('modele_id', modeleId.toString());  // Envoyer l'ID du modèle de courrier
+
+    return this.http.post(`${this.apiUrl}/model/get_model_by_id/`, formData, { withCredentials: true });
+  }
+
 }

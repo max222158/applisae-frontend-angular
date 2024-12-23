@@ -10,6 +10,8 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { AnnotationService } from '../../../../services/api/annotation/annotation.service';
 import { HistoryService } from '../../../../services/api/history/history.service';
 import { RecentlyConsultService } from '../../../../services/api/recently-consult/recently-consult.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../state/app.state';
 
 @Component({
   selector: 'app-details-file',
@@ -47,9 +49,9 @@ export class DetailsFileComponent {
   totalItemsHistory:number = 0
   currentAnnotationPage: number = 1
   currentPaginationHistoryPage: number = 1
-  document_id: number
+  document_id: number 
   isVote: boolean
-  
+  isModalDocumentClassificationOpen: boolean = false
   /* 
     Notifie si le une variable change dans le composant enfant notifySuccessAnnotation
      */
@@ -83,9 +85,11 @@ export class DetailsFileComponent {
   /*   ----------------------------------fin-----------------------
    */
   constructor(private fileManagerService: FilemanagerService, private route: ActivatedRoute, private toastr: ToastrService
-    ,private recentlyConsultService:RecentlyConsultService, private userService: UserService, private historyService: HistoryService, private annotationService: AnnotationService, private globalStateService: GlobalStateService, private workflowService: WorkflowService) {
+    ,private store: Store<AppState>,private recentlyConsultService:RecentlyConsultService, private userService: UserService, private historyService: HistoryService, private annotationService: AnnotationService, private globalStateService: GlobalStateService, private workflowService: WorkflowService) {
 
-  }
+      
+  
+    }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const idParam = params.get('id');
@@ -315,7 +319,11 @@ export class DetailsFileComponent {
     this.isModalDocumentInWorkflowOpen = true
 
   }
+  openModalDocumentClassification(){
+    
+    this.isModalDocumentClassificationOpen = true;
 
+}
   closeModalEditMetadataOpen() {
     this.isModalEditMetadataOpen = false
   }
@@ -431,7 +439,11 @@ export class DetailsFileComponent {
     this.isOpenModalAnnotation = false;
 
   }
-
+  closeModalDocumentClassification(){
+    
+    this.isModalDocumentClassificationOpen = false;
+  
+  }
   closeHistoryModal() {
 
     this.isModalHistoryOpen = false;
@@ -523,8 +535,10 @@ export class DetailsFileComponent {
 
 
   downloadDocument() {
+    const normalizedUrl = this.detailsDocument.file_link.replace(/\\/g, '/');
+    let url =  this.link_nginx_server + normalizedUrl 
 
-
+    window.open(url, '_blank');
     this.recentlyConsultService.insertRecentlyConsultDocumentMicroservice(
       this.document_id, " a téléchargé ").subscribe({ 
         next: (response: any) => { 
@@ -542,6 +556,37 @@ export class DetailsFileComponent {
 
 
 
+  }
+
+  printDocument(divId: string){
+
+    
+
+    this.recentlyConsultService.insertRecentlyConsultDocumentMicroservice(
+      this.document_id, " a imprimé ").subscribe({ 
+        next: (response: any) => { 
+
+
+ 
+        },
+        error: (error: any) => {
+          
+        }
+      })
+      const printContents = document.getElementsByClassName("ng2-pdf-viewer-container")[0]?.innerHTML;
+      if (printContents) {
+        const originalContents = document.body.innerHTML;
+        alert(printContents)  
+        // Ouvrir une nouvelle fenêtre pour l'impression
+        //const printWindow = window.open('', '', 'height=600,width=800');
+    
+        if (printContents) {
+          document.body.innerHTML = printContents;
+          window.print();
+          document.body.innerHTML = originalContents;
+          window.location.reload();
+        }
+      }
   }
 
 }

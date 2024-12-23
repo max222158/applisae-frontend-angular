@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-context-menu',
@@ -9,7 +9,11 @@ export class ContextMenuComponent {
   x = 0;
   y = 0;
   display = 'none';
-  @Input() idParsed:number 
+  @Input() idParsed:number
+
+  @Input() folderName:string
+   
+  @Output() renameModalEvent = new EventEmitter<{id:number, folderName:string}>();
 
   onRightClick(event: MouseEvent): void {
     event.preventDefault();
@@ -28,5 +32,11 @@ export class ContextMenuComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     this.display = 'none';
+  }
+
+  renameModal(id:number, folderName:string) {
+    this.renameModalEvent.emit({id, folderName});
+
+
   }
 }

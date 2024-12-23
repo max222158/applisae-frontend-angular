@@ -61,30 +61,31 @@
                         </div>
 
                         <div *ngIf="(folderAndFilesResponse$ | async) as foldersFiles">
-                          
 
-                                <div class="row">
 
-                                    <div *ngFor="let folderFile of foldersFiles  | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems }; let i = index" class="hover-effect flex1"
-                                        style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
-                                        <div *ngIf="folderFile.is_folder" style="width: 125px;">
-                                            <input type="checkbox" class="absolute" style="position: absolute; 
+                            <div class="row">
+
+                                <div *ngFor="let folderFile of foldersFiles  | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems, id : 'action_all' }; let i = index"
+                                    class="hover-effect flex1"
+                                    style="width: 250px;margin-left: 20px;  justify-content: center; padding: 1rem; margin-right: 20px; cursor: pointer;">
+                                    <div *ngIf="folderFile.is_folder" style="width: 125px;">
+                                        <input type="checkbox" class="absolute" style="position: absolute; 
                                              width: 20px; height: 20px; margin-left: 5px;">
 
-                                            <i class="fa-solid fa-folder" (click)="selectNode(folderFile, 1)"
-                                                style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
-                                            <p>{{ folderFile.name }}</p>
-                                        </div>
+                                        <i class="fa-solid fa-folder" (click)="selectNode(folderFile, 1)"
+                                            style="font-size: 100px; color: rgb(212, 71, 1) !important;"></i>
+                                        <p>{{ folderFile.name }}</p>
+                                    </div>
 
-                                        <div style="width: 125px;" *ngIf="!folderFile.is_folder" >
-                                            <input type="checkbox" class="absolute"
-                                                style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
-                                            <i [class]="getIconName(folderFile.extension)"
-                                                [ngStyle]="{ color: getColor(folderFile.extension) }"
-                                                style="font-size: 100px;"></i>
-                                            <p>{{ folderFile.title }}</p>
-                                        </div>
-                                    
+                                    <div style="width: 125px;" *ngIf="!folderFile.is_folder">
+                                        <input type="checkbox" class="absolute"
+                                            style="position: absolute; width: 20px; height: 20px; margin-left: 5px;">
+                                        <i [class]="getIconName(folderFile.extension)"
+                                            [ngStyle]="{ color: getColor(folderFile.extension) }"
+                                            style="font-size: 100px;"></i>
+                                        <p>{{ folderFile.title }}</p>
+                                    </div>
+
 
                                 </div>
 
@@ -117,20 +118,20 @@
                         </div>
                         <div class="col-12 mt-4">
                             <div class="row">
-                              <div class="col-5">
-                                  Total: {{totalItems}} Résultats
-                              </div>
-                              <div class="col-5">
-                                  <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Précédent"
-                                      nextLabel="Suivant"></pagination-controls>
-                              </div>
-                          </div>
+                                <div class="col-5">
+                                    Total: {{totalItems}} Résultats
+                                </div>
+                                <div class="col-5">
+                                    <pagination-controls (pageChange)="pageChanged($event)" id="action_all" previousLabel="Précédent"
+                                        nextLabel="Suivant"></pagination-controls>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
                 </div>
 
-            </div>
-
-            <!-- src/app/treeview/treeview.component.html -->
+                <!-- src/app/treeview/treeview.component.html -->
 
 
 
@@ -140,46 +141,40 @@
 
 
 
-            <div class="modal-footer" style="
+                <div class="modal-footer" style="
             position: absolute;
             right: 10px;
             bottom: 21px;
         ">
-                <button *ngIf="selectedNodeId !== null && modalButtonAction == 'Déplacer ici'" 
-                 class="btn btn-success" 
-                 [disabled]="disabledActionButton"
-                 style="padding: 8px 51px;
-                background-color: rgb(66, 1, 88);
-                font-weight: 500;font-size: 15px; width: auto;"
-                 (click)="classifyDocument()">
-                    <div *ngIf="(isMovefoldersFilesRequestLoading$ | async) as isLoading  "
-                        style="width: 1.2rem; height: 1.2rem;"
-                        class="spinner-border text-success" role="status">
-                        <span class="sr-only"></span>
-                    </div>
-
-
-
-                    {{modalButtonAction}}
-                </button>
-
-                <button *ngIf="selectedNodeId !== null && modalButtonAction == 'Copier ici'" 
-                [disabled]="disabledActionButton"
-                class="btn btn-success" style="padding: 8px 51px;
+                    <button *ngIf="selectedNodeId !== null && modalButtonAction == 'Déplacer ici'"
+                        class="btn btn-success" [disabled]="disabledActionButton" style="padding: 8px 51px;
                 background-color: rgb(66, 1, 88);
                 font-weight: 500;font-size: 15px; width: auto;" (click)="classifyDocument()">
-                
-                    <div *ngIf="(isCopyfoldersFilesRequestLoading$ | async) as isLoading  "
-                        style="width: 1.2rem; height: 1.2rem;"
-                        class="spinner-border text-success" role="status">
-                        <span class="sr-only"></span>
-                    </div>
+                        <div *ngIf="(isMovefoldersFilesRequestLoading$ | async) as isLoading  "
+                            style="width: 1.2rem; height: 1.2rem;" class="spinner-border text-success" role="status">
+                            <span class="sr-only"></span>
+                        </div>
 
-                    {{modalButtonAction}}
-                </button>
 
-                <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+
+                        {{modalButtonAction}}
+                    </button>
+
+                    <button *ngIf="selectedNodeId !== null && modalButtonAction == 'Copier ici'"
+                        [disabled]="disabledActionButton" class="btn btn-success" style="padding: 8px 51px;
+                background-color: rgb(66, 1, 88);
+                font-weight: 500;font-size: 15px; width: auto;" (click)="classifyDocument()">
+
+                        <div *ngIf="(isCopyfoldersFilesRequestLoading$ | async) as isLoading  "
+                            style="width: 1.2rem; height: 1.2rem;" class="spinner-border text-success" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+
+                        {{modalButtonAction}}
+                    </button>
+
+                    <button class="btn btn-success" (click)="closeModal()">Fermer</button>
+                </div>
             </div>
         </div>
     </div>
-</div>

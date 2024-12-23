@@ -1,59 +1,65 @@
-p{ 
+p {
   margin-bottom: 0px !important;
 }
+
 .devices_btn a {
-    margin-bottom: 10px;
-    font-family: sans-serif;
+  margin-bottom: 10px;
+  font-family: sans-serif;
 }
 
 .color_button {
-    border: 0;
-    display: inline-block;
-    padding: 4px 25px;
-    text-transform: capitalize;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 8px;
-    white-space: nowrap;
-    -webkit-transition: .5s;
-    transition: .5s;
+  border: 0;
+  display: inline-block;
+  padding: 4px 25px;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  white-space: nowrap;
+  -webkit-transition: .5s;
+  transition: .5s;
 }
 
-.folder_name{
+.folder_name {
 
-    margin-left: 10px;
-    font-weight: 900;
+  margin-left: 10px;
+  font-weight: 900;
 
 }
-.folder-column{
-    width: 144px;height: 160px;
-    margin-left: 30px;
+
+.folder-column {
+  width: 144px;
+  height: 160px;
+  margin-left: 30px;
 }
-button{
-    margin-right: 10px;
+
+button {
+  margin-right: 10px;
 }
 
 .hover-effect {
-    position: relative;
-  }
-  
-  .hover-effect:hover {
-    background: #72d2ff61;
-
-  }
-
-  .hover-effect:hover button {
-    
-    display: block !important;
-  }
-  p {
-    margin-top: 0;
-    word-wrap: break-word !important;
+  position: relative;
 }
 
-td{
+.hover-effect:hover {
+  background: #72d2ff61;
+
+}
+
+.hover-effect:hover button {
+
+  display: block !important;
+}
+
+p {
+  margin-top: 0;
+  word-wrap: break-word !important;
+}
+
+td {
   padding-top: 18px;
 }
+
 .table-hover>tbody>tr:hover>* {
   --bs-table-color-state: var(--bs-table-hover-color);
   --bs-table-bg-state: rgba(0, 229, 254, 0.08);
@@ -65,7 +71,7 @@ td{
 }
 
 .dropdown-item {
- 
+
   font-size: 17px;
   padding-top: 15px;
 }
@@ -74,14 +80,17 @@ input[type=checkbox] {
   width: 21px;
   height: 21px;
 }
-.selected{
-  background:#00bcd40d;
+
+.selected {
+  background: #00bcd40d;
 }
-.actve-tabs{
+
+.actve-tabs {
   background: #4CAF50;
   color: white;
 }
-.no-actve-tabs{
+
+.no-actve-tabs {
   background: #e0e0e0d4;
 
 }
@@ -102,12 +111,35 @@ input[type=checkbox] {
   border-color: green !important;
 }
 
-.no-visible-all{
+.no-visible-all {
   color: rgb(242, 80, 80);
   font-style: italic;
 }
 
-.visi-all{
+.visi-all {
   color: rgb(36, 135, 0);
   font-style: italic;
+}
+
+.close-btn {
+  margin-left: 10px;
+  background: #565656;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-modal-name {
+
+  display: flex;
+  background: #7b0042;
+  border-radius: 20px;
+  margin-right: 10px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: fit-content;
 }

@@ -20,6 +20,7 @@ import { resetFolderAndFiles, resetIsSuccessCopyState, resetIsSuccessMoveState }
 import { CustomerFieldsSelectionService } from '../../../services/shared/customer-fields/customer-fields.service';
 import {  debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { RecentlyConsultService } from '../../../services/api/recently-consult/recently-consult.service';
+import { SingleModelSelectionService } from '../../../services/shared/model-document/model-document-selection.service';
 
 @Component({
   selector: 'app-numerical-deposit',
@@ -28,6 +29,17 @@ import { RecentlyConsultService } from '../../../services/api/recently-consult/r
 })
 export class NumericalDepositComponent {
   @ViewChild(ContextMenuComponent) contextMenu: ContextMenuComponent;
+
+  constructor(private http: HttpClient,private singleModelSelectionService: SingleModelSelectionService, private router:Router,private customfieldService: CustomfieldService,
+    private route: ActivatedRoute,
+     private toastr: ToastrService,private fb: FormBuilder,private userService: UserService, 
+     private fileManagerService: FilemanagerService, private store: Store<AppState>,private customerFieldsSelectionService: CustomerFieldsSelectionService,
+     private utilsService: UtilsService, private authService:AuthService,  private recentlyConsultService:RecentlyConsultService ) { 
+        
+
+      this.isActionMoveSuccess$ = this.store.select(moveFolderAndFilesSuccess);
+      this.isCopySuccess$ = this.store.select(isCopyFolderAndFilesSuccess);
+     }
 
   isOpenModalFolder:boolean = false
   isOpenModalUploadFile:boolean = false
@@ -81,9 +93,15 @@ export class NumericalDepositComponent {
   customerFieldsNewFolder$: Observable<any[]>
   customerFieldsNewFolder: any[]; // Non observable
   searchText:string = ''
-
+  modalSelectFieldVisible:boolean = false // Dans creation dossier voir custom field
+  modalModelDocumentVisible:boolean = false // Dans creation dossier voir les models
   isCopySuccess$: Observable<boolean>; // Is copy elements success
+  isOpenModalRenameFolder:boolean=false
+  selectedModelService$: Observable<any>; // un state global pour gerer la selection d'un model
+  modelDocumentSelected: any = {}; //  C'est le model d'enregistrement Qu'on choisi pour un dossier
   private subscriptions: Subscription = new Subscription();
+
+
   ngOnInit() {
 
     let permissions = this.authService.getUser().permissions
@@ -101,6 +119,7 @@ export class NumericalDepositComponent {
         this.store.dispatch(resetFolderAndFiles());
         this.closeModalAction()
       }
+
 
     });
 
@@ -169,7 +188,15 @@ export class NumericalDepositComponent {
     this.getGroup("");
     this.getCustomersFields()
     this.onQueryTextChange()
+    
+    this.selectedModelService$ = this.singleModelSelectionService.selectedModel$;
 
+    // Renvoi le model de document choisi par l'utilisateur
+    this.selectedModelService$.subscribe((model) => {
+      this.modelDocumentSelected = model
+      console.log('selectedModel ---- ', model); 
+
+    });
   }
 
 
@@ -179,18 +206,10 @@ export class NumericalDepositComponent {
     // Reset the copy state when the component is destroyed
     this.store.dispatch(resetIsSuccessCopyState());
     this.store.dispatch(resetIsSuccessMoveState());
+
   }
  
-  constructor(private http: HttpClient,private router:Router,private customfieldService: CustomfieldService,
-    private route: ActivatedRoute,
-     private toastr: ToastrService,private fb: FormBuilder,private userService: UserService, 
-     private fileManagerService: FilemanagerService, private store: Store<AppState>,private customerFieldsSelectionService: CustomerFieldsSelectionService,
-     private utilsService: UtilsService, private authService:AuthService,  private recentlyConsultService:RecentlyConsultService ) { 
 
-
-      this.isActionMoveSuccess$ = this.store.select(moveFolderAndFilesSuccess);
-      this.isCopySuccess$ = this.store.select(isCopyFolderAndFilesSuccess);
-     }
 
      getRootFolders(){
       this.fileManagerService.getFolderById(0,this.page, this.searchText).subscribe({
@@ -262,7 +281,8 @@ export class NumericalDepositComponent {
       group_ids: JSON.stringify(idsGroupUser),
       user_ids: JSON.stringify(idsUser),
       customer_field: JSON.stringify(customersFieldIds),
-      folder_visibility: this.isfoderVisibleAllChecked
+      folder_visibility: this.isfoderVisibleAllChecked,
+      model_document: JSON.stringify(this.modelDocumentSelected)
     };
 
 
@@ -582,6 +602,8 @@ export class NumericalDepositComponent {
     
   }
 
+
+
   openUploadFileModal(value:boolean){
 
     if(this.files.length == 0){
@@ -692,6 +714,16 @@ removeUserGroup(id: number) {
       this.activeActionBtnIndex = index;
     }
     
+  }
+
+  setModalSelectFieldVisible(){
+    this.modalSelectFieldVisible = !this.modalSelectFieldVisible
+    this.modalModelDocumentVisible = false
+  }
+
+  setModalSelectModelDocumentVisible(){
+    this.modalModelDocumentVisible = !this.modalModelDocumentVisible
+    this.modalSelectFieldVisible = false
   }
     selectedIndexActionFolder = 1
 
@@ -849,7 +881,10 @@ removeUserGroup(id: number) {
     // this.updateVisibility(checkbox.checked);
   }
 
-  
+  removeModelDocument(){
+
+    this.singleModelSelectionService.removeModel();
+  }
 
 
 }

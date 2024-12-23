@@ -52,6 +52,10 @@ getFolderById1(id: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/file-manager/list-folder-by-id/`, formData,{withCredentials:true });
   }
 
+  renameFolder(formData:any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/file-manager/rename-folder/`, formData,{withCredentials:true });
+  }
 
   getFolderAndFlesById(formData:any): Observable<any> {
 

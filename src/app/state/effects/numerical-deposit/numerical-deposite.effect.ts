@@ -31,7 +31,7 @@ export class FileFolderEffects {
   this.actions$.pipe(
     ofType(getFolderAndFiles),
     mergeMap(action =>
-      this.fileManagerService.getFolderAndFlesById(action.formData).pipe(
+      this.fileManagerService.getFolderById(action.id, action.page, action.searchText ).pipe(
         map(response => getFolderAndFilesSuccess({ response })),
         catchError(error => of(getFolderAndFilesFailure({ error })))
       )

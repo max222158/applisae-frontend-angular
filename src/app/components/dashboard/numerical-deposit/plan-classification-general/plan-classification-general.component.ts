@@ -18,7 +18,7 @@ export class PlanClassificationGeneralComponent {
   @Input() isOpenModal: boolean = false
   disabledActionButton: boolean = false
   @Input() number_of_elements: number = 0;
-  perPage:number =  10
+  perPage:number =  20
   page:number = 1
   @Input() modalTitle: string = ''
   @Input() modalButtonAction: string = ''
@@ -61,7 +61,8 @@ export class PlanClassificationGeneralComponent {
   @Output() setFolderId = new EventEmitter<{ id: number, name: string }>();
   folderAndFilesResponse$: Observable<any[]>;
   totalItems:number = 0
-  totalItems$: Observable<number>
+  totalItems$: Observable<number>;
+  searchText:string = ''
   // src/app/treeview/treeview.component.ts
   treeData: any[] = [
     {
@@ -85,7 +86,11 @@ export class PlanClassificationGeneralComponent {
     this.isOpenModalDelete = false;
   }
 
-
+  fetchFolderAndFiles(): void {
+    if (this.selectedNodeId) {
+      this.store.dispatch(getFolderAndFiles({ id: this.selectedNodeId, page: this.page, searchText: this.searchText }));
+    }
+  }
   constructor(private fileManager: FilemanagerService, private cdr: ChangeDetectorRef,
     private utilsService: UtilsService, private store: Store<AppState>,private toastr:ToastrService
 
@@ -130,12 +135,10 @@ export class PlanClassificationGeneralComponent {
      const subscription2 = this.isActionMoveSuccess$.subscribe((action) => {
       console.log('is action success ---- ', action); // Devrait imprimer true ou false
       if (action == true) {
-        let formData = new FormData()
-        if(this.selectedNodeId){
-            formData.append('id', this.selectedNodeId.toString());
-            formData.append('page', '1');
-        }
-        this.store.dispatch(getFolderAndFiles({ formData }));
+
+          //recuperer les dossiers et documents par le store
+          this.fetchFolderAndFiles()
+
         this.isActionMoving = false
       }else if(action == false){
   
@@ -154,9 +157,9 @@ export class PlanClassificationGeneralComponent {
         
       let formData = new FormData()
       if(this.selectedNodeId){
-        formData.append('id', this.selectedNodeId.toString());
-        formData.append('page', '1');
-        this.store.dispatch(getFolderAndFiles({ formData }));
+
+          //recuperer les dossiers et documents par le store
+          this.fetchFolderAndFiles()
       }
 
 
@@ -200,9 +203,8 @@ export class PlanClassificationGeneralComponent {
               
     let formData = new FormData()
     if(this.selectedNodeId){
-      formData.append('id', this.selectedNodeId.toString());
-      formData.append('page', '1');
-      this.store.dispatch(getFolderAndFiles({ formData }));
+          //recuperer les dossiers et documents par le store
+          this.fetchFolderAndFiles()
     }
   }
 
@@ -259,10 +261,9 @@ export class PlanClassificationGeneralComponent {
     this.page = 1
     if (this.selectedNodeId) {
 
-      let formData = new FormData()
-      formData.append('id', this.selectedNodeId.toString());
-      formData.append('page', page.toString());
-      this.store.dispatch(getFolderAndFiles({ formData }));
+
+          //recuperer les dossiers et documents par le store
+          this.fetchFolderAndFiles()
       // Souscris au sélecteur de succès
       this.getFileFolderSuccess$.subscribe((isSuccess) => {
         if (isSuccess) {
@@ -413,14 +414,14 @@ export class PlanClassificationGeneralComponent {
   
   pageChanged(event:any){
     this.page = event
-    alert(this.page)
     let formData = new FormData()
     if(this.selectedNodeId){
       formData.append('id', this.selectedNodeId.toString());
       formData.append('page', event);
     }
 
-    this.store.dispatch(getFolderAndFiles({ formData }));
+          //recuperer les dossiers et documents par le store
+          this.fetchFolderAndFiles()
 
   }
 

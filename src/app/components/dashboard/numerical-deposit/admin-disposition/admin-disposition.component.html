@@ -16,7 +16,7 @@
         <div *ngIf="folderFile.type == 'folder'" class="hover-effect"
           style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer;  height:180px"
           [ngClass]="{'selected': isSelected({id: folderFile.id, type: 'folder'})}"
-          (contextmenu)="onRightClick($event, folderFile.id, 'folder')"
+          (contextmenu)="onRightClick($event, folderFile.id,folderFile.name, 'folder')"
           [class.selected]="isSingleSelected(folderFile.id, 'folder')">
           <input type="checkbox" class="absolute"
             style="position: absolute; width: 20px; height: 20px; margin-left: 5px"
@@ -32,7 +32,7 @@
         <div *ngIf="!folderFile.is_folder" class="hover-effect"
             style="width: 130px; padding: 1rem; margin-right: 20px; cursor: pointer; height:180px"
             [ngClass]="{'selected': isSelected({id: folderFile.id, type: 'file'})}"
-            (contextmenu)="onRightClick($event, folderFile.id, 'document')"
+            (contextmenu)="onRightClick($event, folderFile.id,folderFile.title, 'document')"
             [class.selected]="isSingleSelected(folderFile.id, 'document')">
             <input type="checkbox" class="absolute"
               style="position: absolute; width: 20px; height: 20px; margin-left: 5px; "
@@ -66,7 +66,7 @@
         <tr
           *ngFor="let folderFile of foldersFiles | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: totalItems, id : 'folder' }; let i = index"
           style="cursor: pointer;" [ngClass]="{'selected': isSelected({id: folderFile.id, type: 'folder'})}"
-          (contextmenu)="onRightClick($event, folderFile.id, 'folder')"
+          (contextmenu)="onRightClick($event, folderFile.id,folderFile.name, 'folder')"
           [class.selected]="isSingleSelected(folderFile.id, 'folder')">
 
 
@@ -120,4 +120,7 @@
   </div>
 </div>
 
-<app-context-menu [idParsed]="parsedId"></app-context-menu>
+<app-context-menu [idParsed]="parsedId" (renameModalEvent)="renameModal(parsedId, folderName)"></app-context-menu>
+
+<app-rename-folder [isOpenModal]="isOpenModalRenameFolder" [folderName]="folderName" [folderId]="parsedId" (closeModalEvent)="closeModalRenameFolder()" >
+</app-rename-folder>
